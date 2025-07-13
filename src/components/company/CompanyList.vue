@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <!-- <pre>
-        {{ JSON.stringify(companies, null, 2) }}
-      </pre
-    > -->
     <company-table :companies="companies" />
   </div>
 </template>

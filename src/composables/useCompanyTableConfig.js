@@ -19,5 +19,12 @@ export const columns = [
     align: 'left',
     format: (val) => new Date(val).toLocaleDateString(),
   },
-  { name: 'parentId', label: 'Parent ID', field: 'parentId', align: 'left' },
+  {
+    name: 'parentName',
+    label: 'Parent Name',
+    field: 'parent',
+    align: 'left',
+    sortable: true,
+    format: (val) => (val ? val.name : ''),
+  },
 ]
