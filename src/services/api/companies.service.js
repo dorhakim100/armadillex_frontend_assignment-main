@@ -1,6 +1,6 @@
-
 export const companiesService = {
   getCompanies,
+  getDefaultFilter,
 }
 
 async function getCompanies() {
@@ -24,6 +24,16 @@ function _refactorCompanies(companies) {
     parentId: company.parent_id,
     providesAiServices: company.provides_ai_services,
   }))
+}
+
+function getDefaultFilter() {
+  return {
+    txt: '',
+    country: '',
+    onlyActive: false,
+    onlyAI: false,
+    onlyDPF: false,
+  }
 }
 
 // Raw company data

@@ -2,7 +2,7 @@
   <q-card>
     <q-card-section>
       <h1>Companies</h1>
-      <!-- <company-filter /> -->
+      <company-filter :filter="filter" @update="updateFilter" />
     </q-card-section>
     <q-card-section>
       <q-spinner v-if="!companies" />
@@ -12,11 +12,13 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useCompanies } from 'src/composables/useCompanies'
+import { companiesService } from '../../services/api/companies.service'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
-// import CompanyFilter from 'src/components/company/CompanyFilter.vue'
+import CompanyFilter from 'src/components/company/CompanyFilter.vue'
+import { is } from 'quasar'
 
 const { companies } = useCompanies()
 const modifiedCompanies = computed(() => {
@@ -29,9 +31,21 @@ const modifiedCompanies = computed(() => {
   })
 })
 
-const filter = computed(() => ({
-  search: search.value.trim().toLowerCase(),
-  country: country.value,
-  onlyActive: true,
-}))
+const filter = ref(companiesService.getDefaultFilter())
+
+watch(
+  [filter],
+  () => {
+    // Trigger any side effects or API calls when filter changes
+    console.log('Filter changed:', filter.value)
+  },
+  { deep: true },
+)
+
+function updateFilter(newFilter) {
+  filter.value = {
+    ...filter.value,
+    ...newFilter,
+  }
+}
 </script>

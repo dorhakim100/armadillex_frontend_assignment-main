@@ -10,7 +10,7 @@ import { ref, defineProps } from 'vue'
 import CompanyTable from './CompanyTable.vue'
 
 const props = defineProps(['companies'])
-const { companies } = props
+const companies = props.companies
 </script>
 <style scoped lang="scss">
 .container {
