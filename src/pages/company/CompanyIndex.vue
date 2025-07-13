@@ -20,27 +20,20 @@ import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import { is } from 'quasar'
 
-const { companies } = useCompanies()
+const filter = ref(companiesService.getDefaultFilter())
+const { companies } = useCompanies(filter.value)
+
+// display users the parent company name, not id
 const modifiedCompanies = computed(() => {
-  return companies.value.map((company) => {
-    const parentCompany = companies.value.find((c) => c.id === company.parentId)
+  const list = companies.value || []
+  return list.map((company) => {
+    const parent = list.find((c) => c.id === company.parentId)
     return {
       ...company,
-      parent: parentCompany ? { id: company.parentId, name: parentCompany.name } : null,
+      parent: parent ? { id: parent.id, name: parent.name } : null,
     }
   })
 })
-
-const filter = ref(companiesService.getDefaultFilter())
-
-watch(
-  [filter],
-  () => {
-    // Trigger any side effects or API calls when filter changes
-    console.log('Filter changed:', filter.value)
-  },
-  { deep: true },
-)
 
 function updateFilter(newFilter) {
   filter.value = {

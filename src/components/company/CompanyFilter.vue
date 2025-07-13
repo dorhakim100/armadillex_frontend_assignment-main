@@ -5,30 +5,30 @@
       bottom-slots
       :model-value="props.filter.txt"
       label="Name"
-      :dense="dense"
       @update:model-value="(val) => updateField('txt', val)"
     >
       <template v-slot:prepend>
         <q-icon name="search" />
       </template>
       <template v-slot:append>
-        <q-icon name="close" class="cursor-pointer" @click="updateField('txt', '')" />
+        <q-icon name="close" class="cursor-pointer" @click="() => updateField('txt', '')" />
       </template>
     </q-input>
     <q-select
       filled
-      v-model="model"
+      v-model="props.filter.country"
       :options="countries"
       label="Filled"
       @update:model-value="(val) => updateField('country', val)"
     />
-    <date-picker />
+    <!-- <date-picker  /> -->
 
     <q-checkbox
       v-for="(checkbox, index) in checkboxFilters"
       :key="index"
       v-model="props.filter[checkbox.key]"
       :label="checkbox.label"
+      @update:model-value="(val) => updateField(checkbox.key, val)"
     />
   </div>
 </template>

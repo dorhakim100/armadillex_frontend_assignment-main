@@ -3,11 +3,41 @@ export const companiesService = {
   getDefaultFilter,
 }
 
-async function getCompanies() {
-  const companies = demoCompanies
+async function getCompanies(filter = getDefaultFilter()) {
+  // Refactor first so filtering can run on normalized keys
+  const companies = _refactorCompanies(demoCompanies)
+  var filteredCompanies = companies
+
+  const { txt, country, onlyActive, onlyAI, onlyDPF } = filter
+
+  if (txt) {
+    const regex = new RegExp(filter.txt, 'i')
+    filteredCompanies = companies.filter(
+      (company) => regex.test(company.name) || regex.test(company.legalName),
+    )
+  }
+
+  if (country) {
+    filteredCompanies = filteredCompanies.filter(
+      (company) => company.country.toLowerCase() === country.toLowerCase(),
+    )
+  }
+
+  if (onlyActive) {
+    filteredCompanies = filteredCompanies.filter((company) => company.active)
+  }
+
+  if (onlyAI) {
+    filteredCompanies = filteredCompanies.filter((company) => company.providesAiServices)
+  }
+
+  if (onlyDPF) {
+    filteredCompanies = filteredCompanies.filter((company) => company.isDpfFound)
+  }
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(_refactorCompanies(companies))
+      resolve(filteredCompanies)
     }, 1000)
   })
 }
