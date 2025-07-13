@@ -15,7 +15,13 @@
         <q-icon name="close" class="cursor-pointer" @click="updateField('txt', '')" />
       </template>
     </q-input>
-    <q-select filled v-model="model" :options="options" label="Filled" />
+    <q-select
+      filled
+      v-model="model"
+      :options="countries"
+      label="Filled"
+      @update:model-value="(val) => updateField('country', val)"
+    />
     <date-picker />
     <q-checkbox v-model="right" label="Label on Right" />
     <q-checkbox v-model="right" label="Label on Right" />
@@ -26,7 +32,7 @@
 <script setup>
 import { defineProps } from 'vue'
 import DatePicker from './FilterCmps/DatePicker.vue'
-import { log } from 'src/services/log.service'
+import { countries } from '../../composables/countries'
 
 const props = defineProps(['filter'])
 const filter = props.filter
