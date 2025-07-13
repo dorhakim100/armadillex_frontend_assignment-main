@@ -23,16 +23,20 @@
       @update:model-value="(val) => updateField('country', val)"
     />
     <date-picker />
-    <q-checkbox v-model="right" label="Label on Right" />
-    <q-checkbox v-model="right" label="Label on Right" />
-    <q-checkbox v-model="right" label="Label on Right" />
+
+    <q-checkbox
+      v-for="(checkbox, index) in checkboxFilters"
+      :key="index"
+      v-model="props.filter[checkbox.key]"
+      :label="checkbox.label"
+    />
   </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
 import DatePicker from './FilterCmps/DatePicker.vue'
-import { countries } from '../../composables/countries'
+import { countries, checkboxFilters } from '../../composables/useCompanyFilter'
 
 const props = defineProps(['filter'])
 const filter = props.filter
