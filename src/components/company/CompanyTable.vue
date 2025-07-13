@@ -1,29 +1,17 @@
 <template>
   <div class="table-container">
     <q-table title="Companies" :rows="companies" :columns="columns" row-key="id" flat bordered>
-      <template #body-cell-active="props">
+      <template
+        v-for="iconField in companyFieldIcons"
+        :key="iconField.field"
+        v-slot:[`body-cell-${iconField.field}`]="props"
+      >
         <q-td :props="props" class="icon-container">
           <q-icon
-            :name="props.row.active ? 'check_circle' : 'cancel'"
-            :color="props.row.active ? 'positive' : 'negative'"
-          />
-        </q-td>
-      </template>
-
-      <template #body-cell-providesAiServices="props">
-        <q-td :props="props" class="icon-container">
-          <q-icon
-            :name="props.row.providesAiServices ? 'smart_toy' : 'remove_circle_outline'"
-            :color="props.row.providesAiServices ? 'primary' : 'grey'"
-          />
-        </q-td>
-      </template>
-
-      <template #body-cell-isDpfFound="props">
-        <q-td :props="props" class="icon-container">
-          <q-icon
-            :name="props.row.isDpfFound ? 'find_in_page' : 'highlight_off'"
-            :color="props.row.isDpfFound ? 'accent' : 'grey-6'"
+            :name="props.row[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name"
+            :color="
+              props.row[iconField.field] ? iconField.trueIcon.color : iconField.falseIcon.color
+            "
           />
         </q-td>
       </template>
@@ -35,6 +23,7 @@
 import { defineProps } from 'vue'
 
 import { columns } from 'src/composables/useCompanyTableConfig'
+import { companyFieldIcons } from '../../composables/useCompanyFieldIcons'
 
 const props = defineProps(['companies'])
 </script>
