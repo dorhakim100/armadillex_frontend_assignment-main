@@ -4,7 +4,7 @@
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale" anchor="top left">
-            <q-date v-model="date" mask="DD/MM/YYYY">
+            <q-date v-model="date" @update:model-value="updateDate">
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -17,9 +17,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 
-const date = ref('2019/02/01')
+const props = defineProps({
+  // modelValue: [String, Date, null], // or whatever type you use
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+function updateDate(newVal) {
+  emit('update:modelValue', newVal)
+}
 </script>
 
 <style scoped lang="scss">

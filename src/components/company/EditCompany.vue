@@ -45,9 +45,10 @@
           v-else-if="field.type === 'select'"
           v-model="company[field.key]"
           :label="field.label"
-          :options="field.options"
+          :options="field.key === 'parentName' ? companiesNameId.map((c) => c.name) : field.options"
           emit-value
           map-options
+          popup-content-class="custom-select-dropdown"
         />
 
         <!-- Date -->
@@ -73,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
 
 import { useCompanyNames } from '../../composables/useCompanyNames'
@@ -85,6 +86,7 @@ import { notifyService } from 'src/services/notify.service'
 
 const props = defineProps({
   company: Object,
+  companies: Array,
 })
 
 defineEmits([
@@ -96,12 +98,37 @@ defineEmits([
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const company = ref({ ...props.company })
+const companies = ref([...props.companies])
 const isLoadingAiNames = ref(false)
 const sudgestedNames = ref([])
+
+const companiesNameId = computed(() => {
+  return companies.value.map((c) => {
+    {
+      return {
+        id: c.id,
+        name: c.name,
+      }
+    }
+  })
+})
+
+console.log(companiesNameId.value)
 
 function onOKClick() {
   // on OK, it is REQUIRED to
   // call onDialogOK (with optional payload)
+
+  if (company.value.isEmpty) {
+    delete company.value.isEmpty
+  }
+
+  if (company.value.parentName) {
+    const parent = companies.value.find((c) => c.name === company.value.parentName)
+    const { id: parentId } = parent
+    company.value.parentId = parentId
+  }
+
   onDialogOK(company.value)
   // or with no payload: onDialogOK()
   // ...and it will also hide the dialog automatically
@@ -121,6 +148,10 @@ async function onGenerateAiNames() {
   } finally {
     isLoadingAiNames.value = false
   }
+}
+
+function updateTimestamp() {
+  company.value.updatedAt = new Date().toISOString()
 }
 </script>
 

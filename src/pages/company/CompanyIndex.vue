@@ -36,6 +36,7 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
     component: EditCompany,
     componentProps: {
       company: companyToEdit,
+      companies: companies.value,
     },
   }).onOk((editedCompany) => {
     console.log('Edited Company:', editedCompany)

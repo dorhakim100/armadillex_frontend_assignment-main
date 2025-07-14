@@ -20,6 +20,7 @@
       :options="countries"
       label="Filled"
       @update:model-value="(val) => updateField('country', val)"
+      popup-content-class="custom-select-dropdown"
     />
     <!-- <date-picker  /> -->
 

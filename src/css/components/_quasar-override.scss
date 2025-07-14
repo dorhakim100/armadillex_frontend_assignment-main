@@ -47,3 +47,8 @@
     }
   }
 }
+
+.custom-select-dropdown {
+  max-height: 200px; /* or any height you want */
+  overflow-y: auto;
+}
