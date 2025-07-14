@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <company-table :companies="props.companies" />
+    <company-table :companies="props.companies" @onEdit="handleEdit" />
   </div>
 </template>
 
@@ -10,7 +10,10 @@ import { defineProps } from 'vue'
 import CompanyTable from './CompanyTable.vue'
 
 const props = defineProps(['companies', 'filter'])
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update', 'onOpenEdit'])
+function handleEdit(company) {
+  emit('onOpenEdit', company)
+}
 </script>
 <style scoped lang="scss">
 .container {

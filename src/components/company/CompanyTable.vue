@@ -15,17 +15,27 @@
           />
         </q-td>
       </template>
+      <template v-slot:[`body-cell-edit`]="props">
+        <q-td :props="props" class="icon-container">
+          <q-btn @click="onEditCompany(props.row)" flat round color="primary" icon="edit" />
+        </q-td>
+      </template>
     </q-table>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 
 import { columns } from 'src/composables/useCompanyTableConfig'
 import { companyFieldIcons } from '../../composables/useCompanyFieldIcons'
 
 const props = defineProps(['companies'])
+const emit = defineEmits(['handleEdit'])
+
+function onEditCompany(company) {
+  emit('onEdit', company)
+}
 </script>
 
 <style scoped lang="scss">

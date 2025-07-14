@@ -27,4 +27,12 @@ export const columns = [
     sortable: true,
     format: (val) => (val ? val.name : ''),
   },
+  {
+    name: 'edit',
+    label: 'Edit Company',
+    field: '',
+    align: 'left',
+    sortable: false,
+    // format: (val) => (val ? val.name : 'bla'),
+  },
 ]

@@ -8,7 +8,7 @@
     </q-card-section>
     <q-card-section>
       <q-spinner v-if="!companies" />
-      <company-list v-else :companies="modifiedCompanies" />
+      <company-list v-else :companies="modifiedCompanies" @onOpenEdit="onOpenEdit" />
     </q-card-section>
   </q-card>
 </template>
@@ -25,8 +25,11 @@ import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 
-function onOpenModal() {
-  const companyToEdit = companiesService.getEmptyCompany()
+function onOpenEdit(company) {
+  onOpenModal(null, company)
+}
+
+function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
   console.log(companyToEdit)
   $q.dialog({
     component: EditCompany,
