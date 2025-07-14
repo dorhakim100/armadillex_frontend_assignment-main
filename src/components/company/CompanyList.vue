@@ -1,16 +1,15 @@
 <template>
   <div class="container">
-    <company-table :companies="companies" />
+    <company-table :companies="props.companies" />
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { defineProps } from 'vue'
 
 import CompanyTable from './CompanyTable.vue'
 
 const props = defineProps(['companies'])
-const companies = props.companies
 </script>
 <style scoped lang="scss">
 .container {

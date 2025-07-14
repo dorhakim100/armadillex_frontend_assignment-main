@@ -16,7 +16,7 @@
     </q-input>
     <q-select
       filled
-      v-model="props.filter.country"
+      :model-value="props.filter.country"
       :options="countries"
       label="Filled"
       @update:model-value="(val) => updateField('country', val)"
@@ -26,7 +26,7 @@
     <q-checkbox
       v-for="(checkbox, index) in checkboxFilters"
       :key="index"
-      v-model="props.filter[checkbox.key]"
+      :model-value="props.filter[checkbox.key]"
       :label="checkbox.label"
       @update:model-value="(val) => updateField(checkbox.key, val)"
     />
@@ -35,17 +35,19 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import DatePicker from './FilterCmps/DatePicker.vue'
 import { countries, checkboxFilters } from '../../composables/useCompanyFilter'
 
 const props = defineProps(['filter'])
-const filter = props.filter
 const emit = defineEmits(['update'])
 
 function updateField(field, value) {
-  filter[field] = value
+  // Don't mutate props - create a new object instead
+  const newFilter = {
+    ...props.filter,
+    [field]: value,
+  }
 
-  emit('update', { ...filter })
+  emit('update', newFilter)
 }
 </script>
 

@@ -19,15 +19,50 @@ import { companiesService } from '../../services/api/companies.service'
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import { is } from 'quasar'
-
 const filter = ref(companiesService.getDefaultFilter())
-const { companies } = useCompanies(filter.value)
+const { companies } = useCompanies()
+const companiesCopy = ref([])
 
-// display users the parent company name, not id
+// Update the raw copy ONLY when the async data arrives
+watch(
+  companies,
+  (newVal) => {
+    if (newVal) {
+      companiesCopy.value = [...newVal]
+    }
+  },
+  { immediate: true },
+)
+
+const filteredCompanies = computed(() => {
+  let list = companiesCopy.value
+  const { txt, country, onlyActive, onlyAI, onlyDPF } = filter.value
+
+  if (txt) {
+    const regex = new RegExp(txt, 'i')
+    list = list.filter((company) => regex.test(company.name) || regex.test(company.legalName))
+  }
+
+  if (country) {
+    list = list.filter((company) => company.country === country)
+  }
+  if (onlyActive) {
+    list = list.filter((company) => company.active)
+  }
+  if (onlyAI) {
+    list = list.filter((company) => company.providesAiServices)
+  }
+  if (onlyDPF) {
+    list = list.filter((company) => company.isDpfFound)
+  }
+
+  return list
+})
+
+// modify to show parent information
 const modifiedCompanies = computed(() => {
-  const list = companies.value || []
-  return list.map((company) => {
-    const parent = list.find((c) => c.id === company.parentId)
+  return filteredCompanies.value.map((company) => {
+    const parent = filteredCompanies.value.find((c) => c.id === company.parentId)
     return {
       ...company,
       parent: parent ? { id: parent.id, name: parent.name } : null,
