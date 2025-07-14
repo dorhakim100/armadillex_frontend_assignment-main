@@ -1,15 +1,51 @@
 import { makeId } from '../util.service'
+import { storageService } from '../storage.service'
+
+const DB_NAME = 'companiesDB'
 
 export const companiesService = {
   getCompanies,
+  saveCompany,
   getDefaultFilter,
   getEmptyCompany,
 }
 
 async function getCompanies() {
+  let companies = storageService.get(DB_NAME)
+
+  // returning date from local storage if exists
+  if (companies && companies.length) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(_refactorCompanies(companies))
+      }, 1000)
+    })
+  }
+
   return new Promise((resolve) => {
     setTimeout(() => {
+      localStorage.setItem(DB_NAME, JSON.stringify(demoCompanies))
       resolve(_refactorCompanies(demoCompanies))
+    }, 1000)
+  })
+}
+
+async function saveCompany(company) {
+  const companies = storageService.get(DB_NAME)
+  if (company.id) {
+    const idx = companies.findIndex((c) => c.company_id === company.id)
+
+    companies[idx] = {
+      ...companies[idx],
+      ...company,
+    }
+  } else {
+    companies.push({ ...company, id: makeId() })
+  }
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      storageService.set(DB_NAME, companies)
+      resolve(_factorCompaniesForSave(companies))
     }, 1000)
   })
 }
@@ -25,6 +61,20 @@ function _refactorCompanies(companies) {
     isDpfFound: company.dpf_found,
     parentId: company.parent_id,
     providesAiServices: company.provides_ai_services,
+  }))
+}
+
+function _factorCompaniesForSave(companies) {
+  return companies.map((company) => ({
+    company_id: company.id,
+    active: company.active,
+    company_name: company.name,
+    company_legal_name: company.legalName,
+    country: company.country,
+    date_added: company.dateAdded,
+    dpf_found: company.isDpfFound,
+    parent_id: company.parentId,
+    provides_ai_services: company.providesAiServices,
   }))
 }
 

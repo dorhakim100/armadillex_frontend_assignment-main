@@ -5,7 +5,7 @@
       <div class="interface-container">
         <company-filter :filter="filter" @update="updateFilter" />
         <!-- <edit-company /> -->
-        <q-btn color="primary" label="Add Company" @click="onOpenModal" />
+        <q-btn color="primary" label="Add Company" @click="onOpenModal" :loading="isSaving" />
       </div>
     </q-card-section>
     <q-card-section>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useCompanies } from 'src/composables/useCompanies'
 import { companiesService } from '../../services/api/companies.service'
 
@@ -40,10 +40,11 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
     },
   }).onOk((editedCompany) => {
     console.log('Edited Company:', editedCompany)
+    saveCompany(editedCompany)
   })
 }
 const filter = ref(companiesService.getDefaultFilter())
-const { companies } = useCompanies()
+const { companies, saveCompany, isSaving } = useCompanies()
 const companiesCopy = ref([])
 
 // Update the raw copy ONLY when the async data arrives
