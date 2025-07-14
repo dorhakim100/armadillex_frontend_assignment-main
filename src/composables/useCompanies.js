@@ -50,6 +50,7 @@ export function useCompanies() {
 
     // Mutations
     saveCompany: saveCompany.mutate,
+    deleteCompany: deleteCompany.mutate,
 
     // Mutation states
     isSaving: saveCompany.isPending,

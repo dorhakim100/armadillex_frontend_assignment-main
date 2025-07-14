@@ -26,7 +26,7 @@ import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
 
 const filter = ref(companiesService.getDefaultFilter())
-const { companies, saveCompany } = useCompanies()
+const { companies, saveCompany, deleteCompany } = useCompanies()
 const companiesCopy = ref([])
 
 const $q = useQuasar()
@@ -93,7 +93,7 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
         // Handle delete
         try {
           console.log('Deleting company:', editedCompany)
-          // await deleteCompany(editedCompany.id)
+          await deleteCompany(editedCompany.id)
           // Success notification handled in composable
         } catch (err) {
           console.error('Delete failed:', err)
