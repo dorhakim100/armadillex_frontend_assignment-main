@@ -6,6 +6,7 @@ const DB_NAME = 'companiesDB'
 export const companiesService = {
   getCompanies,
   saveCompany,
+  deleteCompany,
   getDefaultFilter,
   getEmptyCompany,
 }
@@ -46,6 +47,20 @@ async function saveCompany(company) {
   }
   return new Promise((resolve) => {
     setTimeout(() => {
+      storageService.set(DB_NAME, companies)
+      resolve(companies)
+    }, 1000)
+  })
+}
+
+function deleteCompany(id) {
+  const companies = storageService.get(DB_NAME)
+  const idx = companies.findIndex((c) => c.company_id === id)
+  if (idx === -1) return Promise.reject(new Error('Company not found'))
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      companies.splice(idx, 1)
       storageService.set(DB_NAME, companies)
       resolve(companies)
     }, 1000)

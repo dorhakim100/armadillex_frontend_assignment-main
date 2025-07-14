@@ -65,9 +65,18 @@
         />
       </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn flat label="Cancel" @click="onDialogCancel" />
-        <q-btn color="primary" label="Save" @click="onOKClick" />
+      <q-card-actions align="around">
+        <q-btn
+          v-if="!company.isEmpty"
+          color="red"
+          label="Delete"
+          @click="onDeleteClick"
+          align="left"
+        />
+        <div class="cancel-ok-container">
+          <q-btn flat label="Cancel" @click="onDialogCancel" />
+          <q-btn color="primary" label="Save" @click="onOKClick" />
+        </div>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -76,6 +85,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
+import { useQuasar } from 'quasar'
 
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
@@ -93,9 +103,12 @@ defineEmits([
   // REQUIRED; need to specify some events that your
   // component will emit through useDialogPluginComponent()
   ...useDialogPluginComponent.emits,
+  'delete',
 ])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+const $q = useQuasar()
 
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
@@ -113,12 +126,7 @@ const companiesNameId = computed(() => {
   })
 })
 
-console.log(companiesNameId.value)
-
 function onOKClick() {
-  // on OK, it is REQUIRED to
-  // call onDialogOK (with optional payload)
-
   if (company.value.isEmpty) {
     delete company.value.isEmpty
     delete company.value.id
@@ -131,10 +139,21 @@ function onOKClick() {
   }
 
   onDialogOK(company.value)
-  // or with no payload: onDialogOK()
-  // ...and it will also hide the dialog automatically
 }
 
+function onDeleteClick() {
+  // Use Quasar's dialog for confirmation
+  $q.dialog({
+    title: 'Confirm Delete',
+    message: `Are you sure you want to delete "${company.value.name}"?`,
+    cancel: true,
+    persistent: true,
+    color: 'negative',
+  }).onOk(() => {
+    // Call the dialog's onDelete method
+    onDialogOK(company.value, 'delete')
+  })
+}
 async function onGenerateAiNames() {
   if (!company.value.name) {
     notifyService.error('Please enter a company name before generating AI names.')
@@ -172,6 +191,13 @@ function updateTimestamp() {
 .ai-names-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.cancel-ok-container {
+  justify-self: end;
+
+  display: flex;
   gap: 0.5rem;
 }
 </style>

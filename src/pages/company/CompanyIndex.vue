@@ -16,24 +16,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 import { useCompanies } from 'src/composables/useCompanies'
-import { useCompanyMutations } from 'src/composables/useCompayMutations'
 import { companiesService } from '../../services/api/companies.service'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
-import { useQuasar } from 'quasar'
-import { notifyMsgs } from 'src/services/notify.service'
 
 const filter = ref(companiesService.getDefaultFilter())
-const { companies } = useCompanies()
+const { companies, saveCompany } = useCompanies()
 const companiesCopy = ref([])
 
 const $q = useQuasar()
-
-const { saveCompany } = useCompanyMutations()
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
@@ -89,15 +85,29 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
       company: companyToEdit,
       companies: companies.value,
     },
-  }).onOk(async (editedCompany) => {
-    try {
-      // console.log('Edited Company:', editedCompany)
-      await saveCompany.mutate(editedCompany)
-      // notifyMsgs.success('Company saved successfully')
-    } catch (err) {
-      console.log(err)
-    }
   })
+    .onOk(async (editedCompany) => {
+      if (action === 'delete') {
+        // Handle delete
+        try {
+          await deleteCompany(editedCompany.id)
+          // Success notification handled in composable
+        } catch (err) {
+          console.error('Delete failed:', err)
+        }
+      } else {
+        // Handle save (existing logic)
+        try {
+          await saveCompany(editedCompany)
+        } catch (err) {
+          console.error('Save failed:', err)
+        }
+      }
+    })
+
+    .onCancel(() => {
+      console.log('Dialog cancelled')
+    })
 }
 
 function updateFilter(newFilter) {
