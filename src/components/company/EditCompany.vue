@@ -81,6 +81,7 @@ import { useCompanyNames } from '../../composables/useCompanyNames'
 import { companyFields } from '../../composables/useCompanyFields'
 
 import DatePicker from './FilterCmps/DatePicker.vue'
+import { notifyService } from 'src/services/notify.service'
 
 const props = defineProps({
   company: Object,
@@ -107,6 +108,10 @@ function onOKClick() {
 }
 
 async function onGenerateAiNames() {
+  if (!company.value.name) {
+    notifyService.error('Please enter a company name before generating AI names.')
+    return
+  }
   isLoadingAiNames.value = true
   // Simulate an API call to generate AI names
   try {
