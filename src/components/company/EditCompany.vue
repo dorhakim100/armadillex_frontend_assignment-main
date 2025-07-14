@@ -8,7 +8,12 @@
         </div>
       </q-card-section>
 
-      <q-card-section v-for="field in companyFields" :key="field.key" class="q-mb-sm">
+      <q-card-section
+        v-for="field in companyFields.filter((f) => f.type !== 'checkbox')"
+        :key="field.key"
+        class="q-mb-sm input-container"
+        :class="field.key"
+      >
         <!-- Text or AI-enabled field -->
         <template v-if="field.type === 'text'">
           <q-input v-model="company[field.key]" :label="field.label">
@@ -35,14 +40,6 @@
           />
         </template>
 
-        <!-- Checkbox -->
-        <q-checkbox
-          v-else-if="field.type === 'checkbox'"
-          v-model="company[field.key]"
-          :label="field.label"
-          class="checkbox-group"
-        />
-
         <!-- Select -->
         <q-select
           v-else-if="field.type === 'select'"
@@ -56,6 +53,16 @@
         <!-- Date -->
         <date-picker v-else-if="field.type === 'date'" v-model="company[field.key]" />
       </q-card-section>
+      <!-- Checkbox -->
+
+      <q-card-section class="q-mb-sm">
+        <q-checkbox
+          v-for="field in companyFields.filter((f) => f.type === 'checkbox')"
+          v-model="company[field.key]"
+          :label="field.label"
+          class="checkbox-group"
+        />
+      </q-card-section>
 
       <q-card-actions align="right">
         <q-btn flat label="Cancel" @click="onDialogCancel" />
@@ -68,6 +75,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
+
+import { useCompanyNames } from '../../composables/useCompanyNames'
 
 import { companyFields } from '../../composables/useCompanyFields'
 
@@ -97,18 +106,16 @@ function onOKClick() {
   // ...and it will also hide the dialog automatically
 }
 
-function onGenerateAiNames() {
+async function onGenerateAiNames() {
   isLoadingAiNames.value = true
   // Simulate an API call to generate AI names
-  setTimeout(() => {
-    sudgestedNames.value = [
-      'Tech Innovators',
-      'Global Solutions',
-      'Future Enterprises',
-      'Visionary Ventures',
-    ]
+  try {
+    sudgestedNames.value = await useCompanyNames(company.value.name)
+  } catch (error) {
+    console.error('Error generating AI names:', error)
+  } finally {
     isLoadingAiNames.value = false
-  }, 2000)
+  }
 }
 </script>
 
@@ -119,8 +126,9 @@ function onGenerateAiNames() {
 }
 
 .input-container {
+  display: grid;
+
   &.name {
-    display: grid;
     gap: 1rem;
   }
 }

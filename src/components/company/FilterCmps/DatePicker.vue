@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 300px">
+  <div class="container">
     <q-input filled v-model="date" type="text" mask="date" :rules="['date']">
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
@@ -21,3 +21,16 @@ import { ref } from 'vue'
 
 const date = ref('2019/02/01')
 </script>
+
+<style scoped lang="scss">
+.container {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  // justify-content: center;
+
+  label {
+    padding: 0px;
+  }
+}
+</style>
