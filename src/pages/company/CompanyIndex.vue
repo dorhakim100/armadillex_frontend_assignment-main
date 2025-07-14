@@ -86,11 +86,14 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
       companies: companies.value,
     },
   })
-    .onOk(async (editedCompany) => {
+    .onOk(async (clickEvent) => {
+      const { action, company: editedCompany } = clickEvent
+
       if (action === 'delete') {
         // Handle delete
         try {
-          await deleteCompany(editedCompany.id)
+          console.log('Deleting company:', editedCompany)
+          // await deleteCompany(editedCompany.id)
           // Success notification handled in composable
         } catch (err) {
           console.error('Delete failed:', err)

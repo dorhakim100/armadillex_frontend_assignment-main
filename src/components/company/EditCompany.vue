@@ -138,20 +138,24 @@ function onOKClick() {
     company.value.parentId = parentId
   }
 
-  onDialogOK(company.value)
+  onDialogOK({ action: 'save', company: company.value })
 }
 
 function onDeleteClick() {
   // Use Quasar's dialog for confirmation
+
   $q.dialog({
     title: 'Confirm Delete',
     message: `Are you sure you want to delete "${company.value.name}"?`,
+    ok: true,
     cancel: true,
+    okLabel: 'Delete',
     persistent: true,
     color: 'negative',
   }).onOk(() => {
     // Call the dialog's onDelete method
-    onDialogOK(company.value, 'delete')
+    console.log('DIALOG DELETE CLICKED')
+    onDialogOK({ action: 'delete', company: company.value })
   })
 }
 async function onGenerateAiNames() {
