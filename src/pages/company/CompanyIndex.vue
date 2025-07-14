@@ -3,6 +3,8 @@
     <q-card-section>
       <h1>Companies</h1>
       <company-filter :filter="filter" @update="updateFilter" />
+      <!-- <edit-company /> -->
+      <q-btn color="primary" label="Add Company" @click="onOpenModal" />
     </q-card-section>
     <q-card-section>
       <q-spinner v-if="!companies" />
@@ -18,7 +20,23 @@ import { companiesService } from '../../services/api/companies.service'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
-import { is } from 'quasar'
+import EditCompany from 'src/components/company/EditCompany.vue'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
+
+function onOpenModal() {
+  const companyToEdit = companiesService.getEmptyCompany()
+  console.log(companyToEdit)
+  $q.dialog({
+    component: EditCompany,
+    componentProps: {
+      company: companyToEdit,
+    },
+  }).onOk((editedCompany) => {
+    console.log('Edited Company:', editedCompany)
+  })
+}
 const filter = ref(companiesService.getDefaultFilter())
 const { companies } = useCompanies()
 const companiesCopy = ref([])

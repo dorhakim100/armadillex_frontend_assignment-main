@@ -9,7 +9,8 @@ import { defineProps } from 'vue'
 
 import CompanyTable from './CompanyTable.vue'
 
-const props = defineProps(['companies'])
+const props = defineProps(['companies', 'filter'])
+const emit = defineEmits(['update'])
 </script>
 <style scoped lang="scss">
 .container {

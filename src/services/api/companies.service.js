@@ -1,6 +1,9 @@
+import { makeId } from '../util.service'
+
 export const companiesService = {
   getCompanies,
   getDefaultFilter,
+  getEmptyCompany,
 }
 
 async function getCompanies() {
@@ -32,6 +35,20 @@ function getDefaultFilter() {
     onlyActive: false,
     onlyAI: false,
     onlyDPF: false,
+  }
+}
+
+function getEmptyCompany() {
+  return {
+    id: makeId(),
+    active: true,
+    name: '',
+    legalName: '',
+    country: '',
+    dateAdded: new Date().toISOString(),
+    isDpfFound: false,
+    parentId: null,
+    providesAiServices: false,
   }
 }
 
