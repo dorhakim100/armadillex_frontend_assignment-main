@@ -49,6 +49,7 @@ function getEmptyCompany() {
     isDpfFound: false,
     parentId: null,
     providesAiServices: false,
+    isEmpty: true,
   }
 }
 

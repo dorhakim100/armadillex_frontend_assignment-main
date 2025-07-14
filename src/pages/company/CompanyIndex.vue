@@ -32,7 +32,6 @@ function onOpenEdit(company) {
 }
 
 function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
-  console.log(companyToEdit)
   $q.dialog({
     component: EditCompany,
     componentProps: {
