@@ -5,7 +5,7 @@
       <div class="interface-container">
         <company-filter :filter="filter" @update="updateFilter" />
         <!-- <edit-company /> -->
-        <q-btn color="primary" label="Add Company" @click="onOpenModal" :loading="isSaving" />
+        <q-btn color="primary" label="Add Company" @click="onOpenModal" />
       </div>
     </q-card-section>
     <q-card-section>
@@ -16,47 +16,24 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useCompanies } from 'src/composables/useCompanies'
+import { useCompanyMutations } from 'src/composables/useCompayMutations'
 import { companiesService } from '../../services/api/companies.service'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
 import { useQuasar } from 'quasar'
+import { notifyMsgs } from 'src/services/notify.service'
+
+const filter = ref(companiesService.getDefaultFilter())
+const { companies } = useCompanies()
+const companiesCopy = ref([])
 
 const $q = useQuasar()
 
-function onOpenEdit(company) {
-  onOpenModal(null, company)
-}
-
-function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
-  $q.dialog({
-    component: EditCompany,
-    componentProps: {
-      company: companyToEdit,
-      companies: companies.value,
-    },
-  }).onOk((editedCompany) => {
-    console.log('Edited Company:', editedCompany)
-    saveCompany(editedCompany)
-  })
-}
-const filter = ref(companiesService.getDefaultFilter())
-const { companies, saveCompany, isSaving } = useCompanies()
-const companiesCopy = ref([])
-
-// Update the raw copy ONLY when the async data arrives
-watch(
-  companies,
-  (newVal) => {
-    if (newVal) {
-      companiesCopy.value = [...newVal]
-    }
-  },
-  { immediate: true },
-)
+const { saveCompany } = useCompanyMutations()
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
@@ -82,7 +59,16 @@ const filteredCompanies = computed(() => {
 
   return list
 })
-
+// Update the raw copy ONLY when the async data arrives
+watch(
+  companies,
+  (newVal) => {
+    if (newVal) {
+      companiesCopy.value = [...newVal]
+    }
+  },
+  { immediate: true },
+)
 // modify to show parent information
 const modifiedCompanies = computed(() => {
   return filteredCompanies.value.map((company) => {
@@ -93,6 +79,26 @@ const modifiedCompanies = computed(() => {
     }
   })
 })
+function onOpenEdit(company) {
+  onOpenModal(null, company)
+}
+function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
+  $q.dialog({
+    component: EditCompany,
+    componentProps: {
+      company: companyToEdit,
+      companies: companies.value,
+    },
+  }).onOk(async (editedCompany) => {
+    try {
+      // console.log('Edited Company:', editedCompany)
+      await saveCompany.mutate(editedCompany)
+      // notifyMsgs.success('Company saved successfully')
+    } catch (err) {
+      console.log(err)
+    }
+  })
+}
 
 function updateFilter(newFilter) {
   filter.value = {

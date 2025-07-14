@@ -121,6 +121,7 @@ function onOKClick() {
 
   if (company.value.isEmpty) {
     delete company.value.isEmpty
+    delete company.value.id
   }
 
   if (company.value.parentName) {

@@ -32,20 +32,22 @@ async function getCompanies() {
 
 async function saveCompany(company) {
   const companies = storageService.get(DB_NAME)
+  let factoredCompany
   if (company.id) {
+    factoredCompany = _factorCompanyForSave(company)
     const idx = companies.findIndex((c) => c.company_id === company.id)
-
     companies[idx] = {
       ...companies[idx],
-      ...company,
+      ...factoredCompany,
     }
   } else {
-    companies.push({ ...company, id: makeId() })
+    factoredCompany = _factorCompanyForSave(company)
+    companies.push({ ...factoredCompany })
   }
   return new Promise((resolve) => {
     setTimeout(() => {
       storageService.set(DB_NAME, companies)
-      resolve(_factorCompaniesForSave(companies))
+      resolve(companies)
     }, 1000)
   })
 }
@@ -64,9 +66,9 @@ function _refactorCompanies(companies) {
   }))
 }
 
-function _factorCompaniesForSave(companies) {
-  return companies.map((company) => ({
-    company_id: company.id,
+function _factorCompanyForSave(company) {
+  return {
+    company_id: company.id || makeId(),
     active: company.active,
     company_name: company.name,
     company_legal_name: company.legalName,
@@ -75,7 +77,7 @@ function _factorCompaniesForSave(companies) {
     dpf_found: company.isDpfFound,
     parent_id: company.parentId,
     provides_ai_services: company.providesAiServices,
-  }))
+  }
 }
 
 function getDefaultFilter() {
