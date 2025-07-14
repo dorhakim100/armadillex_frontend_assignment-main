@@ -56,8 +56,8 @@ function updateField(field, value) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 
-  gap: 1.2rem;
-  padding: 1.2rem;
+  gap: 0.8rem;
+  // padding: 1.2rem;
   border-radius: 8px;
   background-color: #fafafa;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);

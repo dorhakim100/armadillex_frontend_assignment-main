@@ -2,9 +2,11 @@
   <q-card>
     <q-card-section>
       <h1>Companies</h1>
-      <company-filter :filter="filter" @update="updateFilter" />
-      <!-- <edit-company /> -->
-      <q-btn color="primary" label="Add Company" @click="onOpenModal" />
+      <div class="interface-container">
+        <company-filter :filter="filter" @update="updateFilter" />
+        <!-- <edit-company /> -->
+        <q-btn color="primary" label="Add Company" @click="onOpenModal" />
+      </div>
     </q-card-section>
     <q-card-section>
       <q-spinner v-if="!companies" />
@@ -98,3 +100,15 @@ function updateFilter(newFilter) {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.interface-container {
+  display: grid;
+
+  gap: 1rem;
+
+  button {
+    justify-self: start;
+  }
+}
+</style>
