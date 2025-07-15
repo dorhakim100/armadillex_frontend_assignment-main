@@ -43,6 +43,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
+
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
 
@@ -50,7 +51,6 @@ const props = defineProps(['filter'])
 const emit = defineEmits(['update'])
 
 function updateField(field, value) {
-  // Don't mutate props - create a new object instead
   const newFilter = {
     ...props.filter,
     [field]: value,

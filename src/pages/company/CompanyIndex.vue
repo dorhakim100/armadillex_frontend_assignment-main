@@ -4,7 +4,6 @@
       <h1>Companies</h1>
       <div class="interface-container">
         <company-filter :filter="filter" @update="updateFilter" />
-        <!-- <edit-company /> -->
         <q-btn color="primary" label="Add Company" @click="onOpenModal" />
       </div>
     </q-card-section>
@@ -18,16 +17,18 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { useCompanies } from 'src/composables/useCompanies'
+
 import { companiesService } from '../../services/api/companies.service'
+import { useCompanies } from 'src/composables/useCompanies'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
 
-const filter = ref(companiesService.getDefaultFilter())
 const { companies, saveCompany, deleteCompany } = useCompanies()
 const companiesCopy = ref([])
+
+const filter = ref(companiesService.getDefaultFilter())
 
 const $q = useQuasar()
 
@@ -55,16 +56,7 @@ const filteredCompanies = computed(() => {
 
   return list
 })
-// Update the raw copy ONLY when the async data arrives
-watch(
-  companies,
-  (newVal) => {
-    if (newVal) {
-      companiesCopy.value = [...newVal]
-    }
-  },
-  { immediate: true },
-)
+
 // modify to show parent information
 const modifiedCompanies = computed(() => {
   return filteredCompanies.value.map((company) => {
@@ -75,10 +67,30 @@ const modifiedCompanies = computed(() => {
     }
   })
 })
+
+watch(
+  companies,
+  (newVal) => {
+    if (newVal) {
+      companiesCopy.value = [...newVal]
+    }
+  },
+  { immediate: true },
+)
+
+function updateFilter(newFilter) {
+  filter.value = {
+    ...filter.value,
+    ...newFilter,
+  }
+}
+
 function onOpenEdit(company) {
   onOpenModal(null, company)
 }
+
 function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
+  // first parameter is event, not used
   $q.dialog({
     component: EditCompany,
     componentProps: {
@@ -90,16 +102,12 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
       const { action, company: editedCompany } = clickEvent
 
       if (action === 'delete') {
-        // Handle delete
         try {
-          console.log('Deleting company:', editedCompany)
           await deleteCompany(editedCompany.id)
-          // Success notification handled in composable
         } catch (err) {
           console.error('Delete failed:', err)
         }
       } else {
-        // Handle save (existing logic)
         try {
           await saveCompany(editedCompany)
         } catch (err) {
@@ -109,15 +117,8 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
     })
 
     .onCancel(() => {
-      console.log('Dialog cancelled')
+      // console.log('Dialog cancelled')
     })
-}
-
-function updateFilter(newFilter) {
-  filter.value = {
-    ...filter.value,
-    ...newFilter,
-  }
 }
 </script>
 

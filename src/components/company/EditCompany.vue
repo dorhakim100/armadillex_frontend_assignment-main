@@ -85,16 +85,15 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useDialogPluginComponent } from 'quasar'
-import { useQuasar } from 'quasar'
+import { useDialogPluginComponent, useQuasar } from 'quasar'
 
+import { notifyService } from 'src/services/notify.service'
+import { formatDate } from 'src/services/util.service'
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
 import { companyFields } from '../../config/company/fields'
 
 import DatePicker from './FilterCmps/DatePicker.vue'
-import { notifyService } from 'src/services/notify.service'
-import { formatDate } from 'src/services/util.service'
 
 const props = defineProps({
   company: Object,

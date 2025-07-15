@@ -16,10 +16,10 @@ function handleEdit(company) {
 }
 </script>
 <style scoped lang="scss">
-.container {
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // justify-content: center;
-}
+// .container {
+// display: flex;
+// flex-direction: column;
+// align-items: center;
+// justify-content: center;
+// }
 </style>
