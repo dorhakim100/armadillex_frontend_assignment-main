@@ -49,6 +49,11 @@
           emit-value
           map-options
           popup-content-class="custom-select-dropdown"
+          use-input
+          clearable
+          @clear="companiesFilterTxt.value = ''"
+          input-debounce="0"
+          @filter="filterSelectCompanies"
         />
 
         <!-- Date -->
@@ -113,11 +118,14 @@ const $q = useQuasar()
 
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
+const companiesCopy = ref([...props.companies])
 const isLoadingAiNames = ref(false)
 const sudgestedNames = ref([])
+const companiesFilterTxt = ref('')
+const countriesFilterTxt = ref('')
 
 const companiesNameId = computed(() => {
-  return companies.value.map((c) => {
+  return companiesCopy.value.map((c) => {
     {
       return {
         id: c.id,
@@ -171,6 +179,22 @@ async function onGenerateAiNames() {
     console.error('Error generating AI names:', error)
   } finally {
     isLoadingAiNames.value = false
+  }
+}
+
+function filterSelectCompanies(val, update) {
+  if (val === '') {
+    update(() => {
+      companiesFilterTxt.value = ''
+      companiesCopy.value = companies.value
+    })
+  } else {
+    const regex = new RegExp(val, 'i')
+    const filtered = companiesNameId.value.filter((c) => regex.test(c.name))
+    update(() => {
+      companiesFilterTxt.value = val
+      companiesCopy.value = filtered
+    })
   }
 }
 </script>
