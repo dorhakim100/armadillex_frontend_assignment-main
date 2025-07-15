@@ -25,7 +25,7 @@ export const columns = [
     field: 'parent',
     align: 'left',
     sortable: true,
-    format: (val) => (val ? val.name : ''),
+    format: (val) => (val ? val.name : 'N/A'),
   },
   {
     name: 'edit',

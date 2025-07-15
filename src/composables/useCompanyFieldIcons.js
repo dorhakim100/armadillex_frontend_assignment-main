@@ -6,12 +6,12 @@ export const companyFieldIcons = [
   },
   {
     field: 'providesAiServices',
-    trueIcon: { name: 'smart_toy', color: 'primary' },
-    falseIcon: { name: 'remove_circle_outline', color: 'grey' },
+    trueIcon: { name: 'check_circle', color: 'positive' },
+    falseIcon: { name: 'cancel', color: 'negative' },
   },
   {
     field: 'isDpfFound',
-    trueIcon: { name: 'find_in_page', color: 'accent' },
-    falseIcon: { name: 'highlight_off', color: 'grey-6' },
+    trueIcon: { name: 'check_circle', color: 'positive' },
+    falseIcon: { name: 'cancel', color: 'negative' },
   },
 ]
