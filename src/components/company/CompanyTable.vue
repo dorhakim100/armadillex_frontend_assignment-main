@@ -27,8 +27,8 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 
-import { columns } from 'src/composables/useCompanyTableConfig'
-import { companyFieldIcons } from '../../composables/useCompanyFieldIcons'
+import { columns } from '../../config/company/table.config'
+import { companyFieldIcons } from '../../config/company/boolean.icons'
 
 const props = defineProps(['companies'])
 const emit = defineEmits(['handleEdit'])

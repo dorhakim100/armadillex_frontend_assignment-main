@@ -1,4 +1,4 @@
-import { countries } from './useCompanyFilter'
+import { countries } from './filters'
 
 export const companyFields = [
   { key: 'name', label: 'Company Name', type: 'text', aiSuggest: true },

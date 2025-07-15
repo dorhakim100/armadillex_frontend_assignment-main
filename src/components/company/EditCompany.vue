@@ -90,7 +90,7 @@ import { useQuasar } from 'quasar'
 
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
-import { companyFields } from '../../composables/useCompanyFields'
+import { companyFields } from '../../config/company/fields'
 
 import DatePicker from './FilterCmps/DatePicker.vue'
 import { notifyService } from 'src/services/notify.service'

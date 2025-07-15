@@ -43,7 +43,8 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import { countries, checkboxFilters } from '../../composables/useCompanyFilter'
+import { checkboxFilters } from '../../config/company/filters'
+import { countries } from '../../config/company/countries'
 
 const props = defineProps(['filter'])
 const emit = defineEmits(['update'])
