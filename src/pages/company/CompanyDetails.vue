@@ -17,40 +17,52 @@
         <img :src="logo" alt="Logo" />
       </q-card-section>
 
+      <!-- <q-separator spaced /> -->
+
       <q-separator spaced />
 
-      <q-card-section>
-        <div class="row q-col-gutter-md q-mb-sm">
-          <div class="col-12 col-md-6">
-            <div class="text-caption text-grey">Legal Name</div>
-            <div class="text-body1">{{ company.legalName }}</div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="text-caption text-grey">Country</div>
-            <div class="text-body1">{{ company.country }}</div>
-          </div>
+      <q-card-section class="details-container">
+        <div class="legel-name-container">
+          <span class="text-caption text-grey">Legal Name</span>
+          <span class="text-body1">{{ company.legalName }}</span>
+        </div>
+        <div class="country-container">
+          <span class="text-caption text-grey">Country</span>
+          <span class="text-body1">{{ company.country }}</span>
         </div>
 
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
-            <span class="text-caption text-grey">Parent Company</span>
-            <div class="text-body1">
-              <q-btn
-                v-if="companyWithParent.parent.id"
-                flat
-                dense
-                no-caps
-                class="text-primary q-pa-none"
-                @click="navigateToCompany(companyWithParent.parent.id)"
-                >{{ companyWithParent.parent.name }}</q-btn
-              >
-              <span v-else>—</span>
-            </div>
+        <div class="parent-company-container">
+          <span class="text-caption text-grey">Parent Company</span>
+          <div class="text-body1">
+            <q-btn
+              v-if="companyWithParent.parent"
+              flat
+              dense
+              no-caps
+              class="text-primary q-pa-none"
+              @click="navigateToCompany(companyWithParent.parent.id)"
+              >{{ companyWithParent.parent.name }}</q-btn
+            >
+            <span v-else>—</span>
           </div>
-          <div class="col-12 col-md-6">
-            <div class="text-caption text-grey">Date Added</div>
-            <div class="text-body1">{{ formattedDate }}</div>
-          </div>
+        </div>
+        <div class="date-container">
+          <span class="text-caption text-grey">Date Added</span>
+          <span class="text-body1">{{ formattedDate }}</span>
+        </div>
+
+        <div class="icons-container">
+          <q-icon
+            v-for="(iconField, index) in companyFieldIcons"
+            :key="index"
+            :name="company[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name"
+            :color="company[iconField.field] ? 'positive' : 'grey-5'"
+            size="md"
+          >
+            <q-tooltip>{{
+              company[iconField.key] ? 'Active Company' : 'Inactive Company'
+            }}</q-tooltip>
+          </q-icon>
         </div>
       </q-card-section>
     </q-card>
@@ -75,13 +87,15 @@ import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
 
+import { companyFieldIcons } from 'src/config/company/boolean.icons'
+
 import logo from 'src/assets/company/sample-company-logo.png'
 
 const route = useRoute()
 const router = useRouter()
 
 const { company, isLoading, companies } = useCompanyById(computed(() => route.params.id))
-
+console.log(company.value)
 const companyWithParent = computed(() => {
   const parent = companies.value.find((c) => c.id === company.value.parentId)
   return {
@@ -101,6 +115,9 @@ function navigateToCompany(id) {
 </script>
 
 <style scoped>
+.text-caption {
+  font-weight: 500;
+}
 .items-center {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -116,7 +133,48 @@ function navigateToCompany(id) {
     width: 80px;
   }
 }
-.text-caption {
-  font-weight: 500;
+
+.details-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+  align-items: center;
+
+  @media (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.6rem;
+
+    /* grid-template-columns: 1fr; */
+    /* grid-template-rows: repeat(4, auto); */
+  }
+
+  div:not(.icons-container) {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  .parent-company-container {
+    grid-column: 1/2;
+    grid-row: 2/3;
+  }
+  .date-container {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
+}
+.icons-container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: start;
+  padding: 0 0 12px 0; /* reduced bottom padding */
+  margin: 0;
+
+  @media (max-width: 600px) {
+    align-self: stretch;
+    justify-content: space-between;
+  }
 }
 </style>
