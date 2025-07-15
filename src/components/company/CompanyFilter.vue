@@ -1,5 +1,7 @@
 <template>
-  <div class="filter-container q-pa-md">
+  <fieldset class="filter-container q-pa-md">
+    <legend>Filters</legend>
+
     <div class="filter-inputs">
       <q-input
         filled
@@ -38,7 +40,7 @@
         dense
       />
     </div>
-  </div>
+  </fieldset>
 </template>
 
 <script setup>
@@ -70,6 +72,18 @@ function updateField(field, value) {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   gap: 1rem;
   padding: 1rem 1.2rem;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+
+  legend {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    color: #2c3e50;
+  }
 
   @media (max-width: 600px) {
     display: grid;
