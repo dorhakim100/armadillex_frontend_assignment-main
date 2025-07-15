@@ -45,15 +45,16 @@
           v-else-if="field.type === 'select'"
           v-model="company[field.key]"
           :label="field.label"
-          :options="field.key === 'parentName' ? companiesNameId.map((c) => c.name) : field.options"
+          :options="getSelectOptions(field.key)"
           emit-value
           map-options
-          popup-content-class="custom-select-dropdown"
           use-input
           clearable
-          @clear="companiesFilterTxt.value = ''"
+          popup-content-class="custom-select-dropdown"
           input-debounce="0"
-          @filter="filterSelectCompanies"
+          @filter="(val, update) => handleFilter(field.key, val, update)"
+          @clear="() => handleClear(field.key)"
+          :input-class="getCustomInputClass(field.key)"
         />
 
         <!-- Date -->
@@ -97,6 +98,7 @@ import { formatDate } from 'src/services/util.service'
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
 import { companyFields } from '../../config/company/fields'
+import { countries } from 'src/config/company/filters'
 
 import DatePicker from './FilterCmps/DatePicker.vue'
 
@@ -119,6 +121,8 @@ const $q = useQuasar()
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
 const companiesCopy = ref([...props.companies])
+const countriesCopy = ref([...countries])
+
 const isLoadingAiNames = ref(false)
 const sudgestedNames = ref([])
 const companiesFilterTxt = ref('')
@@ -182,20 +186,51 @@ async function onGenerateAiNames() {
   }
 }
 
-function filterSelectCompanies(val, update) {
-  if (val === '') {
-    update(() => {
-      companiesFilterTxt.value = ''
-      companiesCopy.value = companies.value
-    })
+function handleFilter(key, val, update) {
+  if (key === 'parentName') {
+    filterSelectCompanies(val, update)
   } else {
-    const regex = new RegExp(val, 'i')
-    const filtered = companiesNameId.value.filter((c) => regex.test(c.name))
-    update(() => {
-      companiesFilterTxt.value = val
-      companiesCopy.value = filtered
-    })
+    filterSelectCountries(val, update)
   }
+}
+
+function handleClear(key) {
+  if (key === 'parentName') {
+    companiesFilterTxt.value = ''
+    companiesCopy.value = companies.value
+  } else {
+    countriesFilterTxt.value = ''
+    countriesCopy.value = companies.value
+  }
+}
+
+function getSelectOptions(key) {
+  return key === 'parentName' ? companiesCopy.value.map((c) => c.name) : countriesCopy.value
+}
+
+function getCustomInputClass(key) {
+  return key === 'country' ? 'text-uppercase' : ''
+}
+
+function filterSelectCompanies(val, update) {
+  const regex = new RegExp(val, 'i')
+  const filtered = companiesNameId.value.filter((c) => regex.test(c.name))
+
+  update(() => {
+    companiesFilterTxt.value = val
+    companiesCopy.value = val ? filtered : companies.value
+  })
+}
+function filterSelectCountries(val, update) {
+  const regex = new RegExp(val, 'i')
+  const filtered = countriesCopy.value.filter((c) => regex.test(c))
+
+  console.log('Filtered countries:', filtered)
+
+  update(() => {
+    countriesFilterTxt.value = val
+    countriesCopy.value = val ? filtered : countries
+  })
 }
 </script>
 
