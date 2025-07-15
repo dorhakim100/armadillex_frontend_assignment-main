@@ -67,10 +67,34 @@
 
     <!-- Placeholder for future sections -->
     <q-card class="q-pa-md">
-      <q-card-section>
-        <div class="text-h6">More Info</div>
-        <div class="text-caption text-grey">
+      <q-card-section class="more-info-container">
+        <span class="text-h6">More Info</span>
+        <span class="text-caption text-grey">
           This section can show contacts, addresses, or AI tags.
+        </span>
+        <q-btn
+          flat
+          dense
+          no-caps
+          class="text-primary q-pa-none link-button"
+          href="https://google.com"
+          target="_blank"
+          label="Visit Site"
+          icon-right="open_in_new"
+        />
+        <div class="socials-container">
+          <q-btn
+            v-for="social in companySocials"
+            :key="social.key"
+            flat
+            round
+            dense
+            :href="social.getHref(company)"
+            target="_blank"
+          >
+            <q-tooltip>{{ social.tooltip }}</q-tooltip>
+            <img :src="socialsImgs.find((img) => img.key === social.key)?.icon" alt="Social Icon" />
+          </q-btn>
         </div>
       </q-card-section>
     </q-card>
@@ -91,8 +115,12 @@ import { useCompanies } from 'src/composables/useCompanies'
 import EditCompany from 'src/components/company/EditCompany.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
+import { companySocials } from 'src/config/company/socials'
 
 import logo from 'src/assets/company/sample-company-logo.png'
+import whatsapp from 'src/assets/imgs/whatsapp.svg'
+import linkedin from 'src/assets/imgs/linkedin.svg'
+import email from 'src/assets/imgs/email.svg'
 
 const route = useRoute()
 const router = useRouter()
@@ -102,7 +130,12 @@ const $q = useQuasar()
 const { company, isLoading, companies } = useCompanyById(computed(() => route.params.id))
 const { saveCompany, deleteCompany } = useCompanies()
 
-console.log(company.value)
+const socialsImgs = [
+  { key: 'whatsapp', icon: whatsapp },
+  { key: 'linkedin', icon: linkedin },
+  { key: 'email', icon: email },
+]
+
 const companyWithParent = computed(() => {
   const parent = companies.value.find((c) => c.id === company.value.parentId)
   return {
@@ -200,15 +233,41 @@ function onEdit() {
 .icons-container {
   grid-row: 1/-1;
   display: flex;
-  gap: 24px;
+  gap: 1.8em;
   align-items: center;
   justify-content: end;
-  padding: 0 0 12px 0; /* reduced bottom padding */
-  margin: 0;
 
   @media (max-width: 600px) {
     align-self: stretch;
     justify-content: space-between;
+  }
+}
+.more-info-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-rows: repeat(2, auto); */
+
+  span {
+    grid-column: 1/2;
+  }
+
+  .link-button {
+    grid-row: 1/-1;
+    grid-column: 2/-1;
+
+    justify-self: end;
+    align-self: center;
+  }
+
+  .socials-container {
+    grid-column: 1/-1;
+    justify-self: center;
+    display: flex;
+    gap: 1rem;
+
+    img {
+      width: 2rem;
+    }
   }
 }
 </style>
