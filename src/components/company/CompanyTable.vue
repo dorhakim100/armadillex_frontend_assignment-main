@@ -1,6 +1,17 @@
 <template>
   <div class="table-container">
     <q-table title="Companies" :rows="companies" :columns="columns" row-key="id" flat bordered>
+      <template v-slot:[`body-cell-name`]="props">
+        <q-td :props="props">
+          <router-link
+            :to="{ name: 'company-details', params: { id: props.row.id } }"
+            class="text-primary text-weight-medium text-no-wrap"
+            style="text-decoration: none"
+          >
+            {{ props.row.name }}
+          </router-link>
+        </q-td>
+      </template>
       <template
         v-for="iconField in companyFieldIcons"
         :key="iconField.field"
