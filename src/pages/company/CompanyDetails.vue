@@ -18,10 +18,6 @@
       </q-card-section>
 
       <q-separator spaced />
-      <!--
-      <q-card-section class="actions-container"> </q-card-section>
-
-      <q-separator spaced /> -->
 
       <q-card-section>
         <div class="row q-col-gutter-md q-mb-sm">
@@ -37,8 +33,19 @@
 
         <div class="row q-col-gutter-md">
           <div class="col-12 col-md-6">
-            <div class="text-caption text-grey">Parent Company</div>
-            <div class="text-body1">{{ company.parentName || '—' }}</div>
+            <span class="text-caption text-grey">Parent Company</span>
+            <div class="text-body1">
+              <q-btn
+                v-if="companyWithParent.parent.id"
+                flat
+                dense
+                no-caps
+                class="text-primary q-pa-none"
+                @click="navigateToCompany(companyWithParent.parent.id)"
+                >{{ companyWithParent.parent.name }}</q-btn
+              >
+              <span v-else>—</span>
+            </div>
           </div>
           <div class="col-12 col-md-6">
             <div class="text-caption text-grey">Date Added</div>
@@ -62,20 +69,35 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { formatUtcToDisplayDate } from 'src/services/util.service'
+import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
 
 import logo from 'src/assets/company/sample-company-logo.png'
 
 const route = useRoute()
+const router = useRouter()
 
-const { company, isLoading } = useCompanyById(route.params.id)
+const { company, isLoading, companies } = useCompanyById(computed(() => route.params.id))
+
+const companyWithParent = computed(() => {
+  const parent = companies.value.find((c) => c.id === company.value.parentId)
+  return {
+    ...company,
+    parent: parent ? { id: parent.id, name: parent.name } : null,
+  }
+})
 
 const formattedDate = computed(() =>
   company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
+
+function navigateToCompany(id) {
+  if (!id) return notifyService.error(notifyMsgs.companyNotFound)
+  router.push({ name: 'company-details', params: { id } })
+}
 </script>
 
 <style scoped>
