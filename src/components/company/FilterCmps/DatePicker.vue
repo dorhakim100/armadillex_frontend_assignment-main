@@ -19,9 +19,9 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 
-const props = defineProps({
-  // modelValue: [String, Date, null], // or whatever type you use
-})
+// const props = defineProps({
+//   // modelValue: [String, Date, null], // or whatever type you use
+// })
 
 const emit = defineEmits(['update:modelValue'])
 

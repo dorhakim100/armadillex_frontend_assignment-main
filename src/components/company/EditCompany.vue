@@ -61,6 +61,7 @@
           v-for="field in companyFields.filter((f) => f.type === 'checkbox')"
           v-model="company[field.key]"
           :label="field.label"
+          :key="field.key"
           class="checkbox-group"
         />
       </q-card-section>
@@ -93,6 +94,7 @@ import { companyFields } from '../../composables/useCompanyFields'
 
 import DatePicker from './FilterCmps/DatePicker.vue'
 import { notifyService } from 'src/services/notify.service'
+import { formatDate } from 'src/services/util.service'
 
 const props = defineProps({
   company: Object,
@@ -138,12 +140,13 @@ function onOKClick() {
     company.value.parentId = parentId
   }
 
+  company.value.dateAdded = formatDate(company.value.dateAdded)
+
   onDialogOK({ action: 'save', company: company.value })
 }
 
 function onDeleteClick() {
   // Use Quasar's dialog for confirmation
-
   $q.dialog({
     title: 'Confirm Delete',
     message: `Are you sure you want to delete "${company.value.name}"?`,
@@ -153,8 +156,6 @@ function onDeleteClick() {
     persistent: true,
     color: 'negative',
   }).onOk(() => {
-    // Call the dialog's onDelete method
-    console.log('DIALOG DELETE CLICKED')
     onDialogOK({ action: 'delete', company: company.value })
   })
 }
@@ -172,10 +173,6 @@ async function onGenerateAiNames() {
   } finally {
     isLoadingAiNames.value = false
   }
-}
-
-function updateTimestamp() {
-  company.value.updatedAt = new Date().toISOString()
 }
 </script>
 

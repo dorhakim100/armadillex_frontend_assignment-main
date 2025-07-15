@@ -51,7 +51,7 @@ export function isValueEmpty(value) {
   return value === null || value === undefined || value === ''
 }
 
-export function makeId(length = 5) {
+export function makeId(length = 12) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let result = ''
   for (let i = 0; i < length; i++) {
@@ -64,4 +64,8 @@ export function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min)
   const maxFloored = Math.floor(max)
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled) // The maximum is inclusive and the minimum is inclusive
+}
+
+export function formatDate(date) {
+  return new Date(date).toUTCString()
 }
