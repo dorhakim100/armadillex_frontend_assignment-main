@@ -59,9 +59,7 @@
             :color="company[iconField.field] ? 'positive' : 'grey-5'"
             size="md"
           >
-            <q-tooltip>{{
-              company[iconField.key] ? 'Active Company' : 'Inactive Company'
-            }}</q-tooltip>
+            <q-tooltip>{{ iconField.label }}</q-tooltip>
           </q-icon>
         </div>
       </q-card-section>
@@ -82,10 +80,15 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
+
 import { formatUtcToDisplayDate } from 'src/services/util.service'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
+import { useCompanies } from 'src/composables/useCompanies'
+
+import EditCompany from 'src/components/company/EditCompany.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 
@@ -94,7 +97,11 @@ import logo from 'src/assets/company/sample-company-logo.png'
 const route = useRoute()
 const router = useRouter()
 
+const $q = useQuasar()
+
 const { company, isLoading, companies } = useCompanyById(computed(() => route.params.id))
+const { saveCompany, deleteCompany } = useCompanies()
+
 console.log(company.value)
 const companyWithParent = computed(() => {
   const parent = companies.value.find((c) => c.id === company.value.parentId)
@@ -111,6 +118,32 @@ const formattedDate = computed(() =>
 function navigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)
   router.push({ name: 'company-details', params: { id } })
+}
+
+function onEdit() {
+  $q.dialog({
+    component: EditCompany,
+    componentProps: {
+      company: company.value,
+      companies: companies.value,
+    },
+  }).onOk(async (clickEvent) => {
+    const { action, company: editedCompany } = clickEvent
+
+    if (action === 'delete') {
+      try {
+        await deleteCompany(editedCompany.id)
+      } catch (err) {
+        console.error('Delete failed:', err)
+      }
+    } else {
+      try {
+        await saveCompany(editedCompany)
+      } catch (err) {
+        console.error('Save failed:', err)
+      }
+    }
+  })
 }
 </script>
 
@@ -136,7 +169,7 @@ function navigateToCompany(id) {
 
 .details-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(fit-content, 1fr));
   grid-template-rows: repeat(2, 1fr);
   align-items: center;
 
@@ -165,10 +198,11 @@ function navigateToCompany(id) {
   }
 }
 .icons-container {
+  grid-row: 1/-1;
   display: flex;
   gap: 24px;
   align-items: center;
-  justify-content: start;
+  justify-content: end;
   padding: 0 0 12px 0; /* reduced bottom padding */
   margin: 0;
 
