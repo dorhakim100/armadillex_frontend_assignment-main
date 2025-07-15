@@ -16,7 +16,14 @@
         </q-td>
       </template>
       <template v-slot:[`body-cell-edit`]="props">
-        <q-td :props="props" class="icon-container">
+        <q-td :props="props" class="icon-container group">
+          <q-btn
+            @click="onNavigateToDetails(props.row)"
+            flat
+            round
+            color="primary"
+            icon="visibility"
+          />
           <q-btn @click="onEditCompany(props.row)" flat round color="primary" icon="edit" />
         </q-td>
       </template>
@@ -31,10 +38,13 @@ import { columns } from '../../config/company/table.config'
 import { companyFieldIcons } from '../../config/company/boolean.icons'
 
 const props = defineProps(['companies'])
-const emit = defineEmits(['handleEdit'])
+const emit = defineEmits(['handleEdit', 'navigate'])
 
 function onEditCompany(company) {
   emit('onEdit', company)
+}
+function onNavigateToDetails(company) {
+  emit('navigate', company)
 }
 </script>
 

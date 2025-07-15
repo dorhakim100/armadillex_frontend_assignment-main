@@ -14,7 +14,7 @@ const routes = [
         component: () => import('src/pages/company/CompanyIndex.vue'),
       },
       {
-        path: ROUTES.COMPANY_DETAILS,
+        path: `${ROUTES.COMPANY}/:id`,
         name: ROUTES.COMPANY_DETAILS,
         component: () => import('src/pages/company/CompanyDetails.vue'),
       },

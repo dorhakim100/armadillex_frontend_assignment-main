@@ -57,17 +57,21 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDate } from 'src/services/util.service'
 
+import { useCompanyById } from 'src/composables/useCompanyById'
+
 const route = useRoute()
 
+const { company, isLoading } = useCompanyById(route.params.id)
+
 // Ideally you'd fetch this based on route.params.id
-const company = ref({
-  id: route.params.id,
-  name: 'Acme Corp',
-  legalName: 'Acme Corporation Ltd.',
-  country: 'USA',
-  parentName: 'Global Holdings Inc.',
-  dateAdded: '2025-01-26',
-})
+// const company = ref({
+//   id: route.params.id,
+//   name: 'Acme Corp',
+//   legalName: 'Acme Corporation Ltd.',
+//   country: 'USA',
+//   parentName: 'Global Holdings Inc.',
+//   dateAdded: '2025-01-26',
+// })
 
 const formattedDate = computed(() =>
   company.value.dateAdded ? formatDate(company.value.dateAdded) : '',
