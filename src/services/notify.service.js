@@ -55,6 +55,7 @@ export const notifyMsgs = {
   loginSuccess: 'Welcome back ',
   logoutSuccess: 'Logged out successfully.',
   companiesFetched: 'Companies fetched successfully.',
+  companiesError: `Companies couldn't be fetched.`,
   companyAdded: 'Company added successfully.',
   companyUpdated: 'Company updated successfully.',
   companyDeleted: 'Company deleted successfully.',

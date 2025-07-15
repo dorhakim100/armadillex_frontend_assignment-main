@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
+import { computed } from 'vue'
 import { companiesService } from 'src/services/api/companies.service'
 import { QUERY_KEYS } from './const'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
@@ -13,6 +14,10 @@ export function useCompanies() {
       const companies = await companiesService.getCompanies()
       notifyService.success(notifyMsgs.companiesFetched)
       return companies
+    },
+    onError: (error) => {
+      notifyService.error(notifyMsgs.companiesError)
+      console.error('Companies fetch error:', error)
     },
   })
 
@@ -42,10 +47,14 @@ export function useCompanies() {
     },
   })
 
+  const isBusy = computed(() => {
+    return companiesQuery.isLoading || saveCompany.isPending || deleteCompany.isPending
+  })
+
   return {
     // Query state
     companies: companiesQuery.data,
-    isLoading: companiesQuery.isLoading,
+    isLoading: isBusy,
     error: companiesQuery.error,
 
     // Mutations
@@ -55,8 +64,5 @@ export function useCompanies() {
     // Mutation states
     isSaving: saveCompany.isPending,
     saveError: saveCompany.error,
-
-    // Raw mutation object (for advanced usage)
-    // saveCompanyMutation: saveCompany,
   }
 }
