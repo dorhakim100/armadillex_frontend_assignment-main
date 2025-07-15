@@ -3,17 +3,25 @@
     <!-- Header -->
     <div class="row items-center q-mb-md">
       <q-btn icon="arrow_back" flat round @click="$router.back()" />
-      <div class="text-h5 q-ml-sm">Company Details</div>
+      <span class="text-h5 q-ml-sm">Company Details</span>
+      <q-btn icon="edit" flat label="Edit" @click="onEdit" class="q-mr-sm">
+        <q-tooltip>Edit Company</q-tooltip>
+      </q-btn>
     </div>
 
     <!-- Main Company Card -->
     <q-card class="q-pa-md q-mb-lg">
-      <q-card-section>
+      <q-card-section class="company-header-container">
         <div class="text-h6">{{ company.name }}</div>
         <div class="text-subtitle2 text-grey">ID: {{ company.id }}</div>
+        <img :src="logo" alt="Logo" />
       </q-card-section>
 
       <q-separator spaced />
+      <!--
+      <q-card-section class="actions-container"> </q-card-section>
+
+      <q-separator spaced /> -->
 
       <q-card-section>
         <div class="row q-col-gutter-md q-mb-sm">
@@ -55,30 +63,37 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { formatDate } from 'src/services/util.service'
+import { formatUtcToDisplayDate } from 'src/services/util.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
+
+import logo from 'src/assets/company/sample-company-logo.png'
 
 const route = useRoute()
 
 const { company, isLoading } = useCompanyById(route.params.id)
 
-// Ideally you'd fetch this based on route.params.id
-// const company = ref({
-//   id: route.params.id,
-//   name: 'Acme Corp',
-//   legalName: 'Acme Corporation Ltd.',
-//   country: 'USA',
-//   parentName: 'Global Holdings Inc.',
-//   dateAdded: '2025-01-26',
-// })
-
 const formattedDate = computed(() =>
-  company.value.dateAdded ? formatDate(company.value.dateAdded) : '',
+  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
 </script>
 
 <style scoped>
+.items-center {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+.company-header-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: repeat(2, 1fr);
+
+  img {
+    grid-column: 2/3;
+    grid-row: 1/-1;
+    width: 80px;
+  }
+}
 .text-caption {
   font-weight: 500;
 }
