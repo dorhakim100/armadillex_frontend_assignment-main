@@ -1,7 +1,7 @@
 export const columns = [
   { name: 'name', label: 'Name', field: 'name', sortable: true, align: 'left' },
-  { name: 'legalName', label: 'Legal Name', field: 'legalName', sortable: true, align: 'left' },
-  { name: 'country', label: 'Country', field: 'country', sortable: true, align: 'left' },
+  // { name: 'legalName', label: 'Legal Name', field: 'legalName', sortable: true, align: 'left' },
+  // { name: 'country', label: 'Country', field: 'country', sortable: true, align: 'left' },
   { name: 'active', label: 'Active', field: 'active', sortable: true, align: 'center' },
   {
     name: 'providesAiServices',
@@ -11,17 +11,17 @@ export const columns = [
     align: 'center',
   },
   { name: 'isDpfFound', label: 'DPF Found', field: 'isDpfFound', sortable: true, align: 'center' },
-  {
-    name: 'dateAdded',
-    label: 'Date Added',
-    field: 'dateAdded',
-    sortable: true,
-    align: 'left',
-    format: (val) => new Date(val).toLocaleDateString(),
-  },
+  // {
+  //   name: 'dateAdded',
+  //   label: 'Date Added',
+  //   field: 'dateAdded',
+  //   sortable: true,
+  //   align: 'left',
+  //   format: (val) => new Date(val).toLocaleDateString(),
+  // },
   {
     name: 'parentName',
-    label: 'Parent Name',
+    label: 'Parent Company',
     field: 'parent',
     align: 'left',
     sortable: true,
