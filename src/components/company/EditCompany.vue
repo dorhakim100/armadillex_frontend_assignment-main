@@ -261,6 +261,7 @@ function filterSelectCountries(val, update) {
 
   @media (max-width: $break-narrow) {
     grid-template-columns: 1fr;
+    top: 10px;
   }
 }
 

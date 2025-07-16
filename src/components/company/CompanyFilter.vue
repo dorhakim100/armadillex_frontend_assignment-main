@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="filter-container q-pa-md">
+  <fieldset class="filter-container q-pa-md" :class="isMobile = 'mobile'">
     <legend>Filters</legend>
 
     <div class="filter-inputs">
@@ -44,13 +44,18 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
+
+import { useSystemStore } from 'src/stores/system'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
 
 const props = defineProps(['filter'])
 const emit = defineEmits(['update'])
+
+const store = useSystemStore()
+const isMobile = computed(() => store.isMobile)
 
 function updateField(field, value) {
   const newFilter = {
@@ -63,6 +68,7 @@ function updateField(field, value) {
 </script>
 
 <style scoped lang="scss">
+@import 'src/css/setup/_variables.scss';
 .filter-container {
   display: flex;
   flex-wrap: wrap;
@@ -86,8 +92,20 @@ function updateField(field, value) {
     color: #2c3e50;
   }
 
-  @media (max-width: 600px) {
-    display: grid;
+  @media (max-width: $break-narrow) {
+    align-self: end;
+    top: calc($header-height + 0.5rem);
+    width: calc(100vw - 3.5em);
+    z-index: 200;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.253);
+
+    legend {
+      background-color: #f5f7fa;
+
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+    }
   }
 
   .filter-inputs {
@@ -99,7 +117,7 @@ function updateField(field, value) {
       padding-bottom: 0.3rem;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: $break-narrow) {
       grid-template-columns: 1fr;
     }
   }

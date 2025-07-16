@@ -3,8 +3,24 @@
     <q-card-section>
       <h1>Companies</h1>
       <div class="interface-container">
-        <company-filter :filter="filter" @update="updateFilter" />
-        <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
+        <company-filter :filter="filter" @update="updateFilter" v-if="!isMobile" />
+        <q-btn
+          v-if="!isMobile"
+          color="primary"
+          label="Add Company"
+          icon="add"
+          @click="onOpenModal"
+        />
+        <q-fab
+          v-else
+          color="primary"
+          class="floating-button shadow-12"
+          icon="keyboard_arrow_down"
+          direction="down"
+        >
+          <company-filter :filter="filter" @update="updateFilter" />
+          <q-fab-action color="primary" icon="add" @click="onOpenModal" class="shadow-12" />
+        </q-fab>
       </div>
     </q-card-section>
     <q-card-section>
@@ -20,6 +36,8 @@ import { useQuasar } from 'quasar'
 import { companiesService } from '../../services/api/companies.service'
 import { useCompanies } from 'src/composables/useCompanies'
 
+import { useSystemStore } from 'src/stores/system'
+
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
@@ -31,7 +49,9 @@ const filter = ref(companiesService.getDefaultFilter())
 
 const $q = useQuasar()
 
-// const store = useSystemStore()
+const store = useSystemStore()
+
+const isMobile = computed(() => store.isMobile)
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
@@ -138,8 +158,29 @@ h1 {
 }
 .interface-container {
   display: grid;
-
   gap: 1rem;
+  position: relative;
+
+  .floating-button {
+    position: fixed;
+    top: calc($header-height + 1em);
+    right: 1em;
+    margin: 1rem;
+
+    button {
+      // width: 100%;
+      // height: 100%;
+      width: 60px;
+      height: 60px;
+      // font-size: 1.2rem;
+    }
+
+    a {
+      align-self: end;
+      width: 55px;
+      height: 55px;
+    }
+  }
 
   button {
     justify-self: start;
