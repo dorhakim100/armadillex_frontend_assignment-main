@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <h2>Companies</h2>
+      <h1>Companies</h1>
       <div class="interface-container">
         <company-filter :filter="filter" @update="updateFilter" />
         <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
@@ -126,11 +126,17 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
 </script>
 
 <style scoped lang="scss">
-h2 {
-  // font-size: 1.6rem;
+@import 'src/css/setup/_variables.scss';
+h1 {
+  font-size: 3.5rem;
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 1rem;
+  transition: 0.2s ease-out;
+
+  @media (max-width: $break-narrow) {
+    font-size: 2.5rem;
+  }
 }
 .interface-container {
   display: grid;
