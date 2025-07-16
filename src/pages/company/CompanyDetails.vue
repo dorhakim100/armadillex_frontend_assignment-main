@@ -1,19 +1,19 @@
 <template>
   <q-page class="q-pa-md">
     <!-- Header -->
-    <div class="row items-center q-mb-md">
+    <div class="row items-center">
       <q-btn icon="arrow_back" flat round @click="$router.back()" />
-      <span class="text-h5 q-ml-sm">Company Details</span>
+      <span class="text-h5">Company Details</span>
       <q-btn icon="edit" flat label="Edit" @click="onEdit" class="q-mr-sm">
         <q-tooltip>Edit Company</q-tooltip>
       </q-btn>
     </div>
 
     <!-- Main Company Card -->
-    <q-card class="q-pa-md q-mb-lg">
+    <q-card class="">
       <q-card-section class="company-header-container">
-        <div class="text-h6">{{ company.name }}</div>
-        <div class="text-subtitle2 text-grey">ID: {{ company.id }}</div>
+        <div class="text-h5">{{ company.name }}</div>
+        <div class="text-subtitle1 text-grey">ID: {{ company.id }}</div>
         <img :src="logo" alt="Logo" />
       </q-card-section>
 
@@ -39,7 +39,7 @@
               flat
               dense
               no-caps
-              class="text-primary q-pa-none"
+              class="text-primary"
               @click="navigateToCompany(companyWithParent.parent.id)"
               >{{ companyWithParent.parent.name }}</q-btn
             >
@@ -57,7 +57,7 @@
             :key="index"
             :name="company[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name"
             :color="company[iconField.field] ? 'positive' : 'grey-5'"
-            size="md"
+            size="xl"
           >
             <q-tooltip>{{ iconField.label }}</q-tooltip>
           </q-icon>
@@ -67,7 +67,7 @@
     </q-card>
 
     <!-- Placeholder for future sections -->
-    <q-card class="q-pa-md">
+    <q-card class="">
       <q-card-section class="more-info-container">
         <span class="text-h6">More Info</span>
         <span class="text-caption text-grey">
@@ -188,12 +188,17 @@ function onEdit() {
 </script>
 
 <style scoped>
+.q-card {
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+}
 .text-caption {
   font-weight: 500;
 }
 .items-center {
   display: grid;
   grid-template-columns: auto 1fr auto;
+  margin-bottom: 0.8em;
 }
 .company-header-container {
   display: grid;
@@ -252,7 +257,6 @@ function onEdit() {
 .more-info-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* grid-template-rows: repeat(2, auto); */
 
   span {
     grid-column: 1/2;
