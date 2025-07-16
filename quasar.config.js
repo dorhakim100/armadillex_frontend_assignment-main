@@ -20,7 +20,7 @@ export default configure((/* ctx */) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios', 'vue-query', 'error-handler'],
+    boot: ['axios', 'vue-query', 'error-handler', 'stores'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.scss'],
@@ -134,7 +134,7 @@ export default configure((/* ctx */) => {
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
     //   router: 'src/router/index',
-    //   store: 'src/store/index',
+    store: 'src/store/index',
     //   pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
     //   pwaServiceWorker: 'src-pwa/custom-service-worker',
     //   pwaManifestFile: 'src-pwa/manifest.json',

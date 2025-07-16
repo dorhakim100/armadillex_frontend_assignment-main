@@ -39,17 +39,27 @@
         </q-td>
       </template>
     </q-table>
+    <q-inner-loading
+      :showing="isLoading"
+      label="Loading companies..."
+      label-class="text-teal"
+      label-style="font-size: 1.1em"
+    />
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 
+import { useCompanies } from 'src/composables/useCompanies'
+
 import { columns } from '../../config/company/table.config'
 import { companyFieldIcons } from '../../config/company/boolean.icons'
 
 const props = defineProps(['companies'])
 const emit = defineEmits(['handleEdit', 'navigate'])
+
+const { isLoading } = useCompanies()
 
 function onEditCompany(company) {
   emit('onEdit', company)

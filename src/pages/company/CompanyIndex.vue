@@ -8,8 +8,7 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <q-spinner v-if="!companies" />
-      <company-list v-else :companies="modifiedCompanies" @onOpenEdit="onOpenEdit" />
+      <company-list :companies="modifiedCompanies" @onOpenEdit="onOpenEdit" />
     </q-card-section>
   </q-card>
 </template>
@@ -21,6 +20,8 @@ import { useQuasar } from 'quasar'
 import { companiesService } from '../../services/api/companies.service'
 import { useCompanies } from 'src/composables/useCompanies'
 
+import { useSystemStore } from 'src/stores/system'
+
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
@@ -31,6 +32,10 @@ const companiesCopy = ref([])
 const filter = ref(companiesService.getDefaultFilter())
 
 const $q = useQuasar()
+
+const store = useSystemStore()
+
+console.log(store.isLoading)
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value

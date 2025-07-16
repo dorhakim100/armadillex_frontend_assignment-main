@@ -1,11 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { companiesService } from 'src/services/api/companies.service'
 import { QUERY_KEYS } from './const'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
+import { useSystemStore } from 'src/stores/system'
 
 export function useCompanies() {
   const queryClient = useQueryClient()
+  const systemStore = useSystemStore()
 
   // Query for fetching companies
   const companiesQuery = useQuery({
@@ -48,8 +50,19 @@ export function useCompanies() {
   })
 
   const isBusy = computed(() => {
-    return companiesQuery.isLoading || saveCompany.isPending || deleteCompany.isPending
+    return (
+      companiesQuery.isLoading.value || saveCompany.isPending.value || deleteCompany.isPending.value
+    )
   })
+
+  // Sync loading state to global store
+  watch(
+    isBusy,
+    (newValue) => {
+      systemStore.setIsLoading(newValue)
+    },
+    { immediate: true },
+  )
 
   return {
     // Query state
