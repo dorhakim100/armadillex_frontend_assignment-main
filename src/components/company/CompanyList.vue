@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <company-table
+      v-if="!isMobile"
       :companies="props.companies"
       @onEdit="handleEdit"
       @navigate="navigateToCompany"
@@ -9,15 +10,21 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 import CompanyTable from './CompanyTable.vue'
+
+import { breakpoints } from 'src/config/scss.variables'
 
 const props = defineProps(['companies', 'filter'])
 const emit = defineEmits(['update', 'onOpenEdit'])
 
 const router = useRouter()
+
+const $q = useQuasar()
+const isMobile = computed(() => $q.screen.width < breakpoints.narrow)
 
 function handleEdit(company) {
   emit('onOpenEdit', company)

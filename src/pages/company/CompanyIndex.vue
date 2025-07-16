@@ -4,7 +4,7 @@
       <h2>Companies</h2>
       <div class="interface-container">
         <company-filter :filter="filter" @update="updateFilter" />
-        <q-btn color="primary" label="Add Company" @click="onOpenModal" />
+        <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
       </div>
     </q-card-section>
     <q-card-section>

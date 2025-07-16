@@ -2,7 +2,6 @@
   <div class="table-container">
     <q-table
       class="companies-table"
-      title="Companies"
       :rows="companies"
       :columns="columns"
       row-key="id"
