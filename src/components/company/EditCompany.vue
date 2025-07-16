@@ -68,7 +68,11 @@
         />
 
         <!-- Date -->
-        <date-picker v-else-if="field.type === 'date'" v-model="company[field.key]" />
+        <date-picker
+          v-else-if="field.type === 'date'"
+          v-model="company[field.key]"
+          :companyDate="company['dateAdded']"
+        />
       </q-card-section>
       <!-- Checkbox -->
 
@@ -110,7 +114,7 @@ import { useCompanyNames } from '../../composables/useCompanyNames'
 import { companyFields } from '../../config/company/fields'
 import { countries } from 'src/config/company/filters'
 
-import DatePicker from './FilterCmps/DatePicker.vue'
+import DatePicker from './DatePicker.vue'
 
 const props = defineProps({
   company: Object,
