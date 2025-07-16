@@ -6,6 +6,12 @@
       @onEdit="handleEdit"
       @navigate="navigateToCompany"
     />
+    <company-cards
+      v-else
+      :companies="companies"
+      @onEdit="handleEdit"
+      @navigate="navigateToCompany"
+    />
   </div>
 </template>
 
@@ -15,6 +21,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
 import CompanyTable from './CompanyTable.vue'
+import CompanyCards from './CompanyCards.vue'
 
 import { breakpoints } from 'src/config/scss.variables'
 

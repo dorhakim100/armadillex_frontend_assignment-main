@@ -2,6 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <app-header />
 
+    <div v-if="isLoading && isMobile" class="loader-container">
+      <q-circular-progress indeterminate rounded size="50px" class="loader" />
+    </div>
     <q-page-container class="page-container" style="padding-top: 0">
       <q-page class="q-pa-md">
         <router-view />
@@ -11,11 +14,24 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useQuasar } from 'quasar'
+import { useSystemStore } from 'src/stores/system'
+
 import AppHeader from 'src/components/layout/AppHeader.vue'
+
+import { breakpoints } from 'src/config/scss.variables'
+
+const store = useSystemStore()
+const isLoading = computed(() => store.isLoading)
+
+const $q = useQuasar()
+const isMobile = computed(() => $q.screen.width < breakpoints.narrow)
 </script>
 
 <style lang="scss">
 @import '/src/css/setup/variables.scss';
+
 .page-container {
   min-height: 100vh;
   max-width: $max-width-screen;
@@ -24,6 +40,18 @@ import AppHeader from 'src/components/layout/AppHeader.vue'
 
   .q-page {
     max-width: $max-width-screen;
+  }
+}
+.loader-container {
+  position: fixed;
+  bottom: 1em;
+  left: 1em;
+  z-index: 1000;
+
+  .loader {
+    width: 70px;
+    height: 70px;
+    color: $clr-primary;
   }
 }
 </style>
