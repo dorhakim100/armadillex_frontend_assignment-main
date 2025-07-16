@@ -3,24 +3,23 @@
     <q-card-section>
       <h1>Companies</h1>
       <div class="interface-container">
-        <company-filter :filter="filter" @update="updateFilter" v-if="!isMobile" />
-        <q-btn
-          v-if="!isMobile"
-          color="primary"
-          label="Add Company"
-          icon="add"
-          @click="onOpenModal"
-        />
-        <q-fab
-          v-else
-          color="primary"
-          class="floating-button shadow-12"
-          icon="keyboard_arrow_down"
-          direction="down"
-        >
+        <div class="desktop-container" v-if="!isMobile">
           <company-filter :filter="filter" @update="updateFilter" />
-          <q-fab-action color="primary" icon="add" @click="onOpenModal" class="shadow-12" />
-        </q-fab>
+          <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
+        </div>
+        <div v-else class="mobile-container">
+          <q-pagination v-model="pageNumber" :max="maxPage" input />
+
+          <q-fab
+            color="primary"
+            class="floating-button shadow-12"
+            icon="keyboard_arrow_down"
+            direction="down"
+          >
+            <company-filter :filter="filter" @update="updateFilter" />
+            <q-fab-action color="primary" icon="add" @click="onOpenModal" class="shadow-12" />
+          </q-fab>
+        </div>
       </div>
     </q-card-section>
     <q-card-section>
@@ -53,6 +52,20 @@ const store = useSystemStore()
 
 const isMobile = computed(() => store.isMobile)
 
+const PAGE_SIZE = 3
+const pageIdx = ref(0)
+
+const companiesLength = computed(() => companiesCopy.value.length)
+const maxPage = computed(() => Math.ceil(companiesLength.value / PAGE_SIZE))
+
+const pageNumber = computed({
+  get: () => pageIdx.value + 1,
+  set: (val) => {
+    if (val < 1) return
+    pageIdx.value = val - 1
+  },
+})
+
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
   const { txt, country, onlyActive, onlyAI, onlyDPF } = filter.value
@@ -73,6 +86,10 @@ const filteredCompanies = computed(() => {
   }
   if (onlyDPF) {
     list = list.filter((company) => company.isDpfFound)
+  }
+
+  if (isMobile.value) {
+    list = list.slice(pageIdx.value * PAGE_SIZE, pageIdx.value * PAGE_SIZE + PAGE_SIZE)
   }
 
   return list

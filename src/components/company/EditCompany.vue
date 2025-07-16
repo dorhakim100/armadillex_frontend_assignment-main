@@ -281,7 +281,7 @@ function filterSelectCountries(val, update) {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.5rem;
   align-items: center;
-  justify-items: center;
+  justify-items: start;
 
   @media (max-width: $break-narrow) {
     align-items: start;
