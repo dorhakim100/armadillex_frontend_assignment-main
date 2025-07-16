@@ -18,14 +18,14 @@
         <template v-if="field.type === 'text'">
           <q-input v-model="company[field.key]" :label="field.label">
             <template v-if="field.aiSuggest" #append>
-              <q-spinner v-if="isLoadingAiNames" />
+              <q-spinner v-if="store.isLoading" />
               <q-btn
                 v-else
                 dense
                 flat
                 icon="auto_fix_high"
                 @click="onGenerateAiNames"
-                :disable="isLoadingAiNames"
+                :disable="store.isLoading"
               />
             </template>
           </q-input>
@@ -92,6 +92,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
+import { useSystemStore } from 'src/stores/system'
 
 import { notifyService } from 'src/services/notify.service'
 import { formatDate } from 'src/services/util.service'
@@ -118,12 +119,13 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 
 const $q = useQuasar()
 
+const store = useSystemStore()
+
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
 const companiesCopy = ref([...props.companies])
 const countriesCopy = ref([...countries])
 
-const isLoadingAiNames = ref(false)
 const sudgestedNames = ref([])
 const companiesFilterTxt = ref('')
 const countriesFilterTxt = ref('')
@@ -175,14 +177,14 @@ async function onGenerateAiNames() {
     notifyService.error('Please enter a company name before generating AI names.')
     return
   }
-  isLoadingAiNames.value = true
+  store.setIsLoading(true)
   // Simulate an API call to generate AI names
   try {
     sudgestedNames.value = await useCompanyNames(company.value.name)
   } catch (error) {
     console.error('Error generating AI names:', error)
   } finally {
-    isLoadingAiNames.value = false
+    store.setIsLoading(false)
   }
 }
 
