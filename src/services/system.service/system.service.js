@@ -20,6 +20,7 @@ function getPrefs() {
 }
 
 function setPrefs(prefs) {
+  console.log(prefs)
   const entityType = SITENAME_PREFS
   localStorage.setItem(entityType, JSON.stringify(prefs))
 }

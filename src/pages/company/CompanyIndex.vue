@@ -74,15 +74,7 @@ const pageNumber = computed({
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
   const { txt, country, onlyActive, onlyAI, onlyDPF, sortDir } = filter.value
-  // console.log(list)
-  console.log(txt)
-  console.log(country)
 
-  console.log(onlyActive)
-  console.log(onlyAI)
-  console.log(onlyDPF)
-  console.log(sortDir)
-  console.log(isMobile.value)
   if (txt) {
     const regex = new RegExp(txt, 'i')
     list = list.filter((company) => regex.test(company.name) || regex.test(company.legalName))
@@ -108,14 +100,12 @@ const filteredCompanies = computed(() => {
         : list.sort((a, b) => b.name.localeCompare(a.name))
   }
 
-  console.log(list)
   return list
 })
 const companiesLength = computed(() => filteredCompanies.value.length)
 const maxPage = computed(() => Math.ceil(companiesLength.value / PAGE_SIZE))
-console.log(companiesLength.value)
 
-// modify to show parent information
+// modify for pagination
 const slicedCompanies = computed(() => {
   if (!isMobile.value) return filteredCompanies.value
 

@@ -1,7 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <app-header />
-
     <div v-if="isLoading && isMobile" class="loader-container">
       <q-circular-progress indeterminate rounded size="50px" class="loader" />
     </div>

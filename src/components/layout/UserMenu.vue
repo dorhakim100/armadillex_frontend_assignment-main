@@ -27,7 +27,7 @@
             <q-item-section>Profile</q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple @click="onOpenSettingsModal">
             <q-item-section avatar>
               <q-icon name="settings" color="secondary" />
             </q-item-section>
@@ -53,6 +53,11 @@ import { ref } from 'vue'
 import { log } from 'src/services/log.service'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
+import { useQuasar } from 'quasar'
+import SettingsModal from './SettingsModal.vue'
+
+const $q = useQuasar()
+
 const menuOpen = ref(false)
 const onLogout = async () => {
   try {
@@ -62,6 +67,23 @@ const onLogout = async () => {
     log.error('Logout failed:', err)
     notifyService.error(notifyMsgs.logoutFailed)
   }
+}
+
+function onOpenSettingsModal() {
+  menuOpen.value = false
+
+  $q.dialog({
+    component: SettingsModal,
+    componentProps: {
+      // company: companyToEdit,
+      // companies: companies.value,
+    },
+  })
+    .onOk(() => {})
+
+    .onCancel(() => {
+      // console.log('Dialog cancelled')
+    })
 }
 </script>
 
