@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-card style="min-width: 400px" class="card-container">
+    <q-card class="card-container">
       <q-card-section>
         <div class="text-h6">
           <span v-if="company.isEmpty"> Add Company</span>
@@ -12,7 +12,7 @@
         v-for="field in companyFields.filter((f) => f.type !== 'checkbox')"
         :key="field.key"
         class="q-mb-sm input-container"
-        :class="field.key"
+        :class="`${field.key} ${field.type}`"
       >
         <!-- Text or AI-enabled field -->
         <template v-if="field.type === 'text'">
@@ -31,13 +31,23 @@
           </q-input>
 
           <!-- AI suggestion radio options -->
-          <q-option-group
+          <!-- <q-option-group
             v-if="field.aiSuggest && sudgestedNames.length > 0"
             v-model="company.name"
             type="radio"
             :options="sudgestedNames.map((name) => ({ label: name, value: name }))"
             class="q-mt-sm checkbox-group ai-names-container"
-          />
+          /> -->
+          <transition name="expand-height">
+            <div v-if="field.aiSuggest && sudgestedNames.length > 0" class="ai-expand-wrapper">
+              <q-option-group
+                v-model="company.name"
+                type="radio"
+                :options="sudgestedNames.map((name) => ({ label: name, value: name }))"
+                class="q-mt-sm checkbox-group ai-names-container"
+              />
+            </div>
+          </transition>
         </template>
 
         <!-- Select -->
@@ -62,17 +72,16 @@
       </q-card-section>
       <!-- Checkbox -->
 
-      <q-card-section class="q-mb-sm">
+      <q-card-section class="q-mb-sm checkbox-group">
         <q-checkbox
           v-for="field in companyFields.filter((f) => f.type === 'checkbox')"
           v-model="company[field.key]"
           :label="field.label"
           :key="field.key"
-          class="checkbox-group"
         />
       </q-card-section>
 
-      <q-card-actions align="around">
+      <q-card-actions align="around" class="actions-container">
         <q-btn
           v-if="!company.isEmpty"
           color="red"
@@ -237,12 +246,26 @@ function filterSelectCountries(val, update) {
 </script>
 
 <style scoped lang="scss">
+@import 'src/css/setup/_variables.scss';
 .card-container {
-  // display: grid;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   // gap: 0.5rem;
+
+  padding: 0.8rem;
+
+  max-height: 80vh;
+
+  @media (max-width: $break-narrow) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .input-container {
+  align-items: center;
+  &.text {
+    grid-column: 1 / -1;
+  }
   display: grid;
 
   &.name {
@@ -251,14 +274,44 @@ function filterSelectCountries(val, update) {
 }
 .ai-names-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.5rem;
+  align-items: center;
+  justify-items: center;
+
+  @media (max-width: $break-narrow) {
+    align-items: start;
+  }
 }
 
-.cancel-ok-container {
-  justify-self: end;
+.expand-height-enter-active,
+.expand-height-leave-active {
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+  overflow: hidden;
+}
 
-  display: flex;
-  gap: 0.5rem;
+.expand-height-enter-from,
+.expand-height-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.expand-height-enter-to,
+.expand-height-leave-from {
+  max-height: 300px; // adjust based on expected size
+  opacity: 1;
+}
+
+.actions-container {
+  grid-column: 1/-1;
+
+  .cancel-ok-container {
+    justify-self: end;
+
+    display: flex;
+    gap: 0.5rem;
+  }
 }
 </style>
