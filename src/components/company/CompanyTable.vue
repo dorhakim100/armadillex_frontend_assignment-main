@@ -47,13 +47,8 @@
         </q-td>
       </template>
     </q-table>
-    <q-inner-loading
-      :showing="isLoading"
-      label="Loading companies..."
-      label-class="text-teal"
-      label-style="font-size: 1.1em"
-      class="custom-inner-loading"
-    />
+
+    <inner-loading label="Loading companies..." />
   </div>
 </template>
 
@@ -64,6 +59,8 @@ import { useCompanies } from 'src/composables/useCompanies'
 
 import { columns } from '../../config/company/table.config'
 import { companyFieldIcons } from '../../config/company/boolean.icons'
+
+import InnerLoading from '../common/InnerLoading.vue'
 
 const props = defineProps(['companies'])
 const emit = defineEmits(['handleEdit', 'navigate'])
@@ -83,12 +80,6 @@ function onNavigateToDetails(company) {
   min-height: 450px;
   .icon-container {
     text-align: center;
-  }
-
-  .custom-inner-loading {
-    background-color: rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(2px);
-    // border-radius: 8px;
   }
 }
 </style>
