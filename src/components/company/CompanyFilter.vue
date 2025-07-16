@@ -72,6 +72,7 @@ function updateField(field, value) {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   gap: 1rem;
   padding: 1rem 1.2rem;
+  font-size: 1.1rem;
 
   border: 1px solid #ccc;
   border-radius: 8px;
