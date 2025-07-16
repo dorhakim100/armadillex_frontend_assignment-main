@@ -1,6 +1,7 @@
 <template>
   <fieldset class="filter-container q-pa-md" :class="isMobile = 'mobile'">
-    <legend>Filters</legend>
+    <legend v-if="!isMobile">Filters</legend>
+    <legend v-else>Filters & Sorting</legend>
 
     <div class="filter-inputs">
       <q-input
@@ -8,10 +9,10 @@
         dense
         bottom-slots
         :model-value="props.filter.txt"
-        label="Search Name"
+        label="Name"
         @update:model-value="(val) => updateField('txt', val)"
       >
-        <template v-slot:prepend>
+        <template v-slot:prepend v-if="!isMobile">
           <q-icon name="search" />
         </template>
         <template v-slot:append>
@@ -40,6 +41,23 @@
         dense
       />
     </div>
+    <div v-if="isMobile" class="sorting-toggle-container">
+      <span>Sort by name</span>
+      <q-btn-toggle
+        spread
+        :model-value="props.filter.sortDir"
+        @update:model-value="(val) => updateField('sortDir', val)"
+        toggle-color="primary"
+        color="white"
+        text-color="primary"
+        size="sm"
+        class="sorting-toggle"
+        :options="[
+          { label: 'A-Z', value: 1 },
+          { label: 'Z-A', value: -1 },
+        ]"
+      />
+    </div>
   </fieldset>
 </template>
 
@@ -54,13 +72,15 @@ import { countries } from '../../config/company/countries'
 const props = defineProps(['filter'])
 const emit = defineEmits(['update'])
 
+console.log(props.filter)
+
 const store = useSystemStore()
 const isMobile = computed(() => store.isMobile)
 
 function updateField(field, value) {
   const newFilter = {
     ...props.filter,
-    [field]: value,
+    [field]: props.filter[value] === value ? '' : value,
   }
 
   emit('update', newFilter)
@@ -99,12 +119,36 @@ function updateField(field, value) {
     z-index: 200;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.253);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
     legend {
       background-color: #f5f7fa;
 
       border-bottom: none;
       border-radius: 6px 6px 0 0;
+    }
+
+    .filter-inputs {
+      grid-column: 1 / 2;
+    }
+
+    .sorting-toggle-container {
+      grid-column: 2 / -1;
+      grid-row: 1/2;
+      // align-self: start;
+      // align-self: end;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      // align-items: center;
+
+      span {
+        align-self: center;
+      }
+    }
+    .filter-checkboxes {
+      grid-column: 1 / -1;
     }
   }
 

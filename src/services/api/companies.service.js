@@ -102,6 +102,7 @@ function getDefaultFilter() {
     onlyActive: false,
     onlyAI: false,
     onlyDPF: false,
+    sortDir: 1,
   }
 }
 

@@ -13,7 +13,7 @@
           <q-fab
             color="primary"
             class="floating-button shadow-12"
-            icon="keyboard_arrow_down"
+            icon="keyboard_arrow_left"
             direction="down"
           >
             <company-filter :filter="filter" @update="updateFilter" />
@@ -23,7 +23,7 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <company-list :companies="modifiedCompanies" @onOpenEdit="onOpenEdit" />
+      <company-list :companies="companiesWithParent" @onOpenEdit="onOpenEdit" />
     </q-card-section>
   </q-card>
 </template>
@@ -68,7 +68,7 @@ const pageNumber = computed({
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
-  const { txt, country, onlyActive, onlyAI, onlyDPF } = filter.value
+  const { txt, country, onlyActive, onlyAI, onlyDPF, sortDir } = filter.value
 
   if (txt) {
     const regex = new RegExp(txt, 'i')
@@ -88,6 +88,12 @@ const filteredCompanies = computed(() => {
     list = list.filter((company) => company.isDpfFound)
   }
 
+  if (sortDir && isMobile.value) {
+    list =
+      sortDir === 1
+        ? list.sort((a, b) => a.name.localeCompare(b.name))
+        : list.sort((a, b) => b.name.localeCompare(a.name))
+  }
   if (isMobile.value) {
     list = list.slice(pageIdx.value * PAGE_SIZE, pageIdx.value * PAGE_SIZE + PAGE_SIZE)
   }
@@ -96,7 +102,7 @@ const filteredCompanies = computed(() => {
 })
 
 // modify to show parent information
-const modifiedCompanies = computed(() => {
+const companiesWithParent = computed(() => {
   return filteredCompanies.value.map((company) => {
     const parent = filteredCompanies.value.find((c) => c.id === company.parentId)
     return {
