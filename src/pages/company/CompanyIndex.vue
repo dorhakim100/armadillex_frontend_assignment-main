@@ -35,8 +35,6 @@ const $q = useQuasar()
 
 const store = useSystemStore()
 
-console.log(store.isLoading)
-
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
   const { txt, country, onlyActive, onlyAI, onlyDPF } = filter.value

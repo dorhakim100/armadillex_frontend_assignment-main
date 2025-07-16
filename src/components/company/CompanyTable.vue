@@ -1,6 +1,14 @@
 <template>
   <div class="table-container">
-    <q-table title="Companies" :rows="companies" :columns="columns" row-key="id" flat bordered>
+    <q-table
+      class="companies-table"
+      title="Companies"
+      :rows="companies"
+      :columns="columns"
+      row-key="id"
+      flat
+      bordered
+    >
       <template v-slot:[`body-cell-name`]="props">
         <q-td :props="props">
           <router-link
@@ -44,6 +52,7 @@
       label="Loading companies..."
       label-class="text-teal"
       label-style="font-size: 1.1em"
+      class="custom-inner-loading"
     />
   </div>
 </template>
@@ -71,8 +80,15 @@ function onNavigateToDetails(company) {
 
 <style scoped lang="scss">
 .table-container {
+  min-height: 450px;
   .icon-container {
     text-align: center;
+  }
+
+  .custom-inner-loading {
+    background-color: rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(2px);
+    // border-radius: 8px;
   }
 }
 </style>
