@@ -63,6 +63,7 @@
           </q-icon>
         </div>
       </q-card-section>
+      <inner-loading :label="'Loading company...'" />
     </q-card>
 
     <!-- Placeholder for future sections -->
@@ -113,6 +114,7 @@ import { useCompanyById } from 'src/composables/useCompanyById'
 import { useCompanies } from 'src/composables/useCompanies'
 
 import EditCompany from 'src/components/company/EditCompany.vue'
+import InnerLoading from 'src/components/common/InnerLoading.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 import { companySocials } from 'src/config/company/socials'

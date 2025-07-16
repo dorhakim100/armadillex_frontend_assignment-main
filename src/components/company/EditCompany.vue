@@ -18,14 +18,14 @@
         <template v-if="field.type === 'text'">
           <q-input v-model="company[field.key]" :label="field.label">
             <template v-if="field.aiSuggest" #append>
-              <q-spinner v-if="store.isLoading" />
+              <q-spinner v-if="isAiLoading" />
               <q-btn
                 v-else
                 dense
                 flat
                 icon="auto_fix_high"
                 @click="onGenerateAiNames"
-                :disable="store.isLoading"
+                :disable="isAiLoading"
               />
             </template>
           </q-input>
@@ -107,7 +107,7 @@ import { ref, computed } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { useSystemStore } from 'src/stores/system'
 
-import { notifyMsgs, notifyService } from 'src/services/notify.service'
+import { notifyService } from 'src/services/notify.service'
 import { formatDate } from 'src/services/util.service'
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
@@ -121,12 +121,11 @@ const props = defineProps({
   companies: Array,
 })
 
-const emit = defineEmits([
+defineEmits([
   // REQUIRED; need to specify some events that your
   // component will emit through useDialogPluginComponent()
   ...useDialogPluginComponent.emits,
   'delete',
-  'saveCompany',
 ])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
@@ -141,6 +140,8 @@ const companiesCopy = ref([...props.companies])
 const countriesCopy = ref([...countries])
 
 const sudgestedNames = ref([])
+const isAiLoading = ref(false)
+
 const companiesFilterTxt = ref('')
 const countriesFilterTxt = ref('')
 
@@ -155,7 +156,7 @@ const companiesNameId = computed(() => {
   })
 })
 
-async function onOKClick() {
+function onOKClick() {
   if (company.value.isEmpty) {
     delete company.value.isEmpty
     delete company.value.id
@@ -169,17 +170,7 @@ async function onOKClick() {
 
   company.value.dateAdded = formatDate(company.value.dateAdded)
 
-  store.setIsLoading(true)
-  // onDialogOK({ action: 'save', company: company.value })
-  try {
-    emit('saveCompany', company.value)
-    // await saveCompany(company.value)
-  } catch (err) {
-    // console.error('Error saving company:', err)
-    // notifyService.error(notifyMsgs.)
-  } finally {
-    store.setIsLoading(false)
-  }
+  onDialogOK({ action: 'save', company: company.value })
 }
 
 function onDeleteClick() {
@@ -201,14 +192,14 @@ async function onGenerateAiNames() {
     notifyService.error('Please enter a company name before generating AI names.')
     return
   }
-  store.setIsLoading(true)
+  isAiLoading.value = true
   // Simulate an API call to generate AI names
   try {
     sudgestedNames.value = await useCompanyNames(company.value.name)
   } catch (error) {
     console.error('Error generating AI names:', error)
   } finally {
-    store.setIsLoading(false)
+    isAiLoading.value = false
   }
 }
 
