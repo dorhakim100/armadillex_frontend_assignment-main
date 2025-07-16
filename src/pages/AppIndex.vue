@@ -15,18 +15,13 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useQuasar } from 'quasar'
 import { useSystemStore } from 'src/stores/system'
 
 import AppHeader from 'src/components/layout/AppHeader.vue'
 
-import { breakpoints } from 'src/config/scss.variables'
-
 const store = useSystemStore()
 const isLoading = computed(() => store.isLoading)
-
-const $q = useQuasar()
-const isMobile = computed(() => $q.screen.width < breakpoints.narrow)
+const isMobile = computed(() => store.isMobile)
 </script>
 
 <style lang="scss">

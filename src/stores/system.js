@@ -1,10 +1,14 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
+import { watch } from 'vue'
+import { useQuasar } from 'quasar'
 import { systemService } from 'src/services/system.service/system.service.js'
+import { breakpoints } from 'src/config/scss.variables'
 
 export const useSystemStore = defineStore('system', {
   state: () => ({
     prefs: systemService.getPrefs(),
     isLoading: false,
+    isMobile: false,
   }),
 
   getters: {
@@ -19,6 +23,21 @@ export const useSystemStore = defineStore('system', {
     },
     setIsLoading(stateToSet) {
       this.isLoading = stateToSet
+    },
+    setIsMobile(isMobileState) {
+      this.isMobile = isMobileState
+    },
+    initializeScreenWatcher() {
+      const $q = useQuasar()
+
+      this.isMobile = $q.screen.width < breakpoints.narrow
+
+      watch(
+        () => $q.screen.width,
+        (newWidth) => {
+          this.isMobile = newWidth < breakpoints.narrow
+        },
+      )
     },
   },
 })

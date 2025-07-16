@@ -18,20 +18,18 @@
 <script setup>
 import { defineProps, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
+import { useSystemStore } from 'src/stores/system'
 
 import CompanyTable from './CompanyTable.vue'
 import CompanyCards from './CompanyCards.vue'
-
-import { breakpoints } from 'src/config/scss.variables'
 
 const props = defineProps(['companies', 'filter'])
 const emit = defineEmits(['update', 'onOpenEdit'])
 
 const router = useRouter()
+const systemStore = useSystemStore()
 
-const $q = useQuasar()
-const isMobile = computed(() => $q.screen.width < breakpoints.narrow)
+const isMobile = computed(() => systemStore.isMobile)
 
 function handleEdit(company) {
   emit('onOpenEdit', company)
