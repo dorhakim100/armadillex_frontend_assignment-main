@@ -4,7 +4,7 @@
       <h1>Companies</h1>
       <div class="interface-container">
         <div class="desktop-container" v-if="!isMobile">
-          <company-filter :filter="filter" @update="updateFilter" />
+          <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
           <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
         </div>
         <div v-else class="mobile-container">
@@ -16,14 +16,14 @@
             icon="keyboard_arrow_left"
             direction="down"
           >
-            <company-filter :filter="filter" @update="updateFilter" />
+            <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
             <q-fab-action color="primary" icon="add" @click="onOpenModal" class="shadow-12" />
           </q-fab>
         </div>
       </div>
     </q-card-section>
     <q-card-section>
-      <company-list :companies="companiesWithParent" @onOpenEdit="onOpenEdit" />
+      <company-list :companies="slicedCompanies" @onOpenEdit="onOpenEdit" />
     </q-card-section>
   </q-card>
 </template>
@@ -55,8 +55,13 @@ const isMobile = computed(() => store.isMobile)
 const PAGE_SIZE = 3
 const pageIdx = ref(0)
 
-const companiesLength = computed(() => companiesCopy.value.length)
-const maxPage = computed(() => Math.ceil(companiesLength.value / PAGE_SIZE))
+watch(
+  filter,
+  () => {
+    pageIdx.value = 0
+  },
+  { deep: true },
+)
 
 const pageNumber = computed({
   get: () => pageIdx.value + 1,
@@ -69,7 +74,15 @@ const pageNumber = computed({
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value
   const { txt, country, onlyActive, onlyAI, onlyDPF, sortDir } = filter.value
+  // console.log(list)
+  console.log(txt)
+  console.log(country)
 
+  console.log(onlyActive)
+  console.log(onlyAI)
+  console.log(onlyDPF)
+  console.log(sortDir)
+  console.log(isMobile.value)
   if (txt) {
     const regex = new RegExp(txt, 'i')
     list = list.filter((company) => regex.test(company.name) || regex.test(company.legalName))
@@ -94,22 +107,21 @@ const filteredCompanies = computed(() => {
         ? list.sort((a, b) => a.name.localeCompare(b.name))
         : list.sort((a, b) => b.name.localeCompare(a.name))
   }
-  if (isMobile.value) {
-    list = list.slice(pageIdx.value * PAGE_SIZE, pageIdx.value * PAGE_SIZE + PAGE_SIZE)
-  }
 
+  console.log(list)
   return list
 })
+const companiesLength = computed(() => filteredCompanies.value.length)
+const maxPage = computed(() => Math.ceil(companiesLength.value / PAGE_SIZE))
+console.log(companiesLength.value)
 
 // modify to show parent information
-const companiesWithParent = computed(() => {
-  return filteredCompanies.value.map((company) => {
-    const parent = filteredCompanies.value.find((c) => c.id === company.parentId)
-    return {
-      ...company,
-      parent: parent ? { id: parent.id, name: parent.name } : null,
-    }
-  })
+const slicedCompanies = computed(() => {
+  if (!isMobile.value) return filteredCompanies.value
+
+  const start = pageIdx.value * PAGE_SIZE
+  const end = start + PAGE_SIZE
+  return filteredCompanies.value.slice(start, end)
 })
 
 watch(
@@ -127,6 +139,12 @@ function updateFilter(newFilter) {
     ...filter.value,
     ...newFilter,
   }
+}
+
+function clearFilter() {
+  companiesCopy.value = [...companies.value]
+  filter.value = companiesService.getDefaultFilter()
+  pageIdx.value = 0
 }
 
 function onOpenEdit(company) {

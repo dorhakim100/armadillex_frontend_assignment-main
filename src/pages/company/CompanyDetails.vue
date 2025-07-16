@@ -63,7 +63,7 @@
           </q-icon>
         </div>
       </q-card-section>
-      <inner-loading :label="'Loading company...'" />
+      <inner-loading v-if="!isMobile" :label="'Loading company...'" />
     </q-card>
 
     <!-- Placeholder for future sections -->
@@ -112,6 +112,7 @@ import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
 import { useCompanies } from 'src/composables/useCompanies'
+import { useSystemStore } from 'src/stores/system'
 
 import EditCompany from 'src/components/company/EditCompany.vue'
 import InnerLoading from 'src/components/common/InnerLoading.vue'
@@ -128,6 +129,8 @@ const route = useRoute()
 const router = useRouter()
 
 const $q = useQuasar()
+
+const store = useSystemStore()
 
 const { company, companies } = useCompanyById(computed(() => route.params.id))
 const { saveCompany, deleteCompany } = useCompanies()
@@ -149,6 +152,8 @@ const companyWithParent = computed(() => {
 const formattedDate = computed(() =>
   company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
+
+const isMobile = computed(() => store.isMobile)
 
 function navigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)

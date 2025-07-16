@@ -58,6 +58,7 @@
         ]"
       />
     </div>
+    <q-btn color="primary" class="clear-button" @click="handleClear">Clear</q-btn>
   </fieldset>
 </template>
 
@@ -68,9 +69,10 @@ import { useSystemStore } from 'src/stores/system'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
+// import { companiesService } from 'src/services/api/companies.service'
 
 const props = defineProps(['filter'])
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update', 'clear'])
 
 console.log(props.filter)
 
@@ -84,6 +86,10 @@ function updateField(field, value) {
   }
 
   emit('update', newFilter)
+}
+
+function handleClear() {
+  emit('clear')
 }
 </script>
 
@@ -148,7 +154,7 @@ function updateField(field, value) {
       }
     }
     .filter-checkboxes {
-      grid-column: 1 / -1;
+      grid-column: 1 / 2;
     }
   }
 
@@ -173,6 +179,11 @@ function updateField(field, value) {
     align-items: center;
 
     gap: 1.2rem;
+  }
+
+  .clear-button {
+    align-self: end;
+    justify-self: end;
   }
 }
 </style>
