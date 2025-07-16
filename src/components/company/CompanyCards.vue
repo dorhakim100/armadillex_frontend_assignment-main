@@ -5,7 +5,6 @@
         <router-link
           :to="{ name: 'company-details', params: { id: company.id } }"
           class="text-primary"
-          style="text-decoration: none"
         >
           {{ company.name }}
         </router-link>

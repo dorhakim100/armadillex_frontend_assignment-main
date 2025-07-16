@@ -77,8 +77,24 @@ function onNavigateToDetails(company) {
 <style scoped lang="scss">
 .table-container {
   min-height: 450px;
+
+  .companies-table {
+    ::v-deep th {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    td {
+      font-size: 1.1rem;
+    }
+  }
   .icon-container {
     text-align: center;
+    i {
+      font-size: 1.6rem;
+    }
+    &.group {
+      text-align: start;
+    }
   }
 }
 </style>
