@@ -107,7 +107,7 @@ import { ref, computed } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { useSystemStore } from 'src/stores/system'
 
-import { notifyService } from 'src/services/notify.service'
+import { notifyMsgs, notifyService } from 'src/services/notify.service'
 import { formatDate } from 'src/services/util.service'
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
@@ -121,11 +121,12 @@ const props = defineProps({
   companies: Array,
 })
 
-defineEmits([
+const emit = defineEmits([
   // REQUIRED; need to specify some events that your
   // component will emit through useDialogPluginComponent()
   ...useDialogPluginComponent.emits,
   'delete',
+  'saveCompany',
 ])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
@@ -154,7 +155,7 @@ const companiesNameId = computed(() => {
   })
 })
 
-function onOKClick() {
+async function onOKClick() {
   if (company.value.isEmpty) {
     delete company.value.isEmpty
     delete company.value.id
@@ -168,7 +169,17 @@ function onOKClick() {
 
   company.value.dateAdded = formatDate(company.value.dateAdded)
 
-  onDialogOK({ action: 'save', company: company.value })
+  store.setIsLoading(true)
+  // onDialogOK({ action: 'save', company: company.value })
+  try {
+    emit('saveCompany', company.value)
+    // await saveCompany(company.value)
+  } catch (err) {
+    // console.error('Error saving company:', err)
+    // notifyService.error(notifyMsgs.)
+  } finally {
+    store.setIsLoading(false)
+  }
 }
 
 function onDeleteClick() {

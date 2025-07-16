@@ -100,8 +100,15 @@ export function convertToQuasarDateFormat(isoDateString) {
 // Convert YYYY/MM/DD format from Quasar q-date back to ISO string
 export function convertFromQuasarDateFormat(quasarDateString) {
   if (!quasarDateString) return null
+  const parts = quasarDateString.split('/')
+  if (parts.length !== 3) return null
 
-  const date = new Date(quasarDateString)
+  const year = parseInt(parts[0])
+  const month = parseInt(parts[1]) - 1 // Month is 0-indexed
+  const day = parseInt(parts[2])
+
+  // Create date in UTC to avoid timezone shifting
+  const date = new Date(Date.UTC(year, month, day))
   if (isNaN(date.getTime())) return null
 
   return date.toISOString()
