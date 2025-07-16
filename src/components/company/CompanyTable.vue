@@ -54,17 +54,13 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 
-import { useCompanies } from 'src/composables/useCompanies'
-
 import { columns } from '../../config/company/table.config'
 import { companyFieldIcons } from '../../config/company/boolean.icons'
 
 import InnerLoading from '../common/InnerLoading.vue'
 
-const props = defineProps(['companies'])
+defineProps(['companies'])
 const emit = defineEmits(['handleEdit', 'navigate'])
-
-const { isLoading } = useCompanies()
 
 function onEditCompany(company) {
   emit('onEdit', company)

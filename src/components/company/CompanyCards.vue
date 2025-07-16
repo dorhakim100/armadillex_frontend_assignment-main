@@ -42,7 +42,7 @@
 import { defineProps, defineEmits } from 'vue'
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 
-const props = defineProps(['companies'])
+defineProps(['companies'])
 const emit = defineEmits(['onEdit', 'navigate'])
 </script>
 

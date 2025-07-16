@@ -105,7 +105,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
-import { useSystemStore } from 'src/stores/system'
 
 import { notifyService } from 'src/services/notify.service'
 import { formatDate } from 'src/services/util.service'
@@ -131,8 +130,6 @@ defineEmits([
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const $q = useQuasar()
-
-const store = useSystemStore()
 
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])

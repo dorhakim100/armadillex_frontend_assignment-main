@@ -20,8 +20,6 @@ import { useQuasar } from 'quasar'
 import { companiesService } from '../../services/api/companies.service'
 import { useCompanies } from 'src/composables/useCompanies'
 
-import { useSystemStore } from 'src/stores/system'
-
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
 import EditCompany from 'src/components/company/EditCompany.vue'
@@ -33,7 +31,7 @@ const filter = ref(companiesService.getDefaultFilter())
 
 const $q = useQuasar()
 
-const store = useSystemStore()
+// const store = useSystemStore()
 
 const filteredCompanies = computed(() => {
   let list = companiesCopy.value

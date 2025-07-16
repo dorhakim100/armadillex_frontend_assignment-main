@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 
@@ -129,7 +129,7 @@ const router = useRouter()
 
 const $q = useQuasar()
 
-const { company, isLoading, companies } = useCompanyById(computed(() => route.params.id))
+const { company, companies } = useCompanyById(computed(() => route.params.id))
 const { saveCompany, deleteCompany } = useCompanies()
 
 const socialsImgs = [
