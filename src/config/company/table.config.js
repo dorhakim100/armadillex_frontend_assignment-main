@@ -29,7 +29,7 @@ export const columns = [
   },
   {
     name: 'edit',
-    label: 'Edit Company',
+    label: 'Actions',
     field: '',
     align: 'left',
     sortable: false,

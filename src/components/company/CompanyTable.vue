@@ -72,8 +72,7 @@ function onNavigateToDetails(company) {
 
 <style scoped lang="scss">
 .table-container {
-  min-height: 450px;
-
+  min-height: 380px;
   .companies-table {
     ::v-deep th {
       font-weight: 600;

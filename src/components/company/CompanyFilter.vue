@@ -58,7 +58,7 @@
         ]"
       />
     </div>
-    <q-btn color="primary" class="clear-button" @click="handleClear">Clear</q-btn>
+    <q-btn color="primary" class="clear-button" @click="handleClear" icon="delete">Clear</q-btn>
   </fieldset>
 </template>
 
@@ -73,8 +73,6 @@ import { countries } from '../../config/company/countries'
 
 const props = defineProps(['filter'])
 const emit = defineEmits(['update', 'clear'])
-
-console.log(props.filter)
 
 const store = useSystemStore()
 const isMobile = computed(() => store.isMobile)
