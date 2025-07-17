@@ -26,8 +26,8 @@ import {
 } from 'src/services/util.service'
 
 const props = defineProps({
-  modelValue: String, // ISO date string from parent
-  companyDate: String, // backup prop (can be removed if not needed)
+  modelValue: String,
+  companyDate: String,
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -35,7 +35,6 @@ const store = useSystemStore()
 
 const isDarkMode = computed(() => store.isDarkMode)
 
-// Computed properties for reactive date handling
 const displayDate = computed(() => {
   const dateToUse = props.modelValue || props.companyDate
   return formatUtcToDisplayDate(dateToUse)

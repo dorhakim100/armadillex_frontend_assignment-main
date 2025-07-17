@@ -38,11 +38,4 @@ function navigateToCompany(company) {
   router.push({ name: 'company-details', params: { id: company.id } })
 }
 </script>
-<style scoped lang="scss">
-// .container {
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-// justify-content: center;
-// }
-</style>
+<style scoped lang="scss"></style>

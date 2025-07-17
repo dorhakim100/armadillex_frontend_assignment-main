@@ -12,7 +12,6 @@
 import { useSystemStore } from 'src/stores/system'
 
 const props = defineProps(['label'])
-// const emit = defineEmits(['update'])
 
 const store = useSystemStore()
 </script>
@@ -21,6 +20,5 @@ const store = useSystemStore()
 .custom-inner-loading {
   background-color: rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(2px);
-  // border-radius: 8px;
 }
 </style>

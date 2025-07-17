@@ -159,28 +159,23 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
       company: companyToEdit,
       companies: companies.value,
     },
-  })
-    .onOk(async (clickEvent) => {
-      const { action, company: editedCompany } = clickEvent
+  }).onOk(async (clickEvent) => {
+    const { action, company: editedCompany } = clickEvent
 
-      if (action === 'delete') {
-        try {
-          await deleteCompany(editedCompany.id)
-        } catch (err) {
-          console.error('Delete failed:', err)
-        }
-      } else {
-        try {
-          await saveCompany(editedCompany)
-        } catch (err) {
-          console.error('Save failed:', err)
-        }
+    if (action === 'delete') {
+      try {
+        await deleteCompany(editedCompany.id)
+      } catch (err) {
+        console.error('Delete failed:', err)
       }
-    })
-
-    .onCancel(() => {
-      // console.log('Dialog cancelled')
-    })
+    } else {
+      try {
+        await saveCompany(editedCompany)
+      } catch (err) {
+        console.error('Save failed:', err)
+      }
+    }
+  })
 }
 </script>
 
@@ -195,7 +190,6 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
 h1 {
   font-size: 3.5rem;
   font-weight: 600;
-  color: #2c3e50;
   margin-bottom: 1rem;
   transition: 0.2s ease-out;
 
@@ -215,11 +209,8 @@ h1 {
     margin: 1rem;
 
     button {
-      // width: 100%;
-      // height: 100%;
       width: 60px;
       height: 60px;
-      // font-size: 1.2rem;
     }
 
     a {

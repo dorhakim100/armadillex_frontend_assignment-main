@@ -17,8 +17,6 @@
         <img :src="logo" alt="Logo" />
       </q-card-section>
 
-      <!-- <q-separator spaced /> -->
-
       <q-separator spaced />
 
       <q-card-section class="details-container">
@@ -239,9 +237,6 @@ function onEdit() {
     flex-direction: column;
     align-items: start;
     gap: 0.6rem;
-
-    /* grid-template-columns: 1fr; */
-    /* grid-template-rows: repeat(4, auto); */
   }
 
   div:not(.icons-container) {

@@ -35,7 +35,7 @@ export function useCompanies() {
     onError: (error, variables) => {
       const isEdit = !!variables.id
       notifyService.error(isEdit ? notifyMsgs.companyEditFailed : 'Failed to add company')
-      console.error('Company save error:', error)
+      // console.error('Company save error:', error)
     },
   })
 

@@ -77,7 +77,6 @@ function handleNavigation(company) {
   transition: 0.2s ease-out;
 
   &:hover {
-    // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
   }
 

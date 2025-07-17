@@ -31,13 +31,6 @@
           </q-input>
 
           <!-- AI suggestion radio options -->
-          <!-- <q-option-group
-            v-if="field.aiSuggest && sudgestedNames.length > 0"
-            v-model="company.name"
-            type="radio"
-            :options="sudgestedNames.map((name) => ({ label: name, value: name }))"
-            class="q-mt-sm checkbox-group ai-names-container"
-          /> -->
           <transition name="expand-height">
             <div v-if="field.aiSuggest && sudgestedNames.length > 0" class="ai-expand-wrapper">
               <q-option-group
@@ -123,12 +116,7 @@ const props = defineProps({
   companies: Array,
 })
 
-defineEmits([
-  // REQUIRED; need to specify some events that your
-  // component will emit through useDialogPluginComponent()
-  ...useDialogPluginComponent.emits,
-  'delete',
-])
+defineEmits([...useDialogPluginComponent.emits, 'delete'])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
@@ -259,7 +247,6 @@ function filterSelectCountries(val, update) {
 .card-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  // gap: 0.5rem;
 
   padding: 0.8rem;
 
@@ -311,7 +298,7 @@ function filterSelectCountries(val, update) {
 
 .expand-height-enter-to,
 .expand-height-leave-from {
-  max-height: 300px; // adjust based on expected size
+  max-height: 300px;
   opacity: 1;
 }
 

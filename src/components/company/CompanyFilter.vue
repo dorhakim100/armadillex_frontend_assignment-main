@@ -76,7 +76,6 @@ import { useSystemStore } from 'src/stores/system'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
-// import { companiesService } from 'src/services/api/companies.service'
 
 const props = defineProps(['filter'])
 const emit = defineEmits(['update', 'clear'])
@@ -161,12 +160,10 @@ function handleClear() {
     .sorting-toggle-container {
       grid-column: 2 / -1;
       grid-row: 1/2;
-      // align-self: start;
-      // align-self: end;
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      // align-items: center;
 
       span {
         align-self: center;

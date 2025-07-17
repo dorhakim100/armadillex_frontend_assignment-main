@@ -1,4 +1,4 @@
-const SITENAME_PREFS = 'quasar-starter-prefs'
+const SITENAME_PREFS = 'armadillexCompaniesDbPrefs'
 
 export const systemService = {
   getPrefs,

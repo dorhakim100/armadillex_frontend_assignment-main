@@ -82,13 +82,6 @@ function onNavigateToDetails(event, company) {
   if (isHover.value) return
   emit('navigate', company)
 }
-
-function handleMouseEnter(event) {
-  isHover.value = true
-}
-function onMouseLeave() {
-  isHover.value = false
-}
 </script>
 
 <style scoped lang="scss">
