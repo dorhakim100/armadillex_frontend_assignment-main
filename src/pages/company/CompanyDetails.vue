@@ -279,6 +279,7 @@ function onEdit() {
 .more-info-card {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 
   span {
     grid-column: 1/2;

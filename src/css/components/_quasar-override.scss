@@ -144,3 +144,9 @@
     color: $clr-text-primary !important;
   }
 }
+
+.q-toggle--dark {
+  .q-toggle__inner[aria-hidden='true'] {
+    color: $clr-brand-light !important;
+  }
+}

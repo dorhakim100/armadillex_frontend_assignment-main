@@ -1,9 +1,14 @@
 <template>
   <q-dialog v-model="settingsModal">
-    <q-card class="modal-container">
+    <q-card class="modal-container" :dark="isDarkMode">
       <q-card-section class="text-h6">Settings</q-card-section>
       <q-card-section>
-        <q-toggle v-model="isDarkMode" label="Dark Mode" @update:model-value="toggleDarkMode" />
+        <q-toggle
+          v-model="isDarkMode"
+          label="Dark Mode"
+          @update:model-value="toggleDarkMode"
+          :dark="isDarkMode"
+        />
       </q-card-section>
       <q-card-actions align="right">
         <q-btn flat label="Close" v-close-popup />
