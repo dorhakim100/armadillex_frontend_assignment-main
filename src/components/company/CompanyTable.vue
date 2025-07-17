@@ -7,6 +7,7 @@
       row-key="id"
       flat
       bordered
+      :dark="isDarkMode"
     >
       <template v-slot:[`body-cell-name`]="props">
         <q-td :props="props">
@@ -52,7 +53,8 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
+import { useSystemStore } from 'src/stores/system'
 
 import { columns } from '../../config/company/table.config'
 import { companyFieldIcons } from '../../config/company/boolean.icons'
@@ -61,6 +63,9 @@ import InnerLoading from '../common/InnerLoading.vue'
 
 defineProps(['companies'])
 const emit = defineEmits(['handleEdit', 'navigate'])
+
+const store = useSystemStore()
+const isDarkMode = computed(() => store.isDarkMode)
 
 function onEditCompany(company) {
   emit('onEdit', company)

@@ -4,7 +4,11 @@
     <div v-if="isLoading && isMobile" class="loader-container">
       <q-circular-progress indeterminate rounded size="50px" class="loader" />
     </div>
-    <q-page-container class="page-container" style="padding-top: 0">
+    <q-page-container
+      class="page-container"
+      :class="[isDarkMode ? 'dark-mode' : '', isMobile ? 'mobile' : '']"
+      style="padding-top: 0"
+    >
       <q-page class="q-pa-md">
         <router-view />
       </q-page>
@@ -21,6 +25,7 @@ import AppHeader from 'src/components/layout/AppHeader.vue'
 const store = useSystemStore()
 const isLoading = computed(() => store.isLoading)
 const isMobile = computed(() => store.isMobile)
+const isDarkMode = computed(() => store.isDarkMode)
 </script>
 
 <style lang="scss">
@@ -31,6 +36,16 @@ const isMobile = computed(() => store.isMobile)
   max-width: $max-width-screen;
   margin: auto;
   padding-top: $header-height !important;
+
+  &.dark-mode {
+    background-color: $clr-surface;
+    color: $clr-text-primary;
+
+    .q-page {
+      background-color: $clr-surface;
+      color: $clr-text-primary;
+    }
+  }
 
   .q-page {
     max-width: $max-width-screen;

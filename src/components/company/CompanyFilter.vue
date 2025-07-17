@@ -134,6 +134,7 @@ function handleClear() {
     font-size: 1.1rem;
     padding: 0 0.5rem;
     color: #2c3e50;
+    border-radius: 5px 5px 0px;
   }
 
   @media (max-width: $break-narrow) {

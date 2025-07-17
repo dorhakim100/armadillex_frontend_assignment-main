@@ -1,6 +1,6 @@
 <template>
   <div class="cards-container q-gutter-md row">
-    <q-card v-for="company in companies" :key="company.id" class="company-card">
+    <q-card v-for="company in companies" :key="company.id" class="company-card" :dark="isDarkMode">
       <q-card-section class="text-h6 text-primary">
         <router-link
           :to="{ name: 'company-details', params: { id: company.id } }"
@@ -39,11 +39,15 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
+import { useSystemStore } from 'src/stores/system'
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 
 defineProps(['companies'])
 const emit = defineEmits(['onEdit', 'navigate'])
+
+const store = useSystemStore()
+const isDarkMode = computed(() => store.isDarkMode)
 </script>
 
 <style scoped lang="scss">
@@ -54,6 +58,11 @@ const emit = defineEmits(['onEdit', 'navigate'])
 }
 .company-card {
   width: 100%;
+
+  &.q-dark {
+    background-color: var(--q-dark-bg);
+    color: var(--q-dark-text);
+  }
 
   @media (min-width: 600px) {
     width: calc(50% - 1rem);

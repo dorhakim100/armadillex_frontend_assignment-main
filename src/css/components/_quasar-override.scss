@@ -73,10 +73,6 @@
     // color: white !important;
   }
 }
-.q-btn {
-  background-color: $clr-btn-dark !important;
-  color: $clr-text-primary !important;
-}
 
 .q-checkbox--dark {
   .q-checkbox__inner[aria-pressed='true'] {
@@ -104,5 +100,29 @@
 .q-item--dark.q-item--active {
   .q-item__label {
     color: $clr-text-primary !important;
+  }
+}
+
+.q-dark {
+  h1,
+  span,
+  input,
+  label,
+  a {
+    color: $clr-text-primary !important;
+  }
+  .q-btn {
+    background-color: $clr-btn-dark !important;
+    color: $clr-text-primary !important;
+  }
+  &.q-card,
+  &.q-table__container {
+    background-color: $clr-surface-elevated !important;
+    color: $clr-text-primary !important;
+
+    .q-btn.q-btn--flat.q-btn--round {
+      background-color: transparent !important;
+      color: $clr-text-primary !important;
+    }
   }
 }
