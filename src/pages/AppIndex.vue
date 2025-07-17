@@ -42,7 +42,7 @@ const isDarkMode = computed(() => store.isDarkMode)
     color: $clr-text-primary;
 
     .q-page {
-      background-color: $clr-surface;
+      background-color: $clr-bg-dark-background;
       color: $clr-text-primary;
     }
   }

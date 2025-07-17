@@ -1,5 +1,5 @@
 <template>
-  <q-card :dark="isDarkMode">
+  <q-card :dark="isDarkMode" class="main-container" :class="[isDarkMode ? 'dark-mode' : '']">
     <q-card-section>
       <h1>Companies</h1>
       <div class="interface-container">
@@ -186,6 +186,12 @@ function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
 
 <style scoped lang="scss">
 @import 'src/css/setup/_variables.scss';
+
+.main-container {
+  &.dark-mode {
+    background-color: $clr-surface !important;
+  }
+}
 h1 {
   font-size: 3.5rem;
   font-weight: 600;

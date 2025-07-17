@@ -8,6 +8,7 @@
   --q-bg-secondary: #161b22; /* Slightly lighter surface */
 
   /* Surface (cards, modals, dropdowns) */
+  --q-dark-background: #11181f; /* Muted blue-gray surface */
   --q-surface: #1f2a36; /* Muted blue-gray surface */
   --q-surface-elevated: #2c3e50; /* Deeper surface for elevation contrast */
   --q-btn-dark: #4f7091;
@@ -95,6 +96,7 @@ $clr-cta-light: var(--clr-cta-light);
 // Dark mode
 $clr-bg-main: var(--q-bg-main);
 $clr-bg-secondary: var(--q-bg-secondary);
+$clr-bg-dark-background: var(--q-dark-background);
 $clr-surface: var(--q-surface);
 $clr-surface-elevated: var(--q-surface-elevated);
 $clr-btn-dark: var(--q-btn-dark);

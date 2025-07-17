@@ -118,13 +118,13 @@ function handleClear() {
   margin-bottom: 1.5rem;
 
   &.dark-mode {
-    background-color: $clr-surface;
+    background-color: $clr-surface-elevated;
     color: $clr-text-primary;
 
     border-color: $clr-border-light;
 
     legend {
-      background-color: $clr-surface;
+      background-color: $clr-surface-elevated;
       color: $clr-text-primary;
     }
   }
@@ -133,7 +133,7 @@ function handleClear() {
     font-weight: 600;
     font-size: 1.1rem;
     padding: 0 0.5rem;
-    color: #2c3e50;
+    color: $clr-surface;
     border-radius: 5px 5px 0px;
   }
 

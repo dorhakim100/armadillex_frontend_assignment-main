@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <!-- Header -->
-    <div class="row items-center">
+    <div class="row items-center" :class="[isDarkMode ? 'dark-mode' : '']">
       <q-btn icon="arrow_back" flat round @click="$router.back()" />
       <span class="text-h5">Company Details</span>
       <q-btn icon="edit" flat label="Edit" @click="onEdit" class="q-mr-sm">
@@ -10,7 +10,7 @@
     </div>
 
     <!-- Main Company Card -->
-    <q-card class="">
+    <q-card class="main-card-container" :class="[isDarkMode ? 'dark-mode' : '']">
       <q-card-section class="company-header-container">
         <div class="text-h5">{{ company.name }}</div>
         <div class="text-subtitle1 text-grey">ID: {{ company.id }}</div>
@@ -40,6 +40,7 @@
               dense
               no-caps
               class="text-primary"
+              :class="[isDarkMode ? 'dark-mode' : '']"
               @click="navigateToCompany(companyWithParent.parent.id)"
               >{{ companyWithParent.parent.name }}</q-btn
             >
@@ -67,8 +68,8 @@
     </q-card>
 
     <!-- Placeholder for future sections -->
-    <q-card class="">
-      <q-card-section class="more-info-container">
+    <q-card class="more-info-container" :class="[isDarkMode ? 'dark-mode' : '']">
+      <q-card-section class="more-info-card">
         <span class="text-h6">More Info</span>
         <span class="text-caption text-grey">
           This section can show contacts, addresses, or AI tags.
@@ -82,6 +83,7 @@
           target="_blank"
           label="Visit Site"
           icon-right="open_in_new"
+          :class="[isDarkMode ? 'dark-mode' : '']"
         />
         <div class="socials-container">
           <q-btn
@@ -135,6 +137,8 @@ const store = useSystemStore()
 const { company, companies } = useCompanyById(computed(() => route.params.id))
 const { saveCompany, deleteCompany } = useCompanies()
 
+const isDarkMode = computed(() => store.isDarkMode)
+
 const socialsImgs = [
   { key: 'whatsapp', icon: whatsapp },
   { key: 'linkedin', icon: linkedin },
@@ -187,7 +191,8 @@ function onEdit() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import 'src/css/setup/_variables.scss';
 .q-card {
   padding: 0.8rem;
   margin-bottom: 1.5rem;
@@ -200,10 +205,21 @@ function onEdit() {
   grid-template-columns: auto 1fr auto;
   margin-bottom: 0.8em;
 }
+
+.main-card-container {
+  &.dark-mode {
+    background-color: $clr-surface-elevated !important;
+  }
+}
 .company-header-container {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: repeat(2, 1fr);
+
+  &.dark-mode {
+    background-color: $clr-surface-elevated;
+    color: $clr-text-primary;
+  }
 
   img {
     grid-column: 2/3;
@@ -254,7 +270,13 @@ function onEdit() {
     justify-content: space-between;
   }
 }
+
 .more-info-container {
+  &.dark-mode {
+    background-color: $clr-surface-elevated !important;
+  }
+}
+.more-info-card {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 
