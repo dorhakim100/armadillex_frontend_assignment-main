@@ -1,79 +1,76 @@
-# Companies DB - Frontend Developer Assignment Starter
+# 🏢 Armadillex Companies DB
 
-👋 **Welcome, Developer!**
-
-Thanks for taking on this assignment! This is a Vue 3 + Quasar starter project that's been set up with all the tools and architecture you'll need. We've structured it to mirror how we build real features at Armadillex.
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- npm or yarn
-
-### Get Running
-
-```bash
-# Install dependencies
-npm install
-# or
-yarn
-
-# Start development server
-npm run dev
-# or
-quasar dev
-```
-
-The app will be available at `http://localhost:9000`
-
-## 🛠️ What's Already Set Up
-
-- **Vue 3** with Composition API
-- **Quasar Framework** for UI components
-- **Vue Query** (@tanstack/vue-query) for state management
-- **Vue Router** for navigation
-- **Axios** for API calls
-- **SCSS** for styling
-- **ESLint + Prettier** for code quality
-
-## 📁 Project Structure
-
-```
-src/
-├── components/     # Reusable Vue components
-├── pages/         # Route-based page components
-├── router/        # Vue Router configuration
-├── services/      # API services and business logic
-├── stores/        # Composables for state management
-└── css/           # Global styles and variables
-```
-
-## 🎯 Development Approach
-
-1. **Start with the data** - Check out the existing company service structure
-2. **Build incrementally** - The routing and basic architecture is ready
-3. **Use Quasar components** - They're already configured and themed
-4. **Think real-world** - Build like this is going to production
-
-## 🧰 Available Scripts
-
-```bash
-npm run dev      # Start development server
-npm run build    # Build for production
-npm run lint     # Run ESLint
-npm run format   # Format code with Prettier
-```
-
-## 💡 Tips
-
-- The project uses Vue 3 Composition API - leverage `<script setup>` syntax
-- Quasar provides excellent components out of the box
-- Vue Query is set up for API state management
-- Check the existing code structure before creating new patterns - and improve what-ever you see fit.
+A responsive Vue 3 application for managing companies — built with scalability, UX, and clean architecture in mind.
 
 ---
 
-**Ready to build something awesome? Let's go! 🚀**
+## 🚀 Tech Stack
 
-For any questions about the setup or architecture, feel free to reach out.
+- **Vue 3** with **Composition API**
+- **Vue Query** (`@tanstack/vue-query`) for data fetching & caching
+- **Quasar Framework** for UI components and layout
+- **SCSS** for custom styling
+- **Pinia (Store)** – used optionally for UI state and future scalability
+
+---
+
+## ✨ Features
+
+- 📄 **View a list of companies**
+- 🔍 **Filter and sort** companies by name or status
+- ➕ **Add** new companies
+- ✏️ **Edit** existing company details
+- ❌ **Delete** companies
+- 🧠 **Simulate AI name generation** for quick mock data
+- 📑 **Company Details Page**
+
+---
+
+## 📱 UX
+
+- ✅ Fully responsive layout with
+- 🌙 **Dark mode** toggle for modern UX expectations
+
+---
+
+## 🧩 Extra Features
+
+- 🧱 **Dark Mode:** Toggleable, theme-aware styling
+- 🧠 **Store (Pinia):** Used to manage dark mode and mobile state, preparing for future feature growth
+
+---
+
+## 📸 Screenshots
+
+Companied Index
+<img width="1911" height="885" alt="CompaniesIndex - Desktop" src="https://github.com/user-attachments/assets/bd85ccfb-4794-42b9-b727-6063e560cdda" />
+
+Edit/Add Company
+<img width="1916" height="890" alt="EditCompany - Desktop" src="https://github.com/user-attachments/assets/d52f36ef-cf96-4c8a-ab33-c5f0896deafa" />
+
+Companies Details
+<img width="1908" height="889" alt="CompaniesDetails - Desktop" src="https://github.com/user-attachments/assets/72ad0c8c-701f-412c-a9e1-ad50083db7bc" />
+
+Companies Index - Mobile
+<img width="375" height="667" alt="CompaniesIndex - Mobile" src="https://github.com/user-attachments/assets/dd85298b-651d-494e-8f76-0fd21c58ece2" />
+
+Companies Filter - Mobile
+<img width="376" height="672" alt="CompanyFilter - Mobile" src="https://github.com/user-attachments/assets/580f57b6-2cbb-4df7-aa91-6229c1476eb1" />
+
+Companies Index - Dark Mode
+<img width="1916" height="886" alt="CompaniesIndex - Desktop - Dark Mode" src="https://github.com/user-attachments/assets/e2b6811f-a13f-475e-84a8-fd55fb82ede3" />
+
+Companies Index - Mobile - Dark Mode
+<img width="378" height="667" alt="Companies Index - Mobile - Dark Mode" src="https://github.com/user-attachments/assets/c87edd80-95c0-4810-bcd5-2dd4dfb03496" />
+
+Companies Filter - Mobile - Dark Mode
+<img width="377" height="670" alt="Companies Filter - Mobile - Dark Mode" src="https://github.com/user-attachments/assets/4ac1376f-9b71-4cbf-ba6c-8d38459fb5ed" />
+
+
+---
+
+## 🛠 Setup
+
+```bash
+npm install
+npm run dev
