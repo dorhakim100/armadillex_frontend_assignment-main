@@ -1,6 +1,17 @@
 # 🏢 Armadillex Companies DB
 
-A responsive Vue 3 application for managing companies — built with scalability, UX, and clean architecture in mind.
+A responsive Vue 3 application for managing companies.
+
+---
+
+## 🎯 Project Overview
+
+This project was built with a strong focus on:
+
+- **Scalability** – Thoughtful structure and store usage to support future development
+- **UX** – Fully responsive layout with great mobile experience and dark mode
+- **Clean architecture** – Separation of concerns, reusable composables, and store modularity
+- **Real-world product thinking** – Decisions were made as if this app were part of a real production system, not just a coding task
 
 ---
 
