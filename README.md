@@ -28,7 +28,7 @@ A responsive Vue 3 application for managing companies — built with scalability
 
 ## 📱 UX
 
-- ✅ Fully responsive layout with
+- ✅ Fully responsive layout
 - 🌙 **Dark mode** toggle for modern UX expectations
 
 ---
