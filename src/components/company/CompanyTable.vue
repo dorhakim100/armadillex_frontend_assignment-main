@@ -40,8 +40,8 @@
         <q-td
           :props="props"
           class="icon-container group"
-          @mouseenter="handleMouseEnter"
-          @mouseleave="onMouseLeave"
+          @mouseenter="isHover = true"
+          @mouseleave="isHover = false"
         >
           <!-- <q-btn
             @click="onNavigateToDetails(props.row)"
