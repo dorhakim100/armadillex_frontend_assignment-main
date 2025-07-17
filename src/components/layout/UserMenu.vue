@@ -1,8 +1,8 @@
 <template>
   <div class="user-menu">
-    <q-btn round outline :color="menuOpen ? 'primary' : 'secondary'" class="user-avatar-btn">
-      <q-avatar size="32px">
-        <q-icon name="person" size="24px" :color="menuOpen ? 'primary' : 'secondary'" />
+    <q-btn round outline :color="_getButtonColor()" class="user-avatar-btn">
+      <q-avatar size="32px" :dark="isDarkMode">
+        <q-icon name="person" size="24px" :color="_getButtonColor()" />
       </q-avatar>
 
       <q-menu
@@ -11,6 +11,8 @@
         transition-hide="jump-up"
         :offset="[0, 5]"
         class="user-menu-dropdown"
+        :class="[isDarkMode ? 'dark-mode' : '']"
+        :dark="isDarkMode"
       >
         <q-list style="min-width: 200px" class="light-bordered light-radius">
           <q-item-label header class="text-primary text-font-light">
@@ -49,14 +51,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { log } from 'src/services/log.service'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useQuasar } from 'quasar'
+import { useSystemStore } from 'src/stores/system'
 import SettingsModal from './SettingsModal.vue'
 
 const $q = useQuasar()
+
+const store = useSystemStore()
+const isDarkMode = computed(() => store.isDarkMode)
 
 const menuOpen = ref(false)
 const onLogout = async () => {
@@ -85,10 +91,15 @@ function onOpenSettingsModal() {
       // console.log('Dialog cancelled')
     })
 }
+
+function _getButtonColor() {
+  return !isDarkMode.value ? (menuOpen.value ? 'primary' : 'secondary') : 'secondary'
+}
 </script>
 
 <style lang="scss">
 @import 'src/css/setup/_functions.scss';
+@import 'src/css/setup/_variables.scss';
 .user-menu {
   display: inline-block;
   .user-avatar-btn {
@@ -105,9 +116,19 @@ function onOpenSettingsModal() {
   z-index: 100000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
+  &.dark-mode {
+    background-color: $clr-surface !important;
+  }
+
   .q-list {
     .q-item__section--avatar {
       min-width: rem(40px);
+    }
+  }
+
+  &.dark-mode {
+    .q-item__label {
+      color: $clr-text-primary !important;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <q-input filled v-model="displayDate" type="text" mask="##/##/####" readonly>
+    <q-input filled v-model="displayDate" type="text" mask="##/##/####" readonly :dark="isDarkMode">
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale" anchor="top left">
@@ -18,6 +18,7 @@
 
 <script setup>
 import { defineProps, defineEmits, computed } from 'vue'
+import { useSystemStore } from 'src/stores/system'
 import {
   formatUtcToDisplayDate,
   convertToQuasarDateFormat,
@@ -30,6 +31,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const store = useSystemStore()
+
+const isDarkMode = computed(() => store.isDarkMode)
 
 // Computed properties for reactive date handling
 const displayDate = computed(() => {

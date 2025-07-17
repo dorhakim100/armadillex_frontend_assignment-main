@@ -111,7 +111,7 @@
   a {
     color: $clr-text-primary !important;
   }
-  .q-btn {
+  .q-btn:not(.q-btn--flat) {
     background-color: $clr-btn-dark !important;
     color: $clr-text-primary !important;
   }
@@ -123,6 +123,18 @@
     .q-btn.q-btn--flat.q-btn--round {
       background-color: transparent !important;
       color: $clr-text-primary !important;
+    }
+  }
+  .q-checkbox__inner {
+    .q-checkbox__bg {
+      background-color: transparent !important;
+      color: $clr-text-primary !important;
+    }
+    &.q-checkbox__inner--truthy {
+      .q-checkbox__bg {
+        background-color: $clr-primary !important;
+        color: $clr-text-primary !important;
+      }
     }
   }
 }

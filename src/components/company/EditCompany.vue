@@ -1,10 +1,10 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-card class="card-container">
+    <q-card class="card-container" :dark="isDarkMode">
       <q-card-section>
         <div class="text-h6">
-          <span v-if="company.isEmpty"> Add Company</span>
-          <span v-else> Edit Company</span>
+          <span v-if="company.isEmpty">Add Company</span>
+          <span v-else>Edit Company</span>
         </div>
       </q-card-section>
 
@@ -16,7 +16,7 @@
       >
         <!-- Text or AI-enabled field -->
         <template v-if="field.type === 'text'">
-          <q-input v-model="company[field.key]" :label="field.label">
+          <q-input v-model="company[field.key]" :label="field.label" :dark="isDarkMode">
             <template v-if="field.aiSuggest" #append>
               <q-spinner v-if="isAiLoading" />
               <q-btn
@@ -45,6 +45,7 @@
                 type="radio"
                 :options="sudgestedNames.map((name) => ({ label: name, value: name }))"
                 class="q-mt-sm checkbox-group ai-names-container"
+                :dark="isDarkMode"
               />
             </div>
           </transition>
@@ -65,6 +66,7 @@
           @filter="(val, update) => handleFilter(field.key, val, update)"
           @clear="() => handleClear(field.key)"
           :input-class="getCustomInputClass(field.key)"
+          :dark="isDarkMode"
         />
 
         <!-- Date -->
@@ -105,6 +107,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
+import { useSystemStore } from 'src/stores/system'
 
 import { notifyService } from 'src/services/notify.service'
 import { formatDate } from 'src/services/util.service'
@@ -130,6 +133,9 @@ defineEmits([
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const $q = useQuasar()
+
+const systemStore = useSystemStore()
+const isDarkMode = computed(() => systemStore.isDarkMode)
 
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
@@ -267,6 +273,7 @@ function filterSelectCountries(val, update) {
 
 .input-container {
   align-items: center;
+
   &.text {
     grid-column: 1 / -1;
   }
@@ -278,7 +285,7 @@ function filterSelectCountries(val, update) {
 }
 .ai-names-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 0.5rem;
   align-items: center;
   justify-items: start;
