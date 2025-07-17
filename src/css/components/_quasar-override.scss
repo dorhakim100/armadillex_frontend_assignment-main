@@ -14,13 +14,13 @@
   outline: 1px solid $clr-warning;
 }
 
-.q-field__control-container .q-field__native {
-  min-height: 40px;
-  padding: 8px 0 6px;
-}
+// .q-field__control-container .q-field__native {
+//   min-height: 40px;
+//   padding: 8px 0 6px;
+// }
 
 .q-field--outlined.q-field--highlighted .q-field__control::after {
-  outline: 1px solid $clr-brand;
+  // outline: 1px solid $clr-brand;
 }
 
 .q-field--outlined.q-field--highlighted.q-field--error .q-field__control::after {
