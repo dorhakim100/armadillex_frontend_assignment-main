@@ -233,8 +233,6 @@ function filterSelectCountries(val, update) {
   const regex = new RegExp(val, 'i')
   const filtered = countriesCopy.value.filter((c) => regex.test(c))
 
-  console.log('Filtered countries:', filtered)
-
   update(() => {
     countriesFilterTxt.value = val
     countriesCopy.value = val ? filtered : countries
