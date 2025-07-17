@@ -12,6 +12,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(249, 251, 253);
+
+  &.dark-mode {
+    background: $clr-bg-dark-background;
+    color: $clr-primary;
+  }
 }
 
 @media (max-width: 1250px) {
