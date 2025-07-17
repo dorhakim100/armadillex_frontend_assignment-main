@@ -59,7 +59,7 @@ iframe {
   z-index: 5555;
 }
 
-.q-select .q-icon {
+.q-select:not(.q-field--dark) .q-icon {
   color: $clr-primary !important;
 }
 

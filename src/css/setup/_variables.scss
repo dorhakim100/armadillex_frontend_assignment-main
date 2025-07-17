@@ -3,6 +3,24 @@
   --q-primary: #002644;
   --q-primary-dark: #002d23;
 
+  /* Backgrounds */
+  --q-bg-main: #0d1117; /* Dark neutral background */
+  --q-bg-secondary: #161b22; /* Slightly lighter surface */
+
+  /* Surface (cards, modals, dropdowns) */
+  --q-surface: #1f2a36; /* Muted blue-gray surface */
+  --q-surface-elevated: #2c3e50; /* Deeper surface for elevation contrast */
+  --q-btn-dark: #4f7091;
+
+  /* Text Colors */
+  --q-text-primary: #ffffff; /* Pure white for primary text */
+  --q-text-secondary: #c0cad3; /* Light gray-blue for secondary text */
+  --q-text-muted: #8b9aa8; /* Muted gray for placeholders */
+
+  /* Borders & Dividers */
+  --q-border-color: #2c3e50; /* Subtle blue-gray border */
+  --q-border-light: #6f8ba7;
+
   --clr-cta: #ffcc65;
   --clr-cta-light: #fffcea;
 
@@ -73,6 +91,18 @@ $clr-light-border: var(--q-light-border-color);
 
 $clr-cta: var(--clr-cta);
 $clr-cta-light: var(--clr-cta-light);
+
+// Dark mode
+$clr-bg-main: var(--q-bg-main);
+$clr-bg-secondary: var(--q-bg-secondary);
+$clr-surface: var(--q-surface);
+$clr-surface-elevated: var(--q-surface-elevated);
+$clr-btn-dark: var(--q-btn-dark);
+$clr-text-primary: var(--q-text-primary);
+$clr-text-secondary: var(--q-text-secondary);
+$clr-text-muted: var(--q-text-muted);
+$clr-border: var(--q-border-color);
+$clr-border-light: var(--q-border-light);
 
 $main-shadow: var(--main-shadow);
 $btn-shadow: var(--btn-shadow);

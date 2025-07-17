@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated class="app-header bg-white no-shadow">
+  <q-header elevated :class="isDarkMode ? '' : 'bg-white'" class="app-header no-shadow">
     <q-toolbar class="grid no-shadow q-px-md full-height">
       <app-logo />
 
@@ -9,8 +9,14 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useSystemStore } from 'src/stores/system'
+
 import AppLogo from '../common/AppLogo.vue'
 import UserMenu from '../layout/UserMenu.vue'
+
+const store = useSystemStore()
+const isDarkMode = computed(() => store.isDarkMode)
 </script>
 
 <style lang="scss">

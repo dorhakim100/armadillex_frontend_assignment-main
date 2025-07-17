@@ -1,5 +1,8 @@
 <template>
-  <fieldset class="filter-container q-pa-md" :class="isMobile = 'mobile'">
+  <fieldset
+    class="filter-container q-pa-md"
+    :class="[isDarkMode ? 'dark-mode' : '', isMobile ? 'mobile' : '']"
+  >
     <legend v-if="!isMobile">Filters</legend>
     <legend v-else>Filters & Sorting</legend>
 
@@ -11,6 +14,7 @@
         :model-value="props.filter.txt"
         label="Name"
         @update:model-value="(val) => updateField('txt', val)"
+        :dark="isDarkMode ? true : false"
       >
         <template v-slot:prepend v-if="!isMobile">
           <q-icon name="search" />
@@ -28,6 +32,7 @@
         label="Country"
         @update:model-value="(val) => updateField('country', val)"
         popup-content-class="custom-select-dropdown"
+        :dark="isDarkMode ? true : false"
       />
     </div>
 
@@ -39,6 +44,7 @@
         :label="checkbox.label"
         @update:model-value="(val) => updateField(checkbox.key, val)"
         dense
+        :dark="isDarkMode ? true : false"
       />
     </div>
     <div v-if="isMobile" class="sorting-toggle-container">
@@ -52,6 +58,7 @@
         text-color="primary"
         size="sm"
         class="sorting-toggle"
+        :dark="isDarkMode ? true : false"
         :options="[
           { label: 'A-Z', value: 1 },
           { label: 'Z-A', value: -1 },
@@ -76,6 +83,7 @@ const emit = defineEmits(['update', 'clear'])
 
 const store = useSystemStore()
 const isMobile = computed(() => store.isMobile)
+const isDarkMode = computed(() => store.isDarkMode)
 
 function updateField(field, value) {
   const newFilter = {
@@ -108,6 +116,18 @@ function handleClear() {
   border-radius: 8px;
   padding: 1.2rem 1.5rem;
   margin-bottom: 1.5rem;
+
+  &.dark-mode {
+    background-color: $clr-surface;
+    color: $clr-text-primary;
+
+    border-color: $clr-border-light;
+
+    legend {
+      background-color: $clr-surface;
+      color: $clr-text-primary;
+    }
+  }
 
   legend {
     font-weight: 600;

@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card :dark="isDarkMode">
     <q-card-section>
       <h1>Companies</h1>
       <div class="interface-container">
@@ -51,6 +51,7 @@ const $q = useQuasar()
 const store = useSystemStore()
 
 const isMobile = computed(() => store.isMobile)
+const isDarkMode = computed(() => store.isDarkMode)
 
 const PAGE_SIZE = 3
 const pageIdx = ref(0)
@@ -120,7 +121,7 @@ const slicedCompanies = computed(() => {
 
   const start = pageIdx.value * PAGE_SIZE
   const end = start + PAGE_SIZE
-  return companiesWithParent.value.slice(start, end)
+  return companiesWithParent.slice(start, end)
 })
 
 watch(
