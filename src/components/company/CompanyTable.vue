@@ -8,6 +8,8 @@
       flat
       bordered
       :dark="isDarkMode"
+      @row-click="onNavigateToDetails"
+      :body-row-class="() => 'clickable-row'"
     >
       <template v-slot:[`body-cell-name`]="props">
         <q-td :props="props">
@@ -35,14 +37,19 @@
         </q-td>
       </template>
       <template v-slot:[`body-cell-edit`]="props">
-        <q-td :props="props" class="icon-container group">
-          <q-btn
+        <q-td
+          :props="props"
+          class="icon-container group"
+          @mouseenter="handleMouseEnter"
+          @mouseleave="onMouseLeave"
+        >
+          <!-- <q-btn
             @click="onNavigateToDetails(props.row)"
             flat
             round
             color="primary"
             icon="visibility"
-          />
+          /> -->
           <q-btn @click="onEditCompany(props.row)" flat round color="primary" icon="edit" />
         </q-td>
       </template>
@@ -53,7 +60,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue'
+import { defineProps, defineEmits, computed, ref } from 'vue'
 import { useSystemStore } from 'src/stores/system'
 
 import { columns } from '../../config/company/table.config'
@@ -66,12 +73,21 @@ const emit = defineEmits(['handleEdit', 'navigate'])
 
 const store = useSystemStore()
 const isDarkMode = computed(() => store.isDarkMode)
+const isHover = ref(false)
 
 function onEditCompany(company) {
   emit('onEdit', company)
 }
-function onNavigateToDetails(company) {
+function onNavigateToDetails(event, company) {
+  if (isHover.value) return
   emit('navigate', company)
+}
+
+function handleMouseEnter(event) {
+  isHover.value = true
+}
+function onMouseLeave() {
+  isHover.value = false
 }
 </script>
 
