@@ -46,7 +46,7 @@ Companied Index
 <img width="1911" height="885" alt="CompaniesIndex - Desktop" src="https://github.com/user-attachments/assets/bd85ccfb-4794-42b9-b727-6063e560cdda" />
 
 Edit/Add Company
-<img width="1916" height="890" alt="EditCompany - Desktop" src="https://github.com/user-attachments/assets/d52f36ef-cf96-4c8a-ab33-c5f0896deafa" />
+<img width="1917" height="889" alt="EditCompany - Desktop" src="https://github.com/user-attachments/assets/248cc3ac-b758-44b6-92fe-bdc921e25bd6" />
 
 Companies Details
 <img width="1908" height="889" alt="CompaniesDetails - Desktop" src="https://github.com/user-attachments/assets/72ad0c8c-701f-412c-a9e1-ad50083db7bc" />
