@@ -68,6 +68,8 @@ function deleteCompany(id) {
 }
 
 function _refactorCompanies(companies) {
+  // @CR: Consider using a more standardized approach like a mapper class or function
+  // Current implementation requires maintaining two separate data structures
   return companies.map((company) => ({
     id: company.company_id,
     active: company.active,
@@ -82,6 +84,7 @@ function _refactorCompanies(companies) {
 }
 
 function _factorCompanyForSave(company) {
+  // @CR: Same issue as above - maintaining two data structures increases chance of errors
   return {
     company_id: company.id || makeId(),
     active: company.active,

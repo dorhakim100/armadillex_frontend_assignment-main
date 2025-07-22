@@ -152,11 +152,11 @@ const companyWithParent = computed(() => {
 })
 
 const formattedDate = computed(() =>
-  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
+  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : ''
 )
 
 const isMobile = computed(() => store.isMobile)
-
+//@CR: Naming convention is not consistent
 function navigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)
   router.push({ name: 'company-details', params: { id } })

@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { systemService } from 'src/services/system.service/system.service.js'
+import { systemService } from 'src/services/system.service.js'
 import { breakpoints } from 'src/config/scss.variables'
 
 export const useSystemStore = defineStore('system', {
@@ -31,7 +31,7 @@ export const useSystemStore = defineStore('system', {
       const $q = useQuasar()
 
       this.isMobile = $q.screen.width < breakpoints.narrow
-
+      // @CR Watch inside an action????
       watch(
         () => $q.screen.width,
         (newWidth) => {

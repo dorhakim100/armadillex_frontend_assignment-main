@@ -3,6 +3,7 @@ import { getRandomInt } from '../services/util.service.js'
 const FIXED_AMOUNT = 4
 const symbols = [' ', '-', '']
 
+// @CR: Does this really need to be a composeable?
 export function useCompanyNames(base = '') {
   return new Promise((resolve) => {
     setTimeout(() => {

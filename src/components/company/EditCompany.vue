@@ -33,6 +33,7 @@
           <!-- AI suggestion radio options -->
           <transition name="expand-height">
             <div v-if="field.aiSuggest && sudgestedNames.length > 0" class="ai-expand-wrapper">
+              <!-- @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames' -->
               <q-option-group
                 v-model="company.name"
                 type="radio"
@@ -125,20 +126,25 @@ const $q = useQuasar()
 const systemStore = useSystemStore()
 const isDarkMode = computed(() => systemStore.isDarkMode)
 
+// @CR: Unnecessary reactive copies of props - creates inefficient reactivity and potential sync issues
+// Should use computed properties or direct prop references instead
 const company = ref({ ...props.company })
 const companies = ref([...props.companies])
 const companiesCopy = ref([...props.companies])
 const countriesCopy = ref([...countries])
 
+// @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames'
 const sudgestedNames = ref([])
 const isAiLoading = ref(false)
 
 const companiesFilterTxt = ref('')
 const countriesFilterTxt = ref('')
 
+// CompanyOptions is a much better name for this variable
 const companiesNameId = computed(() => {
   return companiesCopy.value.map((c) => {
     {
+      // @CR: Extra unnecessary braces
       return {
         id: c.id,
         name: c.name,
@@ -146,6 +152,9 @@ const companiesNameId = computed(() => {
     }
   })
 })
+
+// @CR: To much code and handlers inside this CMP. Should be split into smaller components or use services/composeables to handle the logic.
+// @CR: The use of $q.dialog is isn't our way of doing things. suggest another way.
 
 function onOKClick() {
   if (company.value.isEmpty) {
@@ -220,6 +229,7 @@ function getCustomInputClass(key) {
   return key === 'country' ? 'text-uppercase' : ''
 }
 
+// @CR: This is a good example to see that this cmp handles different types of logics - and should be split into smaller components.
 function filterSelectCompanies(val, update) {
   const regex = new RegExp(val, 'i')
   const filtered = companiesNameId.value.filter((c) => regex.test(c.name))
@@ -282,9 +292,7 @@ function filterSelectCountries(val, update) {
 
 .expand-height-enter-active,
 .expand-height-leave-active {
-  transition:
-    max-height 0.3s ease,
-    opacity 0.3s ease;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
   overflow: hidden;
 }
 

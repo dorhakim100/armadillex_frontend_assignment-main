@@ -21,6 +21,7 @@ export function useCompanies() {
       notifyService.error(notifyMsgs.companiesError)
       console.error('Companies fetch error:', error)
     },
+    // @CR: Missing error handling
   })
 
   const saveCompany = useMutation({
@@ -35,6 +36,7 @@ export function useCompanies() {
     onError: (error, variables) => {
       const isEdit = !!variables.id
       notifyService.error(isEdit ? notifyMsgs.companyEditFailed : 'Failed to add company')
+      // @CR: Commented out code should be removed
       // console.error('Company save error:', error)
     },
   })
@@ -47,8 +49,10 @@ export function useCompanies() {
       notifyService.success(notifyMsgs.companyDeleted)
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
     },
+    // @CR: Missing onError handler for delete operation
   })
 
+  // @CR: Bad naming convention
   const isBusy = computed(() => {
     return (
       companiesQuery.isLoading.value || saveCompany.isPending.value || deleteCompany.isPending.value
@@ -56,6 +60,7 @@ export function useCompanies() {
   })
 
   // Sync loading state to global store
+  //@CR: Duplicated DATA is NEVER a good option
   watch(
     isBusy,
     (newValue) => {
@@ -77,5 +82,6 @@ export function useCompanies() {
     // Mutation states
     isSaving: saveCompany.isPending,
     saveError: saveCompany.error,
+    // @CR: Missing deleteError and isDeleting states for consistency
   }
 }

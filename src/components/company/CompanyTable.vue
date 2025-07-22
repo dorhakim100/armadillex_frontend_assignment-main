@@ -11,6 +11,7 @@
       @row-click="onNavigateToDetails"
       :body-row-class="() => 'clickable-row'"
     >
+      <slot name="body-cell-name" />
       <template v-slot:[`body-cell-name`]="props">
         <q-td :props="props">
           <router-link
@@ -43,6 +44,7 @@
           @mouseenter="isHover = true"
           @mouseleave="isHover = false"
         >
+          <!-- @CR: Commented out code should be removed -->
           <!-- <q-btn
             @click="onNavigateToDetails(props.row)"
             flat
@@ -73,12 +75,15 @@ const emit = defineEmits(['handleEdit', 'navigate'])
 
 const store = useSystemStore()
 const isDarkMode = computed(() => store.isDarkMode)
+// @CR: What??????????????????
 const isHover = ref(false)
 
 function onEditCompany(company) {
   emit('onEdit', company)
 }
 function onNavigateToDetails(event, company) {
+  // @CR: Same issue as CompanyCards - this approach to stopping propagation is unclear
+  // Consider using event.stopPropagation() in the edit button click handler instead
   if (isHover.value) return
   emit('navigate', company)
 }
@@ -88,6 +93,7 @@ function onNavigateToDetails(event, company) {
 .table-container {
   min-height: 380px;
   .companies-table {
+    // @CR: ::v-deep is deprecated, use :deep() instead for better Vue 3 compatibility
     ::v-deep th {
       font-weight: 600;
       font-size: 1.1rem;

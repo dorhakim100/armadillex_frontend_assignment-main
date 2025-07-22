@@ -51,14 +51,19 @@ import { defineProps, defineEmits, computed, ref } from 'vue'
 import { useSystemStore } from 'src/stores/system'
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 
+// @CR: Alawys use defineProps with type validation for better component API documentation
 defineProps(['companies'])
 const emit = defineEmits(['onEdit', 'navigate'])
 
 const store = useSystemStore()
 const isDarkMode = computed(() => store.isDarkMode)
+
+// @CR: This isHover state should not exist as the functionality of it can be done using CSS/event.stopPropagation()
 const isHover = ref(false)
 
 function handleNavigation(company) {
+  // @CR: This approach to stopping propagation is unclear and error-prone
+  // Consider using event.stopPropagation() in the edit button click handler instead
   if (isHover.value) return
   emit('navigate', company)
 }
