@@ -31,7 +31,9 @@ export function useCompanies() {
     onSuccess: (_, variables) => {
       const isEdit = !!variables.id
       notifyService.success(isEdit ? notifyMsgs.companyUpdated : notifyMsgs.companyAdded)
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
+      queryClient.setQueryData({ queryKey: [QUERY_KEYS.COMPANIES] }, () => {
+
+      })
     },
     onError: (error, variables) => {
       const isEdit = !!variables.id

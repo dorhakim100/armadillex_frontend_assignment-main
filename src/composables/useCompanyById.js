@@ -2,6 +2,7 @@ import { computed, watch } from 'vue'
 import { useCompanies } from './useCompanies'
 import { useSystemStore } from 'src/stores/system'
 
+const darkMode = ref(false)
 export function useCompanyById(idRef) {
   const { companies, isLoading } = useCompanies()
   const systemStore = useSystemStore()
@@ -19,5 +20,5 @@ export function useCompanyById(idRef) {
     { immediate: true },
   )
 
-  return { company, isLoading, companies }
+  return { company, isLoading, companies, darkMode }
 }
