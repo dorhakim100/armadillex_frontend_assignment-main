@@ -84,7 +84,7 @@ function onEditCompany(company) {
 function onNavigateToDetails(event, company) {
   // @CR: Same issue as CompanyCards - this approach to stopping propagation is unclear
   // Consider using event.stopPropagation() in the edit button click handler instead
-  if (isHover.value) return
+
   emit('navigate', company)
 }
 </script>
