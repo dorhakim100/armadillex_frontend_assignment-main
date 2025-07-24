@@ -113,3 +113,17 @@ export function convertFromQuasarDateFormat(quasarDateString) {
 
   return date.toISOString()
 }
+
+export function capitalizeFirstLetter(string) {
+  if (!string) return ''
+
+  // Convert camelCase to spaced words
+  // Add space before uppercase letters that are not at the beginning
+  const spacedString = string.replace(/([a-z])([A-Z])/g, '$1 $2')
+
+  // Capitalize first letter of each word
+  return spacedString
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}

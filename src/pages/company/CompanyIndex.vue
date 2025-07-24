@@ -8,8 +8,6 @@
           <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
         </div>
         <div v-else class="mobile-container">
-          <q-pagination v-model="pageNumber" :max="maxPage" input />
-
           <q-fab
             color="primary"
             class="floating-button shadow-12"
@@ -24,6 +22,7 @@
     </q-card-section>
     <q-card-section>
       <company-list :companies="slicedCompanies" @onOpenEdit="onOpenEdit" />
+      <q-pagination v-if="isMobile" v-model="pageNumber" :max="maxPage" input class="pagination" />
     </q-card-section>
   </q-card>
 </template>
@@ -223,5 +222,8 @@ h1 {
   button {
     justify-self: start;
   }
+}
+.pagination {
+  justify-self: end;
 }
 </style>

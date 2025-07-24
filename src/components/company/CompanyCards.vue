@@ -98,13 +98,13 @@ function handleNavigation(company) {
     width: calc(33.333% - 1rem);
   }
 }
-.icon-container {
-  display: flex;
+// .icon-container {
+//   display: flex;
 
-  .icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
+//   .icon-wrapper {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//   }
+// }
 </style>

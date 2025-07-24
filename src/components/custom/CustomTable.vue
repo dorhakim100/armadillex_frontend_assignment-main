@@ -12,6 +12,7 @@
       :body-row-class="getRowClass"
       :loading="loading"
       :grid="isMobile"
+      :hide-pagination="isMobile"
     >
       <!-- Dynamic slots for custom cell rendering -->
       <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
@@ -176,6 +177,11 @@ function onRowClick(row) {
     &.group {
       text-align: start;
     }
+  }
+}
+:deep(.q-table__grid-content) {
+  .q-table__grid-item {
+    background-color: red;
   }
 }
 </style>
