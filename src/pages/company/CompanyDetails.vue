@@ -13,7 +13,6 @@
     <q-card class="main-card-container" :class="[isDarkMode ? 'dark-mode' : '']">
       <q-card-section class="company-header-container">
         <div class="text-h5">{{ company.name }}</div>
-        <div class="text-subtitle1 text-grey">ID: {{ company.id }}</div>
         <img :src="logo" alt="Logo" />
       </q-card-section>
 
@@ -152,7 +151,7 @@ const companyWithParent = computed(() => {
 })
 
 const formattedDate = computed(() =>
-  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : ''
+  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
 
 const isMobile = computed(() => store.isMobile)

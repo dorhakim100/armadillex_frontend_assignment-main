@@ -115,7 +115,7 @@
   a {
     color: $clr-text-primary !important;
   }
-  .q-btn:not(.q-btn--flat) {
+  .q-btn:not(.q-btn--flat):not(.bg-red) {
     background-color: $clr-btn-dark !important;
     color: $clr-text-primary !important;
   }
