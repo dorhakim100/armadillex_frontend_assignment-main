@@ -119,10 +119,8 @@ const isDarkMode = computed(() => systemStore.isDarkMode)
 
 // @CR: Unnecessary reactive copies of props - creates inefficient reactivity and potential sync issues
 // Should use computed properties or direct prop references instead
-const company = ref({ ...props.company })
-const companies = ref([...props.companies])
-const companiesCopy = ref([...props.companies])
-const countriesCopy = ref([...countries])
+const company = ref(props.company)
+const companies = ref(props.companies)
 
 // @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames'
 const suggestedNames = ref([])
@@ -181,7 +179,7 @@ async function onGenerateAiNames() {
 }
 
 function getSelectOptions(key) {
-  return key === 'parentName' ? companiesCopy.value.map((c) => c.name) : countriesCopy.value
+  return key === 'parentName' ? companies.value.map((c) => c.name) : countries
 }
 
 // @CR: This is a good example to see that this cmp handles different types of logics - and should be split into smaller components.

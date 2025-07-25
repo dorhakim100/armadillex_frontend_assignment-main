@@ -84,8 +84,6 @@ function handleEdit(company) {
   emit('onOpenEdit', company)
 }
 function navigateToCompany(company) {
-  console.log(company)
-
   router.push({ name: 'company-details', params: { id: company.id } })
 }
 </script>

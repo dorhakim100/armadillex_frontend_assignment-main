@@ -1,6 +1,6 @@
 <template>
   <q-select
-    v-model="value"
+    v-model="modelValue"
     :options="options"
     :label="props.label"
     @filter="(val, update) => filteredOptions(val, update)"
@@ -11,7 +11,8 @@
     popup-content-class="custom-select-dropdown"
     input-debounce="0"
     :dark="isDarkMode"
-    :class="value ? 'has-value' : ''"
+    :class="modelValue ? 'has-value' : ''"
+    @clear="() => handleClear()"
   />
 </template>
 
@@ -41,7 +42,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 // Writable computed for v-model support
-const value = computed({
+const modelValue = computed({
   get: () => props.modelValue,
   set: (newValue) => emit('update:modelValue', newValue),
 })
@@ -58,6 +59,11 @@ function filteredOptions(val, update) {
     filterTxt.value = val
     options.value = val ? filtered : props.options
   })
+}
+
+function handleClear() {
+  // reset the value to empty string
+  modelValue.value = ''
 }
 </script>
 
