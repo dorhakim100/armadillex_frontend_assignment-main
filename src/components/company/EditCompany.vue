@@ -141,7 +141,7 @@ const companiesFilterTxt = ref('')
 const countriesFilterTxt = ref('')
 
 // CompanyOptions is a much better name for this variable
-const companiesNameId = computed(() => {
+const CompanyOptions = computed(() => {
   return companiesCopy.value.map((c) => {
     {
       // @CR: Extra unnecessary braces
@@ -232,7 +232,7 @@ function getCustomInputClass(key) {
 // @CR: This is a good example to see that this cmp handles different types of logics - and should be split into smaller components.
 function filterSelectCompanies(val, update) {
   const regex = new RegExp(val, 'i')
-  const filtered = companiesNameId.value.filter((c) => regex.test(c.name))
+  const filtered = CompanyOptions.value.filter((c) => regex.test(c.name))
 
   update(() => {
     companiesFilterTxt.value = val
@@ -292,7 +292,9 @@ function filterSelectCountries(val, update) {
 
 .expand-height-enter-active,
 .expand-height-leave-active {
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
   overflow: hidden;
 }
 

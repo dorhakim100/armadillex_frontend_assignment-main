@@ -24,7 +24,7 @@
         </template>
       </q-input>
 
-      <q-select
+      <!-- <q-select
         filled
         dense
         :model-value="props.filter.country"
@@ -33,6 +33,12 @@
         @update:model-value="(val) => updateField('country', val)"
         popup-content-class="custom-select-dropdown"
         :dark="isDarkMode ? true : false"
+      /> -->
+      <custom-dropdown
+        :model-value="props.filter.country"
+        :options="countries"
+        @update:model-value="(val) => updateField('country', val)"
+        label="Country"
       />
     </div>
 
@@ -84,6 +90,8 @@ import { companiesService } from 'src/services/api/companies.service'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
+
+import CustomDropdown from '../custom/CustomDropdown.vue'
 
 const props = defineProps(['filter'])
 const emit = defineEmits(['update', 'clear'])
