@@ -134,7 +134,7 @@ export default configure((/* ctx */) => {
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
     //   router: 'src/router/index',
-    store: 'src/store/index',
+    //   store: 'src/store/index', // Removed - using boot file instead
     //   pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
     //   pwaServiceWorker: 'src-pwa/custom-service-worker',
     //   pwaManifestFile: 'src-pwa/manifest.json',
