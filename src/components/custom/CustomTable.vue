@@ -172,16 +172,12 @@ function onRowClick(row) {
   .icon-container {
     text-align: center;
     i {
+      margin-inline-end: 22px; // fixed width sort takes
       font-size: 1.6rem;
     }
     &.group {
       text-align: start;
     }
-  }
-}
-:deep(.q-table__grid-content) {
-  .q-table__grid-item {
-    background-color: red;
   }
 }
 </style>

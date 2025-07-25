@@ -8,7 +8,7 @@
       @row-click="navigateToCompany"
     >
       <template v-slot:[`body-cell-edit`]="props">
-        <q-td :props="props" class="icon-container group">
+        <q-td :props="props" class="icon-container group edit-icon">
           <slot name="actions" :row="props.row">
             <q-btn
               @click="
@@ -90,6 +90,10 @@ function navigateToCompany(company) {
 }
 </script>
 <style scoped lang="scss">
+.edit-icon {
+  text-align: end;
+}
+
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -123,7 +127,6 @@ function navigateToCompany(company) {
   flex-wrap: wrap;
   justify-content: space-around;
 
-  // gap: 0.5rem;
   .icon-wrapper {
     display: flex;
     flex-direction: column;

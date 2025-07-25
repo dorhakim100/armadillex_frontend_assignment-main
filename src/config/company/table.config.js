@@ -29,7 +29,8 @@ export const columns = [
   },
   {
     name: 'edit',
-    label: 'Actions',
+    // label: 'Actions',
+    label: '',
     field: '',
     align: 'left',
     sortable: false,
