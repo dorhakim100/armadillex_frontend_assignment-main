@@ -13,18 +13,19 @@ const isDarkMode = computed(() => systemStore.isDarkMode)
 onMounted(() => {
   notifyService.success(notifyMsgs.loginSuccess)
   systemStore.initializeScreenWatcher()
-  if (isDarkMode.value) {
-    document.querySelector('body').classList.add('dark-mode')
-  } else {
-    document.querySelector('body').classList.remove('dark-mode')
-  }
+
+  _toggleDarkMode(systemStore.isDarkMode)
 })
 
 watch(isDarkMode, (newValue) => {
-  if (newValue) {
+  _toggleDarkMode(newValue)
+})
+
+function _toggleDarkMode(stateToSet) {
+  if (stateToSet) {
     document.querySelector('body').classList.add('dark-mode')
   } else {
     document.querySelector('body').classList.remove('dark-mode')
   }
-})
+}
 </script>
