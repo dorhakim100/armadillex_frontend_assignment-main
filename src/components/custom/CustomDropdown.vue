@@ -11,6 +11,7 @@
     popup-content-class="custom-select-dropdown"
     input-debounce="0"
     :dark="isDarkMode"
+    :class="value ? 'has-value' : ''"
   />
 </template>
 
@@ -59,3 +60,16 @@ function filteredOptions(val, update) {
   })
 }
 </script>
+
+<style lang="scss" scoped>
+:deep(.q-placeholder) {
+  padding: 0 !important;
+}
+.has-value {
+  :deep(.q-field__native) {
+    .q-field__input {
+      display: none !important;
+    }
+  }
+}
+</style>

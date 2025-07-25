@@ -32,12 +32,12 @@
 
           <!-- AI suggestion radio options -->
           <transition name="expand-height">
-            <div v-if="field.aiSuggest && sudgestedNames.length > 0" class="ai-expand-wrapper">
+            <div v-if="field.aiSuggest && suggestedNames.length > 0" class="ai-expand-wrapper">
               <!-- @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames' -->
               <q-option-group
                 v-model="company.name"
                 type="radio"
-                :options="sudgestedNames.map((name) => ({ label: name, value: name }))"
+                :options="suggestedNames.map((name) => ({ label: name, value: name }))"
                 class="q-mt-sm checkbox-group ai-names-container"
                 :dark="isDarkMode"
               />
@@ -46,23 +46,13 @@
         </template>
 
         <!-- Select -->
-        <q-select
+
+        <custom-dropdown
           v-else-if="field.type === 'select'"
           v-model="company[field.key]"
           :label="field.label"
           :options="getSelectOptions(field.key)"
-          emit-value
-          map-options
-          use-input
-          clearable
-          popup-content-class="custom-select-dropdown"
-          input-debounce="0"
-          @filter="(val, update) => handleFilter(field.key, val, update)"
-          @clear="() => handleClear(field.key)"
-          :input-class="getCustomInputClass(field.key)"
-          :dark="isDarkMode"
         />
-
         <!-- Date -->
         <date-picker
           v-else-if="field.type === 'date'"
@@ -111,6 +101,7 @@ import { companyFields } from '../../config/company/fields'
 import { countries } from 'src/config/company/filters'
 
 import DatePicker from './DatePicker.vue'
+import CustomDropdown from '../custom/CustomDropdown.vue'
 
 const props = defineProps({
   company: Object,
@@ -134,24 +125,10 @@ const companiesCopy = ref([...props.companies])
 const countriesCopy = ref([...countries])
 
 // @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames'
-const sudgestedNames = ref([])
+const suggestedNames = ref([])
 const isAiLoading = ref(false)
 
-const companiesFilterTxt = ref('')
-const countriesFilterTxt = ref('')
-
 // CompanyOptions is a much better name for this variable
-const CompanyOptions = computed(() => {
-  return companiesCopy.value.map((c) => {
-    {
-      // @CR: Extra unnecessary braces
-      return {
-        id: c.id,
-        name: c.name,
-      }
-    }
-  })
-})
 
 // @CR: To much code and handlers inside this CMP. Should be split into smaller components or use services/composeables to handle the logic.
 // @CR: The use of $q.dialog is isn't our way of doing things. suggest another way.
@@ -195,7 +172,7 @@ async function onGenerateAiNames() {
   isAiLoading.value = true
   // Simulate an API call to generate AI names
   try {
-    sudgestedNames.value = await useCompanyNames(company.value.name)
+    suggestedNames.value = await useCompanyNames(company.value.name)
   } catch (error) {
     console.error('Error generating AI names:', error)
   } finally {
@@ -203,51 +180,11 @@ async function onGenerateAiNames() {
   }
 }
 
-function handleFilter(key, val, update) {
-  if (key === 'parentName') {
-    filterSelectCompanies(val, update)
-  } else {
-    filterSelectCountries(val, update)
-  }
-}
-
-function handleClear(key) {
-  if (key === 'parentName') {
-    companiesFilterTxt.value = ''
-    companiesCopy.value = companies.value
-  } else {
-    countriesFilterTxt.value = ''
-    countriesCopy.value = companies.value
-  }
-}
-
 function getSelectOptions(key) {
   return key === 'parentName' ? companiesCopy.value.map((c) => c.name) : countriesCopy.value
 }
 
-function getCustomInputClass(key) {
-  return key === 'country' ? 'text-uppercase' : ''
-}
-
 // @CR: This is a good example to see that this cmp handles different types of logics - and should be split into smaller components.
-function filterSelectCompanies(val, update) {
-  const regex = new RegExp(val, 'i')
-  const filtered = CompanyOptions.value.filter((c) => regex.test(c.name))
-
-  update(() => {
-    companiesFilterTxt.value = val
-    companiesCopy.value = val ? filtered : companies.value
-  })
-}
-function filterSelectCountries(val, update) {
-  const regex = new RegExp(val, 'i')
-  const filtered = countriesCopy.value.filter((c) => regex.test(c))
-
-  update(() => {
-    countriesFilterTxt.value = val
-    countriesCopy.value = val ? filtered : countries
-  })
-}
 </script>
 
 <style scoped lang="scss">
