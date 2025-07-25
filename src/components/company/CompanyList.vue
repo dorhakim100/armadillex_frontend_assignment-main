@@ -27,7 +27,11 @@
       </template>
       <!-- Grid layout -->
       <template v-slot:item="props">
-        <q-card class="q-ma-sm company-card" @click="navigateToCompany(props.row)">
+        <q-card
+          class="q-ma-sm company-card"
+          @click="navigateToCompany(props.row)"
+          :dark="isDarkMode"
+        >
           <q-card-section>
             <div class="text-h6">{{ props.row.name }}</div>
           </q-card-section>
@@ -74,6 +78,7 @@ const router = useRouter()
 const store = useSystemStore()
 
 const isMobile = computed(() => store.isMobile)
+const isDarkMode = computed(() => store.isDarkMode)
 
 function handleEdit(company) {
   emit('onOpenEdit', company)

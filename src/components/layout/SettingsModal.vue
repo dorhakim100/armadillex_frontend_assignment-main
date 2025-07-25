@@ -1,14 +1,9 @@
 <template>
-  <q-dialog v-model="settingsModal">
+  <q-dialog>
     <q-card class="modal-container" :dark="isDarkMode">
       <q-card-section class="text-h6">Settings</q-card-section>
       <q-card-section>
-        <q-toggle
-          v-model="isDarkMode"
-          label="Dark Mode"
-          @update:model-value="toggleDarkMode"
-          :dark="isDarkMode"
-        />
+        <q-toggle v-model="isDarkMode" label="Dark Mode" :dark="isDarkMode" />
       </q-card-section>
       <q-card-actions align="right">
         <q-btn flat label="Close" v-close-popup />
@@ -23,19 +18,11 @@ import { useSystemStore } from 'src/stores/system'
 
 const store = useSystemStore()
 
-const isDarkMode = computed(() => store.isDarkMode)
-const prefs = computed(() => store.prefs)
-
-function toggleDarkMode() {
-  const stateToSet = !isDarkMode.value
-
-  const prefsToSet = {
-    ...prefs.value,
-    isDarkMode: stateToSet,
-  }
-
-  store.setPrefs(prefsToSet)
-}
+// Writable computed - handles both get and set
+const isDarkMode = computed({
+  get: () => store.isDarkMode,
+  set: (value) => store.setPrefs({ ...store.prefs, isDarkMode: value }),
+})
 </script>
 
 <style lang="scss">
