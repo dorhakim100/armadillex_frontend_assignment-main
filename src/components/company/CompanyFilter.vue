@@ -65,7 +65,14 @@
         ]"
       />
     </div>
-    <q-btn color="primary" class="clear-button" @click="handleClear" icon="delete">Clear</q-btn>
+    <q-btn
+      color="primary"
+      class="clear-button"
+      @click="handleClear"
+      icon="delete"
+      :disable="_isDefault()"
+      >Clear</q-btn
+    >
   </fieldset>
 </template>
 
@@ -73,6 +80,7 @@
 import { defineProps, computed } from 'vue'
 
 import { useSystemStore } from 'src/stores/system'
+import { companiesService } from 'src/services/api/companies.service'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
@@ -95,6 +103,10 @@ function updateField(field, value) {
 
 function handleClear() {
   emit('clear')
+}
+
+function _isDefault() {
+  return JSON.stringify(companiesService.getDefaultFilter()) === JSON.stringify(props.filter)
 }
 </script>
 
