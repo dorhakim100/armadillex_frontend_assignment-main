@@ -159,3 +159,12 @@
 //   padding: 0px !important;
 //   border-radius: 10px 10px 0 0 !important;
 // }
+
+.q-table {
+  th:first-child, // Assuming name is first column
+  td:first-child {
+    width: 200px !important; // Fixed width
+    min-width: 200px !important;
+    max-width: 200px !important;
+  }
+}

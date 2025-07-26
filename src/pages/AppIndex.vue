@@ -2,7 +2,13 @@
   <q-layout view="lHh Lpr lFf">
     <app-header />
     <div v-if="isLoading && isMobile" class="loader-container">
-      <q-circular-progress indeterminate rounded size="50px" class="loader" />
+      <q-circular-progress
+        indeterminate
+        rounded
+        size="50px"
+        class="loader"
+        :color="isDarkMode ? 'amber-1' : 'primary'"
+      />
     </div>
     <q-page-container
       class="page-container"

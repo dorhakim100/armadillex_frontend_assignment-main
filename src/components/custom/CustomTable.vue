@@ -165,6 +165,14 @@ function onRowClick(row) {
       font-weight: 600;
       font-size: 1.1rem;
     }
+    :deep(tr) {
+      td:first-child {
+        width: 290px !important;
+        min-width: 290px !important;
+        max-width: 290px !important;
+      }
+    }
+
     td {
       font-size: 1.1rem;
     }

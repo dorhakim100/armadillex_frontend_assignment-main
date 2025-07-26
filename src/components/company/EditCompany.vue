@@ -49,7 +49,8 @@
 
         <custom-dropdown
           v-else-if="field.type === 'select'"
-          v-model="company[field.key]"
+          :model-value="company[field.key] || ''"
+          @update:model-value="(val) => (company[field.key] = val)"
           :label="field.label"
           :options="getSelectOptions(field.key)"
         />
