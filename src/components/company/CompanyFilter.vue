@@ -24,16 +24,6 @@
         </template>
       </q-input>
 
-      <!-- <q-select
-        filled
-        dense
-        :model-value="props.filter.country"
-        :options="countries"
-        label="Country"
-        @update:model-value="(val) => updateField('country', val)"
-        popup-content-class="custom-select-dropdown"
-        :dark="isDarkMode ? true : false"
-      /> -->
       <custom-dropdown
         :model-value="props.filter.country"
         :options="countries"
@@ -158,13 +148,14 @@ function _isDefault() {
 
   @media (max-width: $break-narrow) {
     align-self: end;
-    top: calc($header-height + 0.5rem);
-    width: calc(100vw - 3.5em);
+    top: calc($header-height);
+    font-size: 0.9rem;
+    height: 400px;
     z-index: 200;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.253);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr auto;
 
     legend {
       background-color: #f5f7fa;
@@ -178,12 +169,13 @@ function _isDefault() {
     }
 
     .sorting-toggle-container {
-      grid-column: 2 / -1;
+      grid-column: 1 / 2;
       grid-row: 1/2;
 
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+
+      justify-content: center;
 
       span {
         align-self: center;
@@ -205,6 +197,7 @@ function _isDefault() {
 
     @media (max-width: $break-narrow) {
       grid-template-columns: 1fr;
+      gap: 0.5rem;
     }
   }
 

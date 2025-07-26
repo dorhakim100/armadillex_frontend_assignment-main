@@ -5,21 +5,21 @@
       <div class="interface-container">
         <div class="desktop-container" v-if="!isMobile">
           <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
-          <q-btn color="primary" label="Add Company" icon="add" @click="onOpenModal" />
+          <q-btn color="primary" label="Add" icon="add" @click="onOpenModal" />
         </div>
         <div v-else class="mobile-container">
-          <q-fab
-            color="primary"
-            class="floating-button shadow-12"
-            icon="keyboard_arrow_left"
-            direction="down"
-          >
-            <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
-            <q-fab-action color="primary" icon="add" @click="onOpenModal" class="shadow-12" />
-          </q-fab>
+          <q-dialog v-model="showModal" position="left" style="width: 300px !important">
+            <q-card class="filter-dialog-content" :dark="isDarkMode">
+              <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
+            </q-card>
+          </q-dialog>
         </div>
       </div>
     </q-card-section>
+    <div class="mobile-buttons" :class="[isDarkMode ? 'dark-mode' : '']" v-if="isMobile">
+      <q-btn label="Filter" color="primary" icon="filter_list" @click="showModal = true" />
+      <q-btn color="primary" label="Add" icon="add" @click="onOpenModal" />
+    </div>
     <q-card-section>
       <company-list :companies="slicedCompanies" @onOpenEdit="onOpenEdit" />
       <q-pagination v-if="isMobile" v-model="pageNumber" :max="maxPage" input class="pagination" />
@@ -44,6 +44,7 @@ const { companies, saveCompany, deleteCompany } = useCompanies()
 const companiesCopy = ref([])
 
 const filter = ref(companiesService.getDefaultFilter())
+const showModal = ref(false)
 
 const $q = useQuasar()
 
@@ -54,14 +55,6 @@ const isDarkMode = computed(() => store.isDarkMode)
 
 const PAGE_SIZE = 3
 const pageIdx = ref(0)
-
-watch(
-  filter,
-  () => {
-    pageIdx.value = 0
-  },
-  { deep: true },
-)
 
 const pageNumber = computed({
   get: () => pageIdx.value + 1,
@@ -131,6 +124,14 @@ watch(
     }
   },
   { immediate: true },
+)
+
+watch(
+  filter,
+  () => {
+    pageIdx.value = 0
+  },
+  { deep: true },
 )
 
 function updateFilter(newFilter) {
@@ -222,7 +223,54 @@ h1 {
   button {
     justify-self: start;
   }
+  // position: relative;
 }
+.mobile-buttons {
+  position: sticky;
+  z-index: 100;
+  top: calc($header-height + 1rem);
+  top: calc($header-height);
+
+  width: calc(100% - 3.4em);
+
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: center;
+  border-bottom: 1px solid $clr-border;
+
+  height: 100%;
+  background-color: $clr-accent-table;
+  padding: 10px 5px;
+
+  &.dark-mode {
+    background-color: $clr-surface;
+  }
+
+  button {
+    box-shadow:
+      rgba(0, 0, 0, 0.16) 0px 3px 6px,
+      rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  }
+
+  border-radius: 3px !important;
+}
+
+.filter-dialog-content {
+  min-height: 200px;
+
+  width: 90vw;
+  max-width: 600px;
+
+  left: 0;
+  right: 0;
+  padding: 10px;
+  &.q-dark {
+    background-color: $clr-bg-dark-background !important;
+  }
+}
+
 .pagination {
   justify-self: end;
 }

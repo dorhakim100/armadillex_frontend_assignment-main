@@ -50,7 +50,7 @@
       </template>
     </q-table>
 
-    <inner-loading v-if="isLoading" :label="loadingLabel" />
+    <inner-loading v-if="!isMobile && isLoading" :label="loadingLabel" />
   </div>
 </template>
 

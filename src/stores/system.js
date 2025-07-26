@@ -30,12 +30,12 @@ export const useSystemStore = defineStore('system', {
     initializeScreenWatcher() {
       const $q = useQuasar()
 
-      this.isMobile = $q.screen.width < breakpoints.narrow
+      this.isMobile = $q.screen.width < breakpoints.narrow + 1
       // @CR Watch inside an action????
       watch(
         () => $q.screen.width,
         (newWidth) => {
-          this.isMobile = newWidth < breakpoints.narrow
+          this.isMobile = newWidth <= breakpoints.narrow
         },
       )
     },
