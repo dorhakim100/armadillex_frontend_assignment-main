@@ -1,14 +1,21 @@
 <template>
   <div class="icon-wrapper">
-    <q-icon :name="icon.name" :color="icon.color" />
+    <q-icon :name="icon.name" :color="icon.color" :size="isMobile ? '' : 'xl'">
+      <!-- <q-tooltip v-if="!isMobile">{{ capitalizeFirstLetter(icon.field) }}</q-tooltip> -->
+    </q-icon>
     <span>{{ capitalizeFirstLetter(icon.field) }}</span>
   </div>
   <q-separator vertical v-if="props.isSeparator" />
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
+import { useSystemStore } from 'src/stores/system'
 import { capitalizeFirstLetter } from 'src/services/util.service'
+
+const store = useSystemStore()
+
+const isMobile = computed(() => store.isMobile)
 
 const props = defineProps({
   icon: {
@@ -26,7 +33,9 @@ const props = defineProps({
 .icon-wrapper {
   display: flex;
   flex-direction: column;
+  height: 100%;
   justify-content: space-around;
+  // justify-content: space-between;
   text-align: center;
   gap: 0.5rem;
 

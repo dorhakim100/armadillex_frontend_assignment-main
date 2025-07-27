@@ -50,17 +50,17 @@
         </div>
 
         <div class="icons-container">
-          <q-icon
-            v-for="(iconField, index) in companyFieldIcons"
-            :key="index"
-            :name="
-              companyCopy[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name
-            "
-            :color="companyCopy[iconField.field] ? 'positive' : 'grey-5'"
-            size="xl"
-          >
-            <q-tooltip>{{ iconField.label }}</q-tooltip>
-          </q-icon>
+          <custom-icon
+            v-for="(icon, index) in companyFieldIcons"
+            :key="icon.field"
+            :name="icon.field"
+            :icon="{
+              name: companyCopy[icon.field] ? icon.trueIcon.name : icon.falseIcon.name,
+              color: companyCopy[icon.field] ? icon.trueIcon.color : icon.falseIcon.color,
+              field: icon.field,
+            }"
+            :isSeparator="index !== companyFieldIcons.length - 1"
+          />
         </div>
       </q-card-section>
       <inner-loading v-if="!isMobile" :label="'Loading company...'" />
@@ -126,6 +126,7 @@ import { useSystemStore } from 'src/stores/system'
 
 import CompanyEdit from 'src/components/company/CompanyEdit.vue'
 import InnerLoading from 'src/components/common/InnerLoading.vue'
+import CustomIcon from 'src/components/custom/CustomIcon.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 import { companySocials } from 'src/config/company/socials'
@@ -207,7 +208,7 @@ function onDeleteClick() {
 .company-header-container {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: repeat(2, 1fr);
+  // grid-template-rows: repeat(2, 1fr);
 
   &.dark-mode {
     background-color: $clr-surface-elevated;
@@ -223,6 +224,7 @@ function onDeleteClick() {
 
 .details-container {
   display: grid;
+  gap: 1.5em;
   grid-template-columns: repeat(auto-fit, minmax(fit-content, 1fr));
   grid-template-rows: repeat(2, 1fr);
   align-items: center;
@@ -252,11 +254,13 @@ function onDeleteClick() {
   grid-row: 1/-1;
   display: flex;
   gap: 1.8em;
-  align-items: center;
+  // align-items: center;
   justify-content: end;
 
   @media (max-width: 600px) {
+    padding: 1em;
     align-self: stretch;
+
     justify-content: space-between;
   }
 }
