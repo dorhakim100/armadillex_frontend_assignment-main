@@ -45,6 +45,7 @@ async function saveCompany(company) {
     factoredCompany = _factorCompanyForSave(company)
     companies.push({ ...factoredCompany })
   }
+
   return new Promise((resolve) => {
     setTimeout(() => {
       storageService.set(DB_NAME, companies)

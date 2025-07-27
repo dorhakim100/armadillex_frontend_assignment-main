@@ -5,7 +5,7 @@
       <div class="interface-container">
         <div class="desktop-container" v-if="!isMobile">
           <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
-          <q-btn color="primary" label="Add" icon="add" @click="onOpenModal" />
+          <q-btn color="primary" label="Add" icon="add" @click="handleOnAddClick" />
         </div>
         <div v-else class="mobile-container">
           <!-- Filter modal -->
@@ -19,7 +19,7 @@
     </q-card-section>
     <div class="mobile-buttons" :class="[isDarkMode ? 'dark-mode' : '']" v-if="isMobile">
       <q-btn label="Filter" color="primary" icon="filter_list" @click="showModal = true" />
-      <q-btn color="primary" label="Add" icon="add" @click="onOpenModal" />
+      <q-btn color="primary" label="Add" icon="add" @click="handleOnAddClick" />
     </div>
     <q-card-section>
       <company-list :companies="slicedCompanies" @onOpenEdit="onOpenEdit" />
@@ -162,7 +162,6 @@ function clearFilter() {
 }
 
 function onOpenEdit(company) {
-  // onOpenModal(null, company)
   companyToEdit.value = company
   showEditModal.value = true
 }
@@ -190,32 +189,11 @@ function handleCloseEditModal() {
   companyToEdit.value = null
 }
 
-// function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
-//   // first parameter is event, not used
-//   $q.dialog({
-//     component: EditCompany,
-//     componentProps: {
-//       company: companyToEdit,
-//       companies: companies.value,
-//     },
-//   }).onOk(async (clickEvent) => {
-//     const { action, company: editedCompany } = clickEvent
-
-//     if (action === 'delete') {
-//       try {
-//         await deleteCompany(editedCompany.id)
-//       } catch (err) {
-//         console.error('Delete failed:', err)
-//       }
-//     } else {
-//       try {
-//         await saveCompany(editedCompany)
-//       } catch (err) {
-//         console.error('Save failed:', err)
-//       }
-//     }
-//   })
-// }
+function handleOnAddClick() {
+  console.log('handleOnAddClick')
+  companyToEdit.value = companiesService.getEmptyCompany()
+  showEditModal.value = true
+}
 </script>
 
 <style scoped lang="scss">
