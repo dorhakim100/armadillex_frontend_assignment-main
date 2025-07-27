@@ -54,7 +54,7 @@
         :options="getSelectOptions(field.key)"
       />
       <!-- Date -->
-      <date-picker
+      <custom-date
         v-else-if="field.type === 'date'"
         v-model="company[field.key]"
         :companyDate="company['dateAdded']"
@@ -99,7 +99,7 @@ import { useCompanyNames } from '../../composables/useCompanyNames'
 import { companyFields } from '../../config/company/fields'
 import { countries } from 'src/config/company/filters'
 
-import DatePicker from './DatePicker.vue'
+import CustomDate from '../custom/CustomDate.vue'
 import CustomDropdown from '../custom/CustomDropdown.vue'
 
 const props = defineProps({

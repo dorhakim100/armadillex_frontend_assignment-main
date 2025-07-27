@@ -28,7 +28,7 @@
       </div>
     </q-card-section>
     <div class="mobile-buttons" :class="[isDarkMode ? 'dark-mode' : '']" v-if="isMobile">
-      <q-btn label="Filter" color="primary" icon="filter_list" @click="showFilterModal = true" />
+      <q-btn label="Filter" color="primary" icon="filter_alt" @click="showFilterModal = true" />
       <q-btn color="primary" label="Add" icon="add" @click="handleOnAddClick" />
     </div>
     <q-card-section>
@@ -200,7 +200,6 @@ function handleCloseEditModal() {
 }
 
 function handleOnAddClick() {
-  console.log('handleOnAddClick')
   companyToEdit.value = companiesService.getEmptyCompany()
   showEditModal.value = true
 }

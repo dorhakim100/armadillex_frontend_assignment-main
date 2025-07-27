@@ -53,7 +53,6 @@
           <custom-icon
             v-for="(icon, index) in companyFieldIcons"
             :key="icon.field"
-            :name="icon.field"
             :icon="{
               name: companyCopy[icon.field] ? icon.trueIcon.name : icon.falseIcon.name,
               color: companyCopy[icon.field] ? icon.trueIcon.color : icon.falseIcon.color,
@@ -208,6 +207,8 @@ function onDeleteClick() {
 .company-header-container {
   display: grid;
   grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1em;
   // grid-template-rows: repeat(2, 1fr);
 
   &.dark-mode {
