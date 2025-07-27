@@ -4,7 +4,7 @@
     <div class="row items-center" :class="[isDarkMode ? 'dark-mode' : '']">
       <q-btn icon="arrow_back" flat round @click="$router.back()" />
       <span class="text-h5">Company Details</span>
-      <q-btn icon="edit" flat label="Edit" @click="onEdit" class="q-mr-sm">
+      <q-btn icon="edit" flat label="Edit" @click="showEditModal = true" class="q-mr-sm">
         <q-tooltip>Edit Company</q-tooltip>
       </q-btn>
     </div>
@@ -12,7 +12,7 @@
     <!-- Main Company Card -->
     <q-card class="main-card-container" :class="[isDarkMode ? 'dark-mode' : '']">
       <q-card-section class="company-header-container">
-        <div class="text-h5">{{ company.name }}</div>
+        <div class="text-h5">{{ companyCopy.name }}</div>
         <img :src="logo" alt="Logo" />
       </q-card-section>
 
@@ -21,11 +21,11 @@
       <q-card-section class="details-container">
         <div class="legel-name-container">
           <span class="text-caption text-grey">Legal Name</span>
-          <span class="text-body1">{{ company.legalName }}</span>
+          <span class="text-body1">{{ companyCopy.legalName }}</span>
         </div>
         <div class="country-container">
           <span class="text-caption text-grey">Country</span>
-          <span class="text-body1">{{ company.country }}</span>
+          <span class="text-body1">{{ companyCopy.country }}</span>
         </div>
 
         <div class="parent-company-container">
@@ -38,7 +38,7 @@
               no-caps
               class="text-primary"
               :class="[isDarkMode ? 'dark-mode' : '']"
-              @click="navigateToCompany(companyWithParent.parent.id)"
+              @click="onNavigateToCompany(companyWithParent.parent.id)"
               >{{ companyWithParent.parent.name }}</q-btn
             >
             <span v-else>—</span>
@@ -53,8 +53,10 @@
           <q-icon
             v-for="(iconField, index) in companyFieldIcons"
             :key="index"
-            :name="company[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name"
-            :color="company[iconField.field] ? 'positive' : 'grey-5'"
+            :name="
+              companyCopy[iconField.field] ? iconField.trueIcon.name : iconField.falseIcon.name
+            "
+            :color="companyCopy[iconField.field] ? 'positive' : 'grey-5'"
             size="xl"
           >
             <q-tooltip>{{ iconField.label }}</q-tooltip>
@@ -89,7 +91,7 @@
             flat
             round
             dense
-            :href="social.getHref(company)"
+            :href="social.getHref(companyCopy)"
             target="_blank"
           >
             <q-tooltip>{{ social.tooltip }}</q-tooltip>
@@ -99,12 +101,21 @@
       </q-card-section>
     </q-card>
   </q-page>
+  <q-dialog v-model="showEditModal" transition-show="scale" transition-hide="scale">
+    <company-edit
+      :company="companyCopy"
+      :companies="companies"
+      @close="showEditModal = false"
+      @save="onSaveClick"
+      @delete="onDeleteClick"
+      :show="showEditModal"
+    />
+  </q-dialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useQuasar } from 'quasar'
 
 import { formatUtcToDisplayDate } from 'src/services/util.service'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
@@ -113,7 +124,7 @@ import { useCompanyById } from 'src/composables/useCompanyById'
 import { useCompanies } from 'src/composables/useCompanies'
 import { useSystemStore } from 'src/stores/system'
 
-import EditCompany from 'src/components/company/EditCompany.vue'
+import CompanyEdit from 'src/components/company/CompanyEdit.vue'
 import InnerLoading from 'src/components/common/InnerLoading.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
@@ -127,11 +138,12 @@ import email from 'src/assets/imgs/email.svg'
 const route = useRoute()
 const router = useRouter()
 
-const $q = useQuasar()
-
+const showEditModal = ref(false)
 const store = useSystemStore()
 
 const { company, companies } = useCompanyById(computed(() => route.params.id))
+const companyCopy = computed(() => ({ ...company.value }))
+
 const { saveCompany, deleteCompany } = useCompanies()
 
 const isDarkMode = computed(() => store.isDarkMode)
@@ -145,7 +157,7 @@ const socialsImgs = [
 const companyWithParent = computed(() => {
   const parent = companies.value.find((c) => c.id === company.value.parentId)
   return {
-    ...company,
+    ...companyCopy.value,
     parent: parent ? { id: parent.id, name: parent.name } : null,
   }
 })
@@ -155,36 +167,20 @@ const formattedDate = computed(() =>
 )
 
 const isMobile = computed(() => store.isMobile)
-//@CR: Naming convention is not consistent
-function navigateToCompany(id) {
+
+function onNavigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)
   router.push({ name: 'company-details', params: { id } })
 }
 
-function onEdit() {
-  $q.dialog({
-    component: EditCompany,
-    componentProps: {
-      company: company.value,
-      companies: companies.value,
-    },
-  }).onOk(async (clickEvent) => {
-    const { action, company: editedCompany } = clickEvent
+function onSaveClick() {
+  saveCompany(companyCopy.value)
+  showEditModal.value = false
+}
 
-    if (action === 'delete') {
-      try {
-        await deleteCompany(editedCompany.id)
-      } catch (err) {
-        console.error('Delete failed:', err)
-      }
-    } else {
-      try {
-        await saveCompany(editedCompany)
-      } catch (err) {
-        console.error('Save failed:', err)
-      }
-    }
-  })
+function onDeleteClick() {
+  deleteCompany(companyCopy.value.id)
+  router.push({ name: 'company' })
 }
 </script>
 
