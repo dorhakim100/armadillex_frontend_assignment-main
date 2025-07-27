@@ -21,7 +21,6 @@ export function useCompanies() {
       notifyService.error(notifyMsgs.companiesError)
       console.error('Companies fetch error:', error)
     },
-    // @CR: Missing error handling
   })
 
   const saveCompany = useMutation({
@@ -30,16 +29,22 @@ export function useCompanies() {
     },
     // Optimistic update
     onMutate: async (company) => {
+      const isEdit = !!company.id
+      if (!isEdit) return { previousCompanies: null, isEdit }
+
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
       const previousCompanies = queryClient.getQueryData([QUERY_KEYS.COMPANIES])
-      queryClient.setQueryData([QUERY_KEYS.COMPANIES], (old) => [...old, company])
-      return { previousCompanies }
+      queryClient.setQueryData([QUERY_KEYS.COMPANIES], (old) => {
+        return old?.map((c) => (c.id === company.id ? company : c)) || []
+      })
+      return { previousCompanies, isEdit }
     },
 
     onError: (error, variables, context) => {
       // Restore previous data
-      if (context?.previousCompanies) {
+      const { previousCompanies } = context
+      if (context?.isEdit && previousCompanies) {
         queryClient.setQueryData([QUERY_KEYS.COMPANIES], context.previousCompanies)
       }
       const isEdit = !!variables.id
@@ -49,17 +54,7 @@ export function useCompanies() {
     onSuccess: (_, variables) => {
       const isEdit = !!variables.id
       notifyService.success(isEdit ? notifyMsgs.companyUpdated : notifyMsgs.companyAdded)
-      if (isEdit) {
-        queryClient.setQueryData([QUERY_KEYS.COMPANIES], () => {
-          const originalCompanies = queryClient.getQueryData([QUERY_KEYS.COMPANIES])
-          const updatedCompanies = originalCompanies.map((c) =>
-            c.id === variables.id ? variables : c,
-          )
-
-          return updatedCompanies
-        })
-      } else {
-        // Need the actual id from the "backend"
+      if (!isEdit) {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
       }
     },
@@ -69,17 +64,23 @@ export function useCompanies() {
     mutationFn: async (id) => {
       return await companiesService.deleteCompany(id)
     },
+    onMutate: async (id) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
+      const previousCompanies = queryClient.getQueryData([QUERY_KEYS.COMPANIES])
+      queryClient.setQueryData([QUERY_KEYS.COMPANIES], (old) => old.filter((c) => c.id !== id))
+      return { previousCompanies }
+    },
+    onError: (error, variables, context) => {
+      // Restore previous data
+      if (context?.previousCompanies) {
+        queryClient.setQueryData([QUERY_KEYS.COMPANIES], context.previousCompanies)
+      }
+      notifyService.error(notifyMsgs.companyDeleteFailed)
+    },
     onSuccess: () => {
       notifyService.success(notifyMsgs.companyDeleted)
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
     },
-    onError: (error, variables) => {
-      notifyService.error(notifyMsgs.companyDeleteFailed)
-      console.log(variables)
-
-      console.error('Company save error:', error)
-    },
-    // @CR: Missing onError handler for delete operation
   })
 
   const isLoading = computed(() => {
