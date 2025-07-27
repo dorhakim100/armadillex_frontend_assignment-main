@@ -61,4 +61,6 @@ export const notifyMsgs = {
   companyDeleted: 'Company deleted successfully.',
   companyEditFailed: 'Failed to edit company.',
   companyNotFound: 'Company not found.',
+  companyAddFailed: 'Failed to add company.',
+  companyDeleteFailed: 'Failed to delete company.',
 }

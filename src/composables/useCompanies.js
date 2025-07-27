@@ -28,6 +28,24 @@ export function useCompanies() {
     mutationFn: async (company) => {
       return await companiesService.saveCompany(company)
     },
+    // Optimistic update
+    onMutate: async (company) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
+      const previousCompanies = queryClient.getQueryData([QUERY_KEYS.COMPANIES])
+      queryClient.setQueryData([QUERY_KEYS.COMPANIES], (old) => [...old, company])
+      return { previousCompanies }
+    },
+
+    onError: (error, variables, context) => {
+      // Restore previous data
+      if (context?.previousCompanies) {
+        queryClient.setQueryData([QUERY_KEYS.COMPANIES], context.previousCompanies)
+      }
+      const isEdit = !!variables.id
+      notifyService.error(isEdit ? notifyMsgs.companyEditFailed : notifyMsgs.companyAddFailed)
+    },
+    // api confirmed, update with real data
     onSuccess: (_, variables) => {
       const isEdit = !!variables.id
       notifyService.success(isEdit ? notifyMsgs.companyUpdated : notifyMsgs.companyAdded)
@@ -41,15 +59,9 @@ export function useCompanies() {
           return updatedCompanies
         })
       } else {
-        // Need the actual id from the backend
+        // Need the actual id from the "backend"
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
       }
-    },
-    onError: (error, variables) => {
-      const isEdit = !!variables.id
-      notifyService.error(isEdit ? notifyMsgs.companyEditFailed : 'Failed to add company')
-      // @CR: Commented out code should be removed
-      // console.error('Company save error:', error)
     },
   })
 
@@ -61,11 +73,16 @@ export function useCompanies() {
       notifyService.success(notifyMsgs.companyDeleted)
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMPANIES] })
     },
+    onError: (error, variables) => {
+      notifyService.error(notifyMsgs.companyDeleteFailed)
+      console.log(variables)
+
+      console.error('Company save error:', error)
+    },
     // @CR: Missing onError handler for delete operation
   })
 
-  // @CR: Bad naming convention
-  const isBusy = computed(() => {
+  const isLoading = computed(() => {
     return (
       companiesQuery.isLoading.value || saveCompany.isPending.value || deleteCompany.isPending.value
     )
@@ -74,7 +91,7 @@ export function useCompanies() {
   // Sync loading state to global store
   //@CR: Duplicated DATA is NEVER a good option
   watch(
-    isBusy,
+    isLoading,
     (newValue) => {
       systemStore.setIsLoading(newValue)
     },
@@ -84,7 +101,7 @@ export function useCompanies() {
   return {
     // Query state
     companies: companiesQuery.data,
-    isLoading: isBusy,
+    isLoading,
     error: companiesQuery.error,
 
     // Mutations
