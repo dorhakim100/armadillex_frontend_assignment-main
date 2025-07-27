@@ -111,22 +111,23 @@ const filteredCompanies = computed(() => {
 const companiesLength = computed(() => filteredCompanies.value.length)
 const maxPage = computed(() => Math.ceil(companiesLength.value / PAGE_SIZE))
 
-// modify for pagination
-const slicedCompanies = computed(() => {
-  // adding parent company information
-  const companiesWithParent = filteredCompanies.value.map((company) => {
+const companiesWithParent = computed(() => {
+  return filteredCompanies.value.map((company) => {
     const parent = filteredCompanies.value.find((c) => c.id === company.parentId)
     return {
       ...company,
       parent: parent ? { id: parent.id, name: parent.name } : null,
     }
   })
+})
 
-  if (!isMobile.value) return companiesWithParent
+// modify for pagination
+const slicedCompanies = computed(() => {
+  if (!isMobile.value) return companiesWithParent.value
 
   const start = pageIdx.value * PAGE_SIZE
   const end = start + PAGE_SIZE
-  return companiesWithParent.slice(start, end)
+  return companiesWithParent.value.slice(start, end)
 })
 
 watch(
