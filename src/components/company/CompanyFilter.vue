@@ -5,7 +5,15 @@
   >
     <legend v-if="!isMobile">Filters</legend>
     <legend v-else>Filters & Sorting</legend>
-
+    <q-btn
+      v-if="isMobile"
+      flat
+      round
+      color="primary"
+      icon="close"
+      @click="emit('closeModal')"
+      class="close-button"
+    />
     <div class="filter-inputs">
       <q-input
         filled
@@ -84,7 +92,7 @@ import { countries } from '../../config/company/countries'
 import CustomDropdown from '../custom/CustomDropdown.vue'
 
 const props = defineProps(['filter'])
-const emit = defineEmits(['update', 'clear'])
+const emit = defineEmits(['update', 'clear', 'closeModal'])
 
 const store = useSystemStore()
 const isMobile = computed(() => store.isMobile)
@@ -151,11 +159,19 @@ function _isDefault() {
     top: calc($header-height);
     font-size: 0.9rem;
     height: 400px;
+    // height: calc(100vh - $header-height - 6rem);
+    // position: relative;
     z-index: 200;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.253);
     display: grid;
     grid-template-columns: 1fr auto;
+
+    .close-button {
+      position: absolute;
+      top: 2em;
+      right: 1em;
+    }
 
     legend {
       background-color: #f5f7fa;

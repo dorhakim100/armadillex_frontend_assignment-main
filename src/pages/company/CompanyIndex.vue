@@ -16,7 +16,12 @@
             transition-hide="slide-left"
           >
             <q-card class="filter-dialog-content" :dark="isDarkMode">
-              <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
+              <company-filter
+                :filter="filter"
+                @update="updateFilter"
+                @clear="clearFilter"
+                @closeModal="showFilterModal = false"
+              />
             </q-card>
           </q-dialog>
         </div>
@@ -281,8 +286,8 @@ h1 {
 
 .filter-dialog-content {
   min-height: 200px;
-  width: 90vw;
-  max-width: 600px;
+  // width: 90vw;
+  max-width: 400px;
   padding: 10px;
 
   &.q-dark {
