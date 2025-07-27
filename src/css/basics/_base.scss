@@ -60,9 +60,7 @@ iframe {
   border: none;
 }
 
-.q-dialog {
-  z-index: 5555;
-}
+/* Removed custom z-index to avoid animation conflicts */
 
 .q-select:not(.q-field--dark) .q-icon {
   color: $clr-primary !important;

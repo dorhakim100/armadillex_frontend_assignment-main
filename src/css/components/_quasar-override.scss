@@ -160,6 +160,16 @@
 //   border-radius: 10px 10px 0 0 !important;
 // }
 
+/* Ensure modal backdrops animate smoothly */
+.q-dialog__backdrop {
+  backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+.q-dialog__inner {
+  transition: all 0.3s ease;
+}
+
 .q-table {
   th:first-child, // Assuming name is first column
   td:first-child {

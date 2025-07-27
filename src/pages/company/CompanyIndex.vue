@@ -9,7 +9,12 @@
         </div>
         <div v-else class="mobile-container">
           <!-- Filter modal -->
-          <q-dialog v-model="showFilterModal" position="left" style="width: 300px !important">
+          <q-dialog
+            v-model="showFilterModal"
+            position="left"
+            transition-show="slide-right"
+            transition-hide="slide-left"
+          >
             <q-card class="filter-dialog-content" :dark="isDarkMode">
               <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
             </q-card>
@@ -18,7 +23,7 @@
       </div>
     </q-card-section>
     <div class="mobile-buttons" :class="[isDarkMode ? 'dark-mode' : '']" v-if="isMobile">
-      <q-btn label="Filter" color="primary" icon="filter_list" @click="showModal = true" />
+      <q-btn label="Filter" color="primary" icon="filter_list" @click="showFilterModal = true" />
       <q-btn color="primary" label="Add" icon="add" @click="handleOnAddClick" />
     </div>
     <q-card-section>
@@ -28,7 +33,7 @@
   </q-card>
 
   <!-- Edit modal -->
-  <q-dialog v-model="showEditModal" style="width: 300px !important">
+  <q-dialog v-model="showEditModal" transition-show="scale" transition-hide="scale">
     <company-edit
       :company="companyToEdit"
       :companies="companies"
@@ -276,16 +281,21 @@ h1 {
 
 .filter-dialog-content {
   min-height: 200px;
-
   width: 90vw;
   max-width: 600px;
-
-  left: 0;
-  right: 0;
   padding: 10px;
+
   &.q-dark {
     background-color: $clr-bg-dark-background !important;
   }
+}
+
+/* Ensure modals have proper dimensions without inline styles */
+.q-dialog .q-card.modal-container,
+.q-dialog .company-edit-modal {
+  width: 90vw;
+  max-width: 600px;
+  min-width: 300px;
 }
 
 .pagination {

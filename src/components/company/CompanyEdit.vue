@@ -1,5 +1,5 @@
 <template>
-  <q-card class="card-container" :dark="isDarkMode">
+  <q-card class="card-container company-edit-modal" :dark="isDarkMode">
     <q-card-section>
       <div class="text-h6">
         <span v-if="company.isEmpty">Add Company</span>
