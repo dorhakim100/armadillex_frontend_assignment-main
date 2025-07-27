@@ -8,7 +8,8 @@
           <q-btn color="primary" label="Add" icon="add" @click="onOpenModal" />
         </div>
         <div v-else class="mobile-container">
-          <q-dialog v-model="showModal" position="left" style="width: 300px !important">
+          <!-- Filter modal -->
+          <q-dialog v-model="showFilterModal" position="left" style="width: 300px !important">
             <q-card class="filter-dialog-content" :dark="isDarkMode">
               <company-filter :filter="filter" @update="updateFilter" @clear="clearFilter" />
             </q-card>
@@ -25,11 +26,22 @@
       <q-pagination v-if="isMobile" v-model="pageNumber" :max="maxPage" input class="pagination" />
     </q-card-section>
   </q-card>
+
+  <!-- Edit modal -->
+  <q-dialog v-model="showEditModal" style="width: 300px !important">
+    <company-edit
+      :company="companyToEdit"
+      :companies="companies"
+      @close="handleCloseEditModal"
+      @save="onSaveClick"
+      @delete="onDeleteClick"
+      :show="showEditModal"
+    />
+  </q-dialog>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { useQuasar } from 'quasar'
 
 import { companiesService } from '../../services/api/companies.service'
 import { useCompanies } from 'src/composables/useCompanies'
@@ -38,15 +50,16 @@ import { useSystemStore } from 'src/stores/system'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
-import EditCompany from 'src/components/company/EditCompany.vue'
+import CompanyEdit from 'src/components/company/CompanyEdit.vue'
 
 const { companies, saveCompany, deleteCompany } = useCompanies()
 const companiesCopy = ref([])
 
 const filter = ref(companiesService.getDefaultFilter())
-const showModal = ref(false)
+const showFilterModal = ref(false)
 
-const $q = useQuasar()
+const companyToEdit = ref(null)
+const showEditModal = ref(false)
 
 const store = useSystemStore()
 
@@ -148,35 +161,60 @@ function clearFilter() {
 }
 
 function onOpenEdit(company) {
-  onOpenModal(null, company)
+  // onOpenModal(null, company)
+  companyToEdit.value = company
+  showEditModal.value = true
 }
 
-function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
-  // first parameter is event, not used
-  $q.dialog({
-    component: EditCompany,
-    componentProps: {
-      company: companyToEdit,
-      companies: companies.value,
-    },
-  }).onOk(async (clickEvent) => {
-    const { action, company: editedCompany } = clickEvent
-
-    if (action === 'delete') {
-      try {
-        await deleteCompany(editedCompany.id)
-      } catch (err) {
-        console.error('Delete failed:', err)
-      }
-    } else {
-      try {
-        await saveCompany(editedCompany)
-      } catch (err) {
-        console.error('Save failed:', err)
-      }
-    }
-  })
+async function onSaveClick(company) {
+  try {
+    handleCloseEditModal()
+    await saveCompany(company)
+  } catch (err) {
+    console.log('Save failed:', err)
+  }
 }
+
+async function onDeleteClick(company) {
+  try {
+    handleCloseEditModal()
+    await deleteCompany(company.id)
+  } catch (err) {
+    console.log('Delete failed:', err)
+  }
+}
+
+function handleCloseEditModal() {
+  showEditModal.value = false
+  companyToEdit.value = null
+}
+
+// function onOpenModal(_, companyToEdit = companiesService.getEmptyCompany()) {
+//   // first parameter is event, not used
+//   $q.dialog({
+//     component: EditCompany,
+//     componentProps: {
+//       company: companyToEdit,
+//       companies: companies.value,
+//     },
+//   }).onOk(async (clickEvent) => {
+//     const { action, company: editedCompany } = clickEvent
+
+//     if (action === 'delete') {
+//       try {
+//         await deleteCompany(editedCompany.id)
+//       } catch (err) {
+//         console.error('Delete failed:', err)
+//       }
+//     } else {
+//       try {
+//         await saveCompany(editedCompany)
+//       } catch (err) {
+//         console.error('Save failed:', err)
+//       }
+//     }
+//   })
+// }
 </script>
 
 <style scoped lang="scss">

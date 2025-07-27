@@ -31,8 +31,14 @@ export function useCompanies() {
     onSuccess: (_, variables) => {
       const isEdit = !!variables.id
       notifyService.success(isEdit ? notifyMsgs.companyUpdated : notifyMsgs.companyAdded)
-      queryClient.setQueryData({ queryKey: [QUERY_KEYS.COMPANIES] }, () => {
-
+      queryClient.setQueryData([QUERY_KEYS.COMPANIES], () => {
+        const originalCompanies = queryClient.getQueryData([QUERY_KEYS.COMPANIES])
+        const updatedCompanies = isEdit
+          ? // Updating
+            originalCompanies.map((c) => (c.id === variables.id ? variables : c))
+          : // Adding
+            [...originalCompanies, variables]
+        return updatedCompanies
       })
     },
     onError: (error, variables) => {
