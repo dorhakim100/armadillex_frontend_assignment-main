@@ -37,14 +37,14 @@
           </q-card-section>
           <q-card-section class="icons-container">
             <slot v-for="(icon, index) in companyFieldIcons" :key="icon.field" :name="icon.field">
-              <div class="icon-wrapper">
-                <q-icon
-                  :name="props.row[icon.field] ? icon.trueIcon.name : icon.falseIcon.name"
-                  :color="props.row[icon.field] ? icon.trueIcon.color : icon.falseIcon.color"
-                />
-                <span>{{ capitalizeFirstLetter(icon.field) }}</span>
-              </div>
-              <q-separator vertical v-if="index !== companyFieldIcons.length - 1" />
+              <custom-icon
+                :icon="{
+                  name: props.row[icon.field] ? icon.trueIcon.name : icon.falseIcon.name,
+                  color: props.row[icon.field] ? icon.trueIcon.color : icon.falseIcon.color,
+                  field: icon.field,
+                }"
+                :isSeparator="index !== companyFieldIcons.length - 1"
+              />
             </slot>
           </q-card-section>
           <q-card-actions align="right">
@@ -64,9 +64,9 @@ import { useRouter } from 'vue-router'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 import { columns } from 'src/config/company/table.config'
-import { capitalizeFirstLetter } from 'src/services/util.service'
 
 import CustomTable from 'src/components/custom/CustomTable.vue'
+import CustomIcon from 'src/components/custom/CustomIcon.vue'
 
 import { useSystemStore } from 'src/stores/system'
 
@@ -124,22 +124,5 @@ function navigateToCompany(company) {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-
-  .icon-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    text-align: center;
-    gap: 0.5rem;
-
-    i {
-      align-self: center;
-      font-size: 1.5rem;
-    }
-
-    span {
-      font-size: 0.8rem;
-    }
-  }
 }
 </style>
