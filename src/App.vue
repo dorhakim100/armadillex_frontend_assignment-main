@@ -12,7 +12,6 @@ const isDarkMode = computed(() => systemStore.isDarkMode)
 
 onMounted(() => {
   notifyService.success(notifyMsgs.loginSuccess)
-  systemStore.initializeScreenWatcher()
 
   _toggleDarkMode(systemStore.isDarkMode)
 })
