@@ -85,6 +85,7 @@ import { defineProps, computed } from 'vue'
 
 import { useSystemStore } from 'src/stores/system'
 import { companiesService } from 'src/services/api/companies.service'
+import { useScreen } from 'src/composables/useScreen'
 
 import { checkboxFilters } from '../../config/company/filters'
 import { countries } from '../../config/company/countries'
@@ -94,8 +95,8 @@ import CustomDropdown from '../custom/CustomDropdown.vue'
 const props = defineProps(['filter'])
 const emit = defineEmits(['update', 'clear', 'closeModal'])
 
+const { isMobile } = useScreen()
 const store = useSystemStore()
-const isMobile = computed(() => store.isMobile)
 const isDarkMode = computed(() => store.isDarkMode)
 
 function updateField(field, value) {

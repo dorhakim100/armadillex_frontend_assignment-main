@@ -57,6 +57,7 @@ import { companiesService } from '../../services/api/companies.service'
 import { useCompanies } from 'src/composables/useCompanies'
 
 import { useSystemStore } from 'src/stores/system'
+import { useScreen } from 'src/composables/useScreen'
 
 import CompanyList from 'src/components/company/CompanyList.vue'
 import CompanyFilter from 'src/components/company/CompanyFilter.vue'
@@ -71,9 +72,9 @@ const showFilterModal = ref(false)
 const companyToEdit = ref(null)
 const showEditModal = ref(false)
 
+const { isMobile } = useScreen()
 const store = useSystemStore()
 
-const isMobile = computed(() => store.isMobile)
 const isDarkMode = computed(() => store.isDarkMode)
 
 const PAGE_SIZE = 3

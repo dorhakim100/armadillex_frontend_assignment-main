@@ -9,13 +9,11 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue'
-import { useSystemStore } from 'src/stores/system'
+import { defineProps } from 'vue'
+import { useScreen } from 'src/composables/useScreen'
 import { capitalizeFirstLetter } from 'src/services/util.service'
 
-const store = useSystemStore()
-
-const isMobile = computed(() => store.isMobile)
+const { isMobile } = useScreen()
 
 const props = defineProps({
   icon: {

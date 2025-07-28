@@ -26,12 +26,13 @@
 import { computed } from 'vue'
 import { useSystemStore } from 'src/stores/system'
 import { useGlobalLoading } from 'src/composables/useGlobalLoading'
+import { useScreen } from 'src/composables/useScreen'
 import AppHeader from 'src/components/layout/AppHeader.vue'
 
 const { isLoading } = useGlobalLoading()
+const { isMobile } = useScreen()
 const store = useSystemStore()
 
-const isMobile = computed(() => store.isMobile)
 const isDarkMode = computed(() => store.isDarkMode)
 </script>
 

@@ -57,6 +57,7 @@
 import { defineProps, defineEmits, computed } from 'vue'
 import { useSystemStore } from 'src/stores/system'
 import { useGlobalLoading } from 'src/composables/useGlobalLoading'
+import { useScreen } from 'src/composables/useScreen'
 import InnerLoading from '../common/InnerLoading.vue'
 
 const props = defineProps({
@@ -133,11 +134,11 @@ const props = defineProps({
 
 const emit = defineEmits(['row-click', 'edit-row'])
 
-const store = useSystemStore()
+const { isMobile } = useScreen()
 const { isLoading } = useGlobalLoading()
+const store = useSystemStore()
 
 const isDarkMode = computed(() => store.isDarkMode)
-const isMobile = computed(() => store.isMobile)
 
 function getRowClass(row) {
   if (typeof props.rowClass === 'function') {

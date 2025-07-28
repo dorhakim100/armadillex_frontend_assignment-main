@@ -69,15 +69,16 @@ import CustomTable from 'src/components/custom/CustomTable.vue'
 import CustomIcon from 'src/components/custom/CustomIcon.vue'
 
 import { useSystemStore } from 'src/stores/system'
+import { useScreen } from 'src/composables/useScreen'
 
 const props = defineProps(['companies', 'filter'])
 const emit = defineEmits(['update', 'onOpenEdit'])
 
 const router = useRouter()
 
+const { isMobile } = useScreen()
 const store = useSystemStore()
 
-const isMobile = computed(() => store.isMobile)
 const isDarkMode = computed(() => store.isDarkMode)
 
 function handleEdit(company) {

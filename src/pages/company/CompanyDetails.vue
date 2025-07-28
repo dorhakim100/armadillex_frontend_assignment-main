@@ -134,6 +134,7 @@ import CustomIcon from 'src/components/custom/CustomIcon.vue'
 
 import { companyFieldIcons } from 'src/config/company/boolean.icons'
 import { companySocials } from 'src/config/company/socials'
+import { useScreen } from 'src/composables/useScreen'
 
 import logo from 'src/assets/company/sample-company-logo.png'
 import whatsapp from 'src/assets/imgs/whatsapp.svg'
@@ -144,6 +145,7 @@ const route = useRoute()
 const router = useRouter()
 
 const showEditModal = ref(false)
+const { isMobile } = useScreen()
 const store = useSystemStore()
 
 const { company, companies } = useCompanyById(computed(() => route.params.id))
@@ -171,8 +173,6 @@ const companyWithParent = computed(() => {
 const formattedDate = computed(() =>
   company.value?.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
-
-const isMobile = computed(() => store.isMobile)
 
 function navigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)
