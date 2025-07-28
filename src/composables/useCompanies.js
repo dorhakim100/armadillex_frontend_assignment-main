@@ -1,13 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { companiesService } from 'src/services/api/companies.service'
 import { QUERY_KEYS } from './const'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
-import { useSystemStore } from 'src/stores/system'
 
 export function useCompanies() {
   const queryClient = useQueryClient()
-  const systemStore = useSystemStore()
 
   // Query for fetching companies
   const companiesQuery = useQuery({
@@ -88,16 +86,6 @@ export function useCompanies() {
       companiesQuery.isLoading.value || saveCompany.isPending.value || deleteCompany.isPending.value
     )
   })
-
-  // Sync loading state to global store
-  //@CR: Duplicated DATA is NEVER a good option
-  watch(
-    isLoading,
-    (newValue) => {
-      systemStore.setIsLoading(newValue)
-    },
-    { immediate: true },
-  )
 
   return {
     // Query state

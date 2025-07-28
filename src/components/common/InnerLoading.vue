@@ -1,6 +1,6 @@
 <template>
   <q-inner-loading
-    :showing="store.isLoading"
+    :showing="props.showing"
     :label="props.label || 'Loading...'"
     label-class="text-teal"
     label-style="font-size: 1.1em"
@@ -9,11 +9,9 @@
 </template>
 
 <script setup>
-import { useSystemStore } from 'src/stores/system'
+import { defineProps } from 'vue'
 
-const props = defineProps(['label'])
-
-const store = useSystemStore()
+const props = defineProps(['label', 'showing'])
 </script>
 
 <style scoped lang="scss">

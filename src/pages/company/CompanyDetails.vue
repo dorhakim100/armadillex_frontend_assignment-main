@@ -62,7 +62,7 @@
           />
         </div>
       </q-card-section>
-      <inner-loading v-if="!isMobile" :label="'Loading company...'" />
+      <inner-loading v-if="!isMobile" :showing="isLoading" :label="'Loading company...'" />
     </q-card>
 
     <!-- Placeholder for future sections -->
@@ -121,6 +121,7 @@ import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 import { useCompanyById } from 'src/composables/useCompanyById'
 import { useCompanies } from 'src/composables/useCompanies'
+import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import { useSystemStore } from 'src/stores/system'
 
 import CompanyEdit from 'src/components/company/CompanyEdit.vue'
@@ -147,6 +148,7 @@ const companyCopy = computed(() => ({ ...company.value }))
 const { saveCompany, deleteCompany } = useCompanies()
 
 const isDarkMode = computed(() => store.isDarkMode)
+const { isLoading } = useGlobalLoading()
 
 const socialsImgs = [
   { key: 'whatsapp', icon: whatsapp },

@@ -7,7 +7,7 @@ import { breakpoints } from 'src/config/scss.variables'
 export const useSystemStore = defineStore('system', {
   state: () => ({
     prefs: systemService.getPrefs(),
-    isLoading: false,
+
     isMobile: false,
   }),
 
@@ -20,9 +20,6 @@ export const useSystemStore = defineStore('system', {
     setPrefs(prefsToSet) {
       this.prefs = prefsToSet
       systemService.setPrefs(prefsToSet)
-    },
-    setIsLoading(stateToSet) {
-      this.isLoading = stateToSet
     },
     setIsMobile(isMobileState) {
       this.isMobile = isMobileState

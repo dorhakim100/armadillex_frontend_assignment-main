@@ -10,7 +10,6 @@
       :dark="isDarkMode"
       @row-click="(event, row) => onRowClick(row)"
       :body-row-class="getRowClass"
-      :loading="loading"
       :grid="isMobile"
       :hide-pagination="isMobile"
     >
@@ -50,13 +49,14 @@
       </template>
     </q-table>
 
-    <inner-loading v-if="!isMobile && isLoading" :label="loadingLabel" />
+    <inner-loading v-if="!isMobile" :showing="isLoading" :label="loadingLabel" />
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits, computed } from 'vue'
 import { useSystemStore } from 'src/stores/system'
+import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import InnerLoading from '../common/InnerLoading.vue'
 
 const props = defineProps({
@@ -134,9 +134,10 @@ const props = defineProps({
 const emit = defineEmits(['row-click', 'edit-row'])
 
 const store = useSystemStore()
+const { isLoading } = useGlobalLoading()
+
 const isDarkMode = computed(() => store.isDarkMode)
 const isMobile = computed(() => store.isMobile)
-const isLoading = computed(() => store.isLoading)
 
 function getRowClass(row) {
   if (typeof props.rowClass === 'function') {

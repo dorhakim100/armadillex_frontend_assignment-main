@@ -25,11 +25,12 @@
 <script setup>
 import { computed } from 'vue'
 import { useSystemStore } from 'src/stores/system'
-
+import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import AppHeader from 'src/components/layout/AppHeader.vue'
 
+const { isLoading } = useGlobalLoading()
 const store = useSystemStore()
-const isLoading = computed(() => store.isLoading)
+
 const isMobile = computed(() => store.isMobile)
 const isDarkMode = computed(() => store.isDarkMode)
 </script>
