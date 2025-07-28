@@ -8,9 +8,13 @@
         <q-tooltip>Edit Company</q-tooltip>
       </q-btn>
     </div>
-
     <!-- Main Company Card -->
     <q-card class="main-card-container" :class="[isDarkMode ? 'dark-mode' : '']">
+      <inner-loading
+        v-if="!companyCopy.id && !isMobile"
+        :showing="isLoading"
+        :label="'Loading company...'"
+      />
       <q-card-section class="company-header-container">
         <div class="text-h5">{{ companyCopy.name }}</div>
         <img :src="logo" alt="Logo" />
@@ -38,7 +42,7 @@
               no-caps
               class="text-primary"
               :class="[isDarkMode ? 'dark-mode' : '']"
-              @click="onNavigateToCompany(companyWithParent.parent.id)"
+              @click="navigateToCompany(companyWithParent.parent.id)"
               >{{ companyWithParent.parent.name }}</q-btn
             >
             <span v-else>—</span>
@@ -157,7 +161,7 @@ const socialsImgs = [
 ]
 
 const companyWithParent = computed(() => {
-  const parent = companies.value.find((c) => c.id === company.value.parentId)
+  const parent = companies.value?.find((c) => c.id === company?.value.parentId)
   return {
     ...companyCopy.value,
     parent: parent ? { id: parent.id, name: parent.name } : null,
@@ -165,12 +169,12 @@ const companyWithParent = computed(() => {
 })
 
 const formattedDate = computed(() =>
-  company.value.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
+  company.value?.dateAdded ? formatUtcToDisplayDate(company.value.dateAdded) : '',
 )
 
 const isMobile = computed(() => store.isMobile)
 
-function onNavigateToCompany(id) {
+function navigateToCompany(id) {
   if (!id) return notifyService.error(notifyMsgs.companyNotFound)
   router.push({ name: 'company-details', params: { id } })
 }
