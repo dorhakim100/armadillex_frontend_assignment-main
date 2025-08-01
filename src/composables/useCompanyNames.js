@@ -20,9 +20,9 @@ export function useCompanyNames(base = '') {
 
         let name = ''
         for (let i = 0; i < nameWordCount; i++) {
-          const randonIdx = getRandomInt(0, words.length - 1)
-          name += i + 1 === nameWordCount ? `${words[randonIdx]}` : `${words[randonIdx]}${symbol}`
-          words.splice(randonIdx, 1)
+          const randomIdx = getRandomInt(0, words.length - 1)
+          name += i + 1 === nameWordCount ? `${words[randomIdx]}` : `${words[randomIdx]}${symbol}`
+          words.splice(randomIdx, 1)
         }
 
         names.push(name)
