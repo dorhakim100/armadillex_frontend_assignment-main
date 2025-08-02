@@ -6,7 +6,7 @@ import { notifyMsgs, notifyService } from 'src/services/notify.service'
 
 const queryKey = QUERY_KEYS.USERS
 
-export function useCompanies() {
+export function useUsers() {
   const queryClient = useQueryClient()
 
   // Query for fetching users

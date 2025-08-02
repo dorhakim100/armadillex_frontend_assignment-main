@@ -18,6 +18,11 @@ const routes = [
         name: ROUTES.COMPANY_DETAILS,
         component: () => import('src/pages/company/CompanyDetails.vue'),
       },
+      {
+        path: ROUTES.LOGIN,
+        name: ROUTES.LOGIN,
+        component: () => import('src/pages/user/LoginPage.vue'),
+      },
     ],
   },
 
