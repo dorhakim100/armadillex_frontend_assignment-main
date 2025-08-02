@@ -14,8 +14,10 @@ export function useAuth() {
     },
     onSuccess: (data) => {
       // Store token, update auth state
-      queryClient.setQueryData(['auth', 'user'], data.user)
+
+      queryClient.setQueryData(['auth', 'user'], data)
       notifyService.success(notifyMsgs.loginSuccess)
+      return data
     },
     onError: () => {
       notifyService.error(notifyMsgs.loginFailed)

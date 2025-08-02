@@ -2,7 +2,8 @@
   <q-card :dark="isDarkMode" class="login-container" :class="[isDarkMode ? 'dark-mode' : '']">
     <q-card-section class="login-header">
       <div class="logo-section"></div>
-      <h1>User Login</h1>
+      <h1 v-if="!!user">{{ user?.fullname }}</h1>
+      <h1 v-else>User Login</h1>
       <p class="subtitle">Sign in to your account</p>
     </q-card-section>
 
@@ -45,11 +46,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from 'src/composables/useAuth'
+
 import { useSystemStore } from 'src/stores/system'
 
-import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import { notifyService } from 'src/services/notify.service'
 
 import { inputs as loginInputs } from 'src/config/login/loginInputs'
@@ -59,8 +61,8 @@ import CustomInput from 'src/components/custom/CustomInput.vue'
 
 const router = useRouter()
 const store = useSystemStore()
-
-const { isLoading } = useGlobalLoading()
+const { user, login, isLoading } = useAuth()
+// const { isLoading } = useGlobalLoading()
 
 const loginForm = ref(_getLoginForm())
 
@@ -77,11 +79,9 @@ const isFormValid = computed(() => {
 // Methods
 async function onSubmit() {
   if (!isFormValid.value) {
-    console.log('bla')
-
     return
   }
-  router.push(ROUTES.COMPANY)
+  login(loginForm.value)
 }
 
 function onForgotPassword() {
@@ -94,6 +94,12 @@ function _getLoginForm() {
     return acc
   }, {})
 }
+
+watch(user, (newUser) => {
+  if (newUser) {
+    router.push(ROUTES.COMPANY)
+  }
+})
 </script>
 
 <style scoped lang="scss">

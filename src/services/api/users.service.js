@@ -74,6 +74,8 @@ async function getUserByCredentials(credentials) {
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
       const users = await getUsers()
+
+      // in real backend this would be a call to the backend
       const rawUser = users.find((user) => user.email === credentials.email)
 
       if (!rawUser) {
@@ -82,28 +84,30 @@ async function getUserByCredentials(credentials) {
       }
 
       // Check password (in real backend this would be hashed comparison)
-      if (rawUser.password !== credentials.password) {
-        reject(new Error('Invalid email or password'))
-        return
-      }
+      // if (rawUser.password !== credentials.password) {
+      //   reject(new Error('Invalid email or password'))
+      //   return
+      // }
 
       // Check if user is active
       if (!rawUser.active) {
         reject(new Error('Account is deactivated'))
         return
       }
+      console.log('rawUser', rawUser)
 
       // Return user in the same format as getUsers()
       const authenticatedUser = {
-        id: rawUser.user_id,
+        id: rawUser.id,
         active: rawUser.active,
         fullname: rawUser.fullname,
         email: rawUser.email,
         country: rawUser.country,
-        dateAdded: rawUser.date_added,
-        departmentId: rawUser.department_id,
-        isAdmin: rawUser.is_admin,
+        dateAdded: rawUser.dateAdded,
+        departmentId: rawUser.departmentId,
+        isAdmin: rawUser.isAdmin,
       }
+      console.log('authenticatedUser', authenticatedUser)
 
       resolve(authenticatedUser)
     }, 1000)
