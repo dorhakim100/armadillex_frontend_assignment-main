@@ -94,7 +94,6 @@ async function getUserByCredentials(credentials) {
         reject(new Error('Account is deactivated'))
         return
       }
-      console.log('rawUser', rawUser)
 
       // Return user in the same format as getUsers()
       const authenticatedUser = {
@@ -107,7 +106,6 @@ async function getUserByCredentials(credentials) {
         departmentId: rawUser.departmentId,
         isAdmin: rawUser.isAdmin,
       }
-      console.log('authenticatedUser', authenticatedUser)
 
       resolve(authenticatedUser)
     }, 1000)

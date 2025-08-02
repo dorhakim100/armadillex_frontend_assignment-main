@@ -5,13 +5,13 @@
 <script setup>
 import { onMounted, computed, watch } from 'vue'
 import { useSystemStore } from 'src/stores/system'
-import { notifyMsgs, notifyService } from './services/notify.service'
+// import { notifyMsgs, notifyService } from './services/notify.service'
 
 const systemStore = useSystemStore()
 const isDarkMode = computed(() => systemStore.isDarkMode)
 
 onMounted(() => {
-  notifyService.success(notifyMsgs.loginSuccess)
+  // notifyService.success(notifyMsgs.loginSuccess)
 
   _toggleDarkMode(systemStore.isDarkMode)
 })
