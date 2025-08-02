@@ -9,6 +9,7 @@ export const usersService = {
   deleteUser,
   getDefaultFilter,
   getEmptyUser,
+  getUserByCredentials,
 }
 
 async function getUsers() {
@@ -64,6 +65,47 @@ function deleteUser(id) {
       users.splice(idx, 1)
       storageService.set(DB_NAME, users)
       resolve(users)
+    }, 1000)
+  })
+}
+
+async function getUserByCredentials(credentials) {
+  // Mimic backend authentication with realistic delay
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      const users = await getUsers()
+      const rawUser = users.find((user) => user.email === credentials.email)
+
+      if (!rawUser) {
+        reject(new Error('Invalid email or password'))
+        return
+      }
+
+      // Check password (in real backend this would be hashed comparison)
+      if (rawUser.password !== credentials.password) {
+        reject(new Error('Invalid email or password'))
+        return
+      }
+
+      // Check if user is active
+      if (!rawUser.active) {
+        reject(new Error('Account is deactivated'))
+        return
+      }
+
+      // Return user in the same format as getUsers()
+      const authenticatedUser = {
+        id: rawUser.user_id,
+        active: rawUser.active,
+        fullname: rawUser.fullname,
+        email: rawUser.email,
+        country: rawUser.country,
+        dateAdded: rawUser.date_added,
+        departmentId: rawUser.department_id,
+        isAdmin: rawUser.is_admin,
+      }
+
+      resolve(authenticatedUser)
     }, 1000)
   })
 }
@@ -138,7 +180,8 @@ var demoUsers = [
     active: true,
     user_id: 'pAuC6RQ71bBG',
     fullname: 'John Doe',
-    email: 'john.doe@example.com',
+    email: 'john.doe1@example.com',
+    password: '123456',
     country: 'USA',
     date_added: 'Sun, 26 Jan 2025 16:54:36 GMT',
     department_id: 'hDQkIp9PldZO',
@@ -148,7 +191,8 @@ var demoUsers = [
     active: true,
     user_id: 'pAuC6RQ75bBG',
     fullname: 'John Foe',
-    email: 'john.doe@example.com',
+    email: 'john.doe2@example.com',
+    password: '123456',
     country: 'USA',
     date_added: 'Sun, 26 Jan 2025 16:54:36 GMT',
     department_id: 'hDQkIp9PldZO',
@@ -158,7 +202,8 @@ var demoUsers = [
     active: true,
     user_id: 'pAuC6RQ72bBG',
     fullname: 'John Soe',
-    email: 'john.doe@example.com',
+    email: 'john.doe3@example.com',
+    password: '123456',
     country: 'USA',
     date_added: 'Sun, 26 Jan 2025 16:54:36 GMT',
     department_id: 'hDQkIp9PldZO',

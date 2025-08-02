@@ -52,8 +52,11 @@ export const notifyService = {
 }
 
 export const notifyMsgs = {
+  // auth
   loginSuccess: 'Welcome back ',
   logoutSuccess: 'Logged out successfully.',
+  loginFailed: 'Login failed.',
+  logoutFailed: 'Logout failed.',
   // companies
   companiesFetched: 'Companies fetched successfully.',
   companiesError: `Companies couldn't be fetched.`,
