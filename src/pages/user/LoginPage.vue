@@ -8,44 +8,15 @@
 
     <q-card-section class="login-form">
       <q-form @submit="onSubmit" class="form">
-        <q-input
-          v-model="loginForm.email"
-          label="Email"
-          type="email"
-          outlined
-          :dark="isDarkMode"
-          :rules="emailRules"
-          autocomplete="email"
-          class="form-field"
-        >
-          <template v-slot:prepend>
-            <q-icon name="email" />
-          </template>
-        </q-input>
-
-        <q-input
-          v-model="loginForm.password"
-          label="Password"
-          :type="showPassword ? 'text' : 'password'"
-          outlined
-          :dark="isDarkMode"
-          :rules="passwordRules"
-          autocomplete="current-password"
-          class="form-field"
-        >
-          <template v-slot:prepend>
-            <q-icon name="lock" />
-          </template>
-          <template v-slot:append>
-            <q-icon
-              :name="showPassword ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="showPassword = !showPassword"
-            />
-          </template>
-        </q-input>
-
-        <custom-input v-model="loginForm.email" label="Password" type="password" icon="lock" />
+        <custom-input
+          v-for="(input, index) in loginInputs"
+          :key="index"
+          v-model="loginForm[input.type]"
+          :label="input.label"
+          :type="input.type"
+          :icon="input.icon"
+          :rules="input.rules"
+        />
 
         <div class="form-actions">
           <q-btn
@@ -74,97 +45,55 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSystemStore } from 'src/stores/system'
-import { useUsers } from 'src/composables/useUsers'
+
+import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import { notifyService } from 'src/services/notify.service'
+
+import { inputs as loginInputs } from 'src/config/login/loginInputs'
+import { ROUTES } from 'src/router/const'
 
 import CustomInput from 'src/components/custom/CustomInput.vue'
 
 const router = useRouter()
 const store = useSystemStore()
-const { users } = useUsers()
 
-// Reactive data
-const loginForm = ref({
-  email: '',
-  password: '',
-})
+const { isLoading } = useGlobalLoading()
 
-const showPassword = ref(false)
-const isLoading = ref(false)
+const loginForm = ref(_getLoginForm())
 
-// Computed properties
 const isDarkMode = computed(() => store.isDarkMode)
 
-const demoUsers = computed(() => {
-  if (!users.value) return []
-  return users.value.slice(0, 3) // Show first 3 users for demo
-})
-
+// make sure all the rules are valid,
+// based on the type of the input
 const isFormValid = computed(() => {
-  return loginForm.value.email && loginForm.value.password && loginForm.value.email.includes('@')
+  return loginInputs.every((input) =>
+    input.rules.every((rule) => rule(loginForm.value[input.type])),
+  )
 })
-
-// Validation rules
-const emailRules = [
-  (val) => !!val || 'Email is required',
-  (val) => val.includes('@') || 'Please enter a valid email',
-]
-
-const passwordRules = [
-  (val) => !!val || 'Password is required',
-  (val) => val.length >= 6 || 'Password must be at least 6 characters',
-]
 
 // Methods
 async function onSubmit() {
-  if (!isFormValid.value) return
+  if (!isFormValid.value) {
+    console.log('bla')
 
-  isLoading.value = true
-
-  try {
-    // Simulate login API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock authentication - check if email exists in demo users
-    const user = users.value?.find((u) => u.email === loginForm.value.email)
-
-    if (user) {
-      notifyService.success(`Welcome back, ${user.fullname}!`)
-      // Navigate to main app or dashboard
-      router.push('/companies')
-    } else {
-      notifyService.error('Invalid credentials. Try using one of the demo users.')
-    }
-  } catch (error) {
-    notifyService.error('Login failed. Please try again.')
-    console.error('Login error:', error)
-  } finally {
-    isLoading.value = false
+    return
   }
+  router.push(ROUTES.COMPANY)
 }
 
 function onForgotPassword() {
   notifyService.info('Password reset functionality would be implemented here')
 }
 
-function fillDemoCredentials(user) {
-  loginForm.value.email = user.email
-  loginForm.value.password = 'demo123'
-  notifyService.info(`Filled credentials for ${user.fullname}`)
+function _getLoginForm() {
+  return loginInputs.reduce((acc, input) => {
+    acc[input.type] = ''
+    return acc
+  }, {})
 }
-
-// Lifecycle
-onMounted(() => {
-  // Auto-fill first demo user credentials if available
-  if (demoUsers.value.length > 0) {
-    setTimeout(() => {
-      fillDemoCredentials(demoUsers.value[0])
-    }, 1500)
-  }
-})
 </script>
 
 <style scoped lang="scss">

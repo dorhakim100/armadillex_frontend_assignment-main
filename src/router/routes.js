@@ -5,9 +5,14 @@ const routes = [
   {
     path: '/',
     name: ROUTES.APP,
-    redirect: ROUTES.COMPANY,
+    redirect: ROUTES.LOGIN,
     component: AppIndex,
     children: [
+      {
+        path: ROUTES.LOGIN,
+        name: ROUTES.LOGIN,
+        component: () => import('src/pages/user/LoginPage.vue'),
+      },
       {
         path: ROUTES.COMPANY,
         name: ROUTES.COMPANY,
@@ -17,11 +22,6 @@ const routes = [
         path: `${ROUTES.COMPANY}/:id`,
         name: ROUTES.COMPANY_DETAILS,
         component: () => import('src/pages/company/CompanyDetails.vue'),
-      },
-      {
-        path: ROUTES.LOGIN,
-        name: ROUTES.LOGIN,
-        component: () => import('src/pages/user/LoginPage.vue'),
       },
     ],
   },

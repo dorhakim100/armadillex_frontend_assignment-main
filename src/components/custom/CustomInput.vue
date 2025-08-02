@@ -4,6 +4,7 @@
     @update:model-value="updateModelValue"
     :label="props.label"
     :type="props.type === 'password' ? (showPassword ? 'text' : 'password') : type"
+    :rules="props.rules"
     outlined
     :dark="isDarkMode"
     autocomplete="email"
