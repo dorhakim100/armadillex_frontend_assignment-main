@@ -15,14 +15,14 @@
         :dark="isDarkMode"
       >
         <q-list style="min-width: 200px" class="light-bordered light-radius">
-          <q-item-label header class="text-primary text-font-light">
+          <q-item-label v-if="!!user" header class="text-primary text-font-light">
             Hello,
-            <span class="text-font-medium">User</span>
+            <span class="text-font-medium">{{ user.fullname }}</span>
           </q-item-label>
 
           <q-separator />
 
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-if="!!user">
             <q-item-section avatar>
               <q-icon name="account_circle" color="secondary" />
             </q-item-section>
@@ -38,7 +38,7 @@
 
           <q-separator />
 
-          <q-item clickable v-ripple @click="onLogout">
+          <q-item v-if="!!user" clickable v-ripple @click="onLogout">
             <q-item-section avatar>
               <q-icon name="logout" color="negative" />
             </q-item-section>
@@ -52,14 +52,19 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { log } from 'src/services/log.service'
 import { notifyMsgs, notifyService } from 'src/services/notify.service'
+import { useAuth } from 'src/composables/useAuth'
 
 import { useQuasar } from 'quasar'
 import { useSystemStore } from 'src/stores/system'
 import SettingsModal from './SettingsModal.vue'
+import { ROUTES } from 'src/router/const'
 
 const $q = useQuasar()
+const { user, logout } = useAuth()
+const router = useRouter()
 
 const store = useSystemStore()
 const isDarkMode = computed(() => store.isDarkMode)
@@ -67,8 +72,9 @@ const isDarkMode = computed(() => store.isDarkMode)
 const menuOpen = ref(false)
 const onLogout = async () => {
   try {
-    log.info('Demo logout')
+    logout()
     notifyService.success(notifyMsgs.logoutSuccess)
+    router.push(ROUTES.LOGIN)
   } catch (err) {
     log.error('Logout failed:', err)
     notifyService.error(notifyMsgs.logoutFailed)
