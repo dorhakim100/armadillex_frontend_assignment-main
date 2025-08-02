@@ -54,6 +54,7 @@ export const notifyService = {
 export const notifyMsgs = {
   loginSuccess: 'Welcome back ',
   logoutSuccess: 'Logged out successfully.',
+  // companies
   companiesFetched: 'Companies fetched successfully.',
   companiesError: `Companies couldn't be fetched.`,
   companyAdded: 'Company added successfully.',
@@ -63,4 +64,14 @@ export const notifyMsgs = {
   companyNotFound: 'Company not found.',
   companyAddFailed: 'Failed to add company.',
   companyDeleteFailed: 'Failed to delete company.',
+  // users
+  usersFetched: 'Users fetched successfully.',
+  usersError: `Users couldn't be fetched.`,
+  userAdded: 'User added successfully.',
+  userUpdated: 'User updated successfully.',
+  userDeleted: 'User deleted successfully.',
+  userEditFailed: 'Failed to edit user.',
+  userNotFound: 'User not found.',
+  userAddFailed: 'Failed to add user.',
+  userDeleteFailed: 'Failed to delete user.',
 }
