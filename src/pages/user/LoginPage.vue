@@ -35,8 +35,8 @@
           <q-btn
             flat
             color="primary"
-            label="Forgot Password?"
-            @click="onForgotPassword"
+            label="Example User"
+            @click="onExampleUser"
             class="link-btn"
           />
         </div>
@@ -51,8 +51,6 @@ import { useRouter } from 'vue-router'
 import { useAuth } from 'src/composables/useAuth'
 
 import { useSystemStore } from 'src/stores/system'
-
-import { notifyService } from 'src/services/notify.service'
 
 import { inputs as loginInputs } from 'src/config/login/loginInputs'
 import { ROUTES } from 'src/router/const'
@@ -84,8 +82,11 @@ async function onSubmit() {
   login(loginForm.value)
 }
 
-function onForgotPassword() {
-  notifyService.info('Password reset functionality would be implemented here')
+function onExampleUser() {
+  loginForm.value = {
+    email: 'john.doe1@example.com',
+    password: '123456',
+  }
 }
 
 function _getLoginForm() {
