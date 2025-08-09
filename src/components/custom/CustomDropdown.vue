@@ -13,7 +13,34 @@
     :dark="isDarkMode"
     :class="modelValue ? 'has-value' : ''"
     @clear="() => handleClear()"
-  />
+  >
+    <template #option="scope">
+      <slot name="option" v-bind="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section v-if="scope.opt.avatar" avatar>
+            <q-avatar v-if="scope.opt.avatar" size="28px">
+              <img :src="scope.opt.avatar" alt="" />
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-weight-medium">{{ scope.opt.title }}</q-item-label>
+            <q-item-label caption>{{ scope.opt.subtitle }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </slot>
+    </template>
+
+    <template #selected-item="scope">
+      <slot name="selected-item" v-bind="scope">
+        <div class="row items-center no-wrap">
+          <q-avatar v-if="scope.opt.avatar" size="16px" class="q-mr-sm">
+            <img :src="scope.opt.avatar" alt="" />
+          </q-avatar>
+          <span>{{ scope.opt.title }}</span>
+        </div>
+      </slot>
+    </template>
+  </q-select>
 </template>
 
 <script setup>
@@ -26,7 +53,7 @@ const isDarkMode = computed(() => store.isDarkMode)
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Number, Object],
     required: true,
   },
   options: {
@@ -51,9 +78,20 @@ const options = ref(props.options)
 const filterTxt = ref('')
 
 function filteredOptions(val, update) {
-  const regex = new RegExp(val, 'i')
+  const lowVal = val.toLowerCase()
 
-  const filtered = props.options.filter((o) => regex.test(o))
+  const regex = new RegExp(lowVal, 'i')
+
+  const filtered = props.options.filter((o) => {
+    const lowTitle = o.title?.toLowerCase()
+    const lowSubtitle = o.subtitle?.toLowerCase()
+
+    if (lowVal === '') return true
+
+    if (lowTitle === lowVal || lowSubtitle === lowVal) return true
+
+    return regex.test(lowTitle) || regex.test(lowSubtitle)
+  })
 
   update(() => {
     filterTxt.value = val
