@@ -23,10 +23,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useSystemStore } from 'src/stores/system'
 import { useGlobalLoading } from 'src/composables/useGlobalLoading'
 import { useScreen } from 'src/composables/useScreen'
+import { useAuth } from 'src/composables/useAuth'
+import { ROUTES } from 'src/router/const'
 import AppHeader from 'src/components/layout/AppHeader.vue'
 
 const { isLoading } = useGlobalLoading()
@@ -34,6 +37,18 @@ const { isMobile } = useScreen()
 const store = useSystemStore()
 
 const isDarkMode = computed(() => store.isDarkMode)
+
+// Global auth guard at layout level
+const router = useRouter()
+const route = useRoute()
+const { user } = useAuth()
+
+watchEffect(() => {
+  const isOnLogin = route.name === ROUTES.LOGIN
+  if (!user?.value && !isOnLogin) {
+    router.replace({ name: ROUTES.LOGIN })
+  }
+})
 </script>
 
 <style lang="scss">
