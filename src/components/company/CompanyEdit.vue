@@ -32,7 +32,6 @@
         <!-- AI suggestion radio options -->
         <transition name="expand-height">
           <div v-if="field.aiSuggest && suggestedNames.length > 0" class="ai-expand-wrapper">
-            <!-- @CR: Typo in variable name - 'sudgestedNames' should be 'suggestedNames' -->
             <q-option-group
               v-model="company.name"
               type="radio"
@@ -49,7 +48,7 @@
       <custom-dropdown
         v-else-if="field.type === 'select'"
         :model-value="getSelectValue(field.key, company[field.key])"
-        @update:model-value="(val) => (company[field.key] = val)"
+        @update:model-value="(val) => onSelectUpdate(field.key, val)"
         :label="field.label"
         :options="getSelectOptions(field.key)"
       />
@@ -177,6 +176,51 @@ async function onGenerateAiNames() {
   }
 }
 
+function onSelectUpdate(key, val) {
+  if (key === 'parentName') {
+    // Persist selection object for UI, and set parentId for data model
+    company.value.parentName = val
+    const parent = companies.value.find((c) => c.name === val?.title)
+    company.value.parentId = parent ? parent.id : undefined
+    return
+  }
+
+  if (key === 'country') {
+    // Keep UI object for display, but also normalize stored country as alpha-3 string
+    company.value.country = val
+    const alpha3 = getCodeFromValue('country', val)
+    if (typeof alpha3 === 'string') {
+      company.value.country = alpha3
+    }
+    return
+  }
+
+  company.value[key] = val
+}
+
+function getSelectValue(key, val) {
+  if (key === 'country') {
+    // Stored as alpha-3 string; dropdown expects option object with alpha-2 in subtitle
+    if (typeof val === 'string') {
+      const alpha2Code = countriesCodeMap[val]?.alpha2Code
+      if (!alpha2Code) return val
+      const option = countries.find((c) => c.subtitle === alpha2Code)
+      return option || val
+    }
+    return val
+  }
+
+  if (key === 'parentName') {
+    const parentId = company.value.parentId
+    if (parentId) {
+      const parent = companies.value.find((c) => c.id === parentId)
+      if (parent) return { title: parent.name }
+    }
+  }
+
+  return val
+}
+
 function getSelectOptions(key) {
   return key === 'parentName'
     ? companies.value.map((c) => ({
@@ -188,34 +232,14 @@ function getSelectOptions(key) {
 
 function getCodeFromValue(key, val) {
   if (key === 'country') {
-    console.log(val)
-    console.log(countriesCodeMap)
-
-    for (const country in countriesCodeMap) {
-      if (val.subtitle === countriesCodeMap[country].alpha2Code) {
-        return country
+    // Convert dropdown option (alpha-2 in subtitle) to stored alpha-3 code
+    if (val && typeof val === 'object' && val.subtitle) {
+      for (const alpha3 in countriesCodeMap) {
+        if (val.subtitle === countriesCodeMap[alpha3].alpha2Code) {
+          return alpha3
+        }
       }
     }
-  }
-
-  return val
-}
-
-function getSelectValue(key, val) {
-  if (val === null || val === '') return val
-
-  if (key === 'country') {
-    const alpha2Code = countriesCodeMap[val].alpha2Code
-
-    const country = countries.find((c) => c.subtitle === alpha2Code)
-
-    if (country) return country
-  }
-
-  if (key === 'parentName') {
-    const parent = companies.value.find((c) => c.id === company.value.parentId)
-
-    if (parent) return { title: parent.name }
   }
 
   return val
