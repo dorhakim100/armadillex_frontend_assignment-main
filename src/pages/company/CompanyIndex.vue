@@ -11,7 +11,7 @@
           <!-- Filter modal -->
           <q-dialog
             v-model="showFilterModal"
-            position="left"
+            position="top-left"
             transition-show="slide-right"
             transition-hide="slide-left"
           >
@@ -286,9 +286,11 @@ h1 {
 
 .filter-dialog-content {
   min-height: 200px;
-  // width: 90vw;
   max-width: 400px;
   padding: 10px;
+  margin-top: $header-height;
+  // width: 90vw;
+  // background-color: red;
 
   &.q-dark {
     background-color: $clr-bg-dark-background !important;
