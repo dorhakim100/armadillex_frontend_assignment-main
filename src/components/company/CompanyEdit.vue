@@ -48,7 +48,7 @@
 
       <custom-dropdown
         v-else-if="field.type === 'select'"
-        :model-value="company[field.key] || ''"
+        :model-value="getSelectValue(field.key, company[field.key])"
         @update:model-value="(val) => (company[field.key] = val)"
         :label="field.label"
         :options="getSelectOptions(field.key)"
@@ -97,7 +97,8 @@ import { formatDate } from 'src/services/util.service'
 import { useCompanyNames } from '../../composables/useCompanyNames'
 
 import { companyFields } from '../../config/company/fields'
-import { countries } from 'src/config/company/filters'
+import { countries } from '../../config/company/countries'
+import { countriesCodeMap } from '../../assets/jsons/countries'
 
 import CustomDate from '../custom/CustomDate.vue'
 import CustomDropdown from '../custom/CustomDropdown.vue'
@@ -126,8 +127,12 @@ function onSaveClick() {
     delete company.value.id
   }
 
+  if (company.value.country) {
+    company.value.country = getCodeFromValue('country', company.value.country)
+  }
+
   if (company.value.parentName) {
-    const parent = companies.value.find((c) => c.name === company.value.parentName)
+    const parent = companies.value.find((c) => c.name === company.value.parentName.title)
     const { id: parentId } = parent
     company.value.parentId = parentId
   }
@@ -173,7 +178,47 @@ async function onGenerateAiNames() {
 }
 
 function getSelectOptions(key) {
-  return key === 'parentName' ? companies.value.map((c) => c.name) : countries
+  return key === 'parentName'
+    ? companies.value.map((c) => ({
+        title: c.name,
+        // subtitle: c.legalName,
+      }))
+    : countries
+}
+
+function getCodeFromValue(key, val) {
+  if (key === 'country') {
+    console.log(val)
+    console.log(countriesCodeMap)
+
+    for (const country in countriesCodeMap) {
+      if (val.subtitle === countriesCodeMap[country].alpha2Code) {
+        return country
+      }
+    }
+  }
+
+  return val
+}
+
+function getSelectValue(key, val) {
+  if (val === null || val === '') return val
+
+  if (key === 'country') {
+    const alpha2Code = countriesCodeMap[val].alpha2Code
+
+    const country = countries.find((c) => c.subtitle === alpha2Code)
+
+    if (country) return country
+  }
+
+  if (key === 'parentName') {
+    const parent = companies.value.find((c) => c.id === company.value.parentId)
+
+    if (parent) return { title: parent.name }
+  }
+
+  return val
 }
 </script>
 

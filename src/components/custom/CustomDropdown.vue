@@ -4,8 +4,6 @@
     :options="options"
     :label="props.label"
     @filter="(val, update) => filteredOptions(val, update)"
-    emit-value
-    map-options
     use-input
     clearable
     popup-content-class="custom-select-dropdown"
