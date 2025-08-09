@@ -52,7 +52,7 @@ const isDarkMode = computed(() => store.isDarkMode)
 const props = defineProps({
   modelValue: {
     type: [String, Number, Object],
-    required: true,
+    required: false,
   },
   options: {
     type: Array,
